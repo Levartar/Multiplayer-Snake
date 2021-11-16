@@ -30,7 +30,7 @@ image: maven:3.8-openjdk-17
 # To keep cache across branches add 'key: "$CI_JOB_NAME"'
 cache:
   paths:
-    - .m2/repository
+    - .m2/repository/server
 
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
