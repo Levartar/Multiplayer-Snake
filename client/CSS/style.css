@@ -1,0 +1,29 @@
+body{
+    margin: 5em; /*small border around everything*/
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+input{
+    border-color: black;
+}
+h1,h2{
+    font-weight: lighter;
+}
+button{
+    padding: .75em 1.25em;
+    margin: 1em;
+    border-radius: 10em;
+    background-color: rgb(255, 159, 80);
+    color: white;
+    font-size: 1em;
+    letter-spacing: .15em;
+}
+#sessionId{
+    margin-top: 3em;
+    margin-bottom: 3em;
+    float: right;
+}
+#newGame {
+    margin-top: 3em;
+    margin-bottom: 3em;
+    float: left;
+}
