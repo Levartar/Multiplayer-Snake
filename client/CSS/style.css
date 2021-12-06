@@ -8,6 +8,16 @@ input{
 h1,h2{
     font-weight: lighter;
 }
+header{
+    text-align: center;
+}
+img{
+    width: 30%;
+    height: 30%;
+}
+label{
+    font-weight: bolder;
+}
 button{
     padding: .75em 1.25em;
     margin: 1em;
@@ -27,3 +37,19 @@ button{
     margin-bottom: 3em;
     float: left;
 }
+#name{
+    text-align:center;
+}
+
+/*
+body {
+  background-color: #269;
+  background-image:
+    linear-gradient(rgba(255,255,255,.5) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255,255,255,.5) 2px, transparent 2px),
+    linear-gradient(rgba(255,255,255,.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.28) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}
+*/

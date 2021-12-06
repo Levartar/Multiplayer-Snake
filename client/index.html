@@ -10,20 +10,22 @@
 
 <header>
     <h1>Snake IO</h1>
+    <img src="assets/img.png" alt="snakeio banner picture">
 </header>
 
 <main>
     <section id="name">
-        <input type="text" placeholder="enter name" name="iputName" id="inputName">
+        <label for="inputName">Enter your name</label><br>
+        <input type="text" name="inputName" id="inputName">
     </section>
     <section id="newGame">
-        <h2>Start new game</h2>
+        <label for="buttonNewGame">Create a game</label>
         <br>
         <button id="buttonNewGame">Play</button>
     </section>
     <section id="sessionId">
-        <h2>or join session</h2>
-        <input type="text" placeholder="SessionID" name="inputSessionId" id="inputSessionId">
+        <label for="inputSessionId">Join a session</label><br>
+        <input type="text" name="inputSessionId" id="inputSessionId">
         <br>
         <button id="buttonJoinSession">join</button>
     </section>
