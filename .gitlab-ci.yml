@@ -37,8 +37,9 @@ cache:
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
 verify: 
-  stage: test
+  stage: testServer
   script:
+    - cd server
     - 'mvn $MAVEN_CLI_OPTS verify'
   except:
     variables:
