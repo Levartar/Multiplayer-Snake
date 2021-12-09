@@ -1,4 +1,4 @@
-package main.java.Logic.Gamemodes;
+package logic.gamemodes;
 
 public class BasicSnake {
 
