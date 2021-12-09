@@ -14,6 +14,10 @@
 # * Verify but don't deploy merge requests.
 # * Deploy built artifacts from master branch only.
 
+stages: 
+  - testServer
+  - build
+
 variables:
   # This will suppress any download for dependencies and plugins or upload messages which would clutter the console log.
   # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
@@ -27,6 +31,7 @@ variables:
 image: maven:3.8-openjdk-17
 
 setup:
+  stage: build
   script:
     - cd server
 # Cache downloaded dependencies and plugins between builds.
@@ -36,8 +41,8 @@ cache:
     - .m2/repository
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-verify: 
-  stage: testServer
+verify:
+  stage: testServer 
   script:
     - cd server
     - 'mvn $MAVEN_CLI_OPTS verify'
