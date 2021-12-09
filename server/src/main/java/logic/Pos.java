@@ -1,16 +1,18 @@
 package logic;
 
+import java.util.Objects;
+
 public class Pos {
 
-    Integer x;
-    Integer y;
+    int x;
+    int y;
 
-    public Pos(Integer x, Integer y) {
+    public Pos(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public void add(Integer number) {
+    public void add(int number) {
         this.x = x+number;
         this.y = y+number;
     }
@@ -18,5 +20,18 @@ public class Pos {
     public void add(Pos position) {
         this.x = x+position.x;
         this.y = y+position.y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pos pos = (Pos) o;
+        return x == pos.x && y == pos.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }
