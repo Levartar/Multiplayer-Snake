@@ -1,4 +1,4 @@
-package main.java.Logic;
+package logic;
 
 import java.util.List;
 
