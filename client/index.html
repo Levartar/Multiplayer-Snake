@@ -7,29 +7,40 @@
     <script src="./JS/script.js"></script>
 </head>
 <body>
+    <header>
+        <h1>Snake IO</h1>
+        <img src="assets/img.png" alt="snakeio banner picture">
+    </header>
 
-<header>
-    <h1>Snake IO</h1>
-    <img src="assets/img.png" alt="snakeio banner picture">
-</header>
+    <main>
+        <div id="name">
+            <label for="inputName">Enter your name</label><br>
+            <input type="text" name="inputName" id="inputName" size="10">
+        </div>
+        <div id="enterLobby">
+            <div id="newGame">
+                <div id="newGameLabelDiv">
+                    <label for="buttonNewGame">Create a game</label>
+                </div>
+                <div id="emptySpaceDiv">
 
-<main>
-    <section id="name">
-        <label for="inputName">Enter your name</label><br>
-        <input type="text" name="inputName" id="inputName">
-    </section>
-    <section id="newGame">
-        <label for="buttonNewGame">Create a game</label>
-        <br>
-        <button id="buttonNewGame">Play</button>
-    </section>
-    <section id="sessionId">
-        <label for="inputSessionId">Join a session</label><br>
-        <input type="text" name="inputSessionId" id="inputSessionId">
-        <br>
-        <button id="buttonJoinSession">join</button>
-    </section>
-</main>
-
+                </div>
+                <div id="newGameButtonDiv">
+                    <button id="buttonNewGame">Play</button>
+                </div>
+            </div>
+            <div id="sessionId">
+                <div id="sessionIdLabelDiv">
+                    <label for="inputSessionId">Join a session</label>
+                </div>
+                <div id="sessionIdInputDiv">
+                    <input type="text" name="inputSessionId" id="inputSessionId" size="8">
+                </div>
+               <div id="sessionIdButtonDiv">
+                   <button id="buttonJoinSession">join</button>
+               </div>
+            </div>
+        </div>
+    </main>
 </body>
 </html>

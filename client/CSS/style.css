@@ -11,6 +11,12 @@ body{
             linear-gradient(90deg, rgba(0, 0, 0, 0.28) 1px, transparent 1px);
     background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
     background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+
+    /* flexbox */
+    display: flex;
+    flex-direction: column;
+    margin-left: 20%;
+    margin-right: 20%;
 }
 input{
     border-color: black;
@@ -37,14 +43,20 @@ button{
     font-size: 1em;
     letter-spacing: .15em;
 }
+main{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+#enterLobby{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10%;
+}
 #sessionId{
-    margin-top: 3em;
-    margin-bottom: 3em;
     float: right;
 }
 #newGame {
-    margin-top: 3em;
-    margin-bottom: 3em;
     float: left;
 }
 #name{
