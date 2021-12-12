@@ -33,6 +33,7 @@ img{
 }
 label{
     font-weight: bolder;
+    margin-bottom: 1em;
 }
 button{
     padding: .75em 1.25em;
@@ -42,6 +43,7 @@ button{
     color: white;
     font-size: 1em;
     letter-spacing: .15em;
+    width: 8em;
 }
 main{
     display: flex;
@@ -53,12 +55,31 @@ main{
     justify-content: space-around;
     margin-top: 10%;
 }
-#sessionId{
-    float: right;
-}
-#newGame {
-    float: left;
-}
 #name{
     text-align:center;
+}
+
+#newGameLabelDiv{
+    display: flex;
+    justify-content: center;
+}
+#emptySpaceDiv{
+    display: flex;
+    justify-content: center;
+}
+#newGameButtonDiv{
+    display: flex;
+    justify-content: center;
+}
+#sessionIdLabelDiv{
+    display: flex;
+    justify-content: center;
+}
+#sessionIdInputDiv{
+    display: flex;
+    justify-content: center;
+}
+#sessionIdButtonDiv{
+    display: flex;
+    justify-content: center;
 }
