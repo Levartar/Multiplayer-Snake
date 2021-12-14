@@ -10,6 +10,13 @@ public class Snake {
     boolean dead;
     Integer speed;
 
+    enum Direction{ //maybe create new class for enum or put in Pos class
+        up,
+        down,
+        left,
+        right
+    }
+
     public Snake(Pos spawn, int speed, int length) {
         this.dead = true;
         this.speed = speed;
@@ -28,6 +35,28 @@ public class Snake {
             positions.add(spawn);
         }
     }
+
+    public void move(Direction input){
+        //move the head and set the tail to each previous Element
+        //head is first element in posList
+        //first copy tail then set head
+        for (int i = 1; i < positions.size()-2; i++) {
+            positions.set(i,positions.get(i+1)); //copies all elements to the previous element
+        }
+
+        Pos head = positions.get(0);
+        switch (input) { //switch case can be edited to support more directions. Also maybe put it in directions class
+            case up -> head.add(new Pos(0, 1));
+            case down -> head.add(new Pos(0, -1));
+            case left -> head.add(new Pos(-1, 0));
+            case right -> head.add(new Pos(1, 0));
+        }
+        //set first to new head
+        positions.set(0,head);
+
+    }
+
+
 
     public List<Pos> getPositions() {
         return positions;
