@@ -41,8 +41,8 @@ public class Snake {
         //move the head and set the tail to each previous Element
         //head is first element in posList
         //first copy tail then set head
-        for (int i = 1; i < positions.size(); i++) {
-            positions.set(i,positions.get(i-1)); //copies all elements to the previous element
+        for (int i = positions.size(); i < 1; i--) {
+            positions.set(i,positions.get(i-1)); //sets all elements to the previous element
         }
 
         Pos head = positions.get(0);
