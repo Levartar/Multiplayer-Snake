@@ -41,16 +41,17 @@ public class Snake {
         //move the head and set the tail to each previous Element
         //head is first element in posList
         //first copy tail then set head
-        for (int i = positions.size(); i < 1; i--) {
+        for (int i = positions.size() - 1; i > 0; i--) {
             positions.set(i,positions.get(i-1)); //sets all elements to the previous element
         }
 
-        Pos head = positions.get(0);
+        Pos head = new Pos(positions.get(0));
+
         switch (input) { //switch case can be edited to support more directions. Also maybe put it in directions class
-            case up -> head.add(new Pos(0, 1));
-            case down -> head.add(new Pos(0, -1));
-            case left -> head.add(new Pos(-1, 0));
-            case right -> head.add(new Pos(1, 0));
+            case up -> head.add(0,1);
+            case down -> head.add(0,-1);
+            case left -> head.add(-1,0);
+            case right -> head.add(1,0);
         }
         //set first to new head
         positions.set(0,head);

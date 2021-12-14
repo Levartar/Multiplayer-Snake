@@ -50,7 +50,7 @@ class SnakeTest {
         testPositions.add(new Pos(1,1));
 
         Snake testSnake = new Snake(new Pos(1,1), 1, 3);
-        for (int i = 0; i < 2 ; i++) { //move right 3 times
+        for (int i = 0; i < 2 ; i++) { //move right 2 times
             testSnake.move(Snake.Direction.right);
         }
 
