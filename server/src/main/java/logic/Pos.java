@@ -12,9 +12,9 @@ public class Pos {
         this.y = y;
     }
 
-    public void add(int number) {
-        this.x = x+number;
-        this.y = y+number;
+    public void add(int x, int y) {
+        this.x += x;
+        this.y += y;
     }
 
     public void add(Pos position) {
