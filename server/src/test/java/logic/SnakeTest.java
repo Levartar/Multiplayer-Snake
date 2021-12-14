@@ -39,6 +39,10 @@ class SnakeTest {
         testSnake.move(Snake.Direction.up);
 
         assertEquals(testPositions, testSnake.getPositions());
+
+        for (int i = 0; i < testSnake.getPositions().size() - 1; i++) {
+            assertNotSame(testSnake.getPositions().get(i), testSnake.getPositions().get(i + 1));
+        }
     }
 
     @Test
@@ -55,5 +59,9 @@ class SnakeTest {
         }
 
         assertEquals(testPositions, testSnake.getPositions());
+
+        for (int i = 0; i < testSnake.getPositions().size() - 1; i++) {
+            assertNotSame(testSnake.getPositions().get(i), testSnake.getPositions().get(i + 1));
+        }
     }
 }
