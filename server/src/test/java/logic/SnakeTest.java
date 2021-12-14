@@ -24,4 +24,31 @@ class SnakeTest {
 
         assertEquals(testPositions, snake.getPositions());
     }
+
+    @Test
+    void moveHead() {
+        //testHead
+        List<Pos> testPositions = new ArrayList<>();
+        testPositions.add(new Pos(1,2));
+        Snake testSnake = new Snake(new Pos(1,1), 1, 1);
+        testSnake.move(Snake.Direction.up);
+
+        assertEquals(testPositions, testSnake.getPositions());
+    }
+
+    @Test
+    void moveSnake() {
+        //testLongersnake
+        List<Pos> testPositions = new ArrayList<>();
+        testPositions.add(new Pos(3,1));
+        testPositions.add(new Pos(2,1));
+        testPositions.add(new Pos(1,1));
+
+        Snake testSnake = new Snake(new Pos(1,1), 1, 3);
+        for (int i = 0; i < 2 ; i++) { //move right 3 times
+            testSnake.move(Snake.Direction.right);
+        }
+
+        assertEquals(testPositions, testSnake.getPositions());
+    }
 }

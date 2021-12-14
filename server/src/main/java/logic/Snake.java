@@ -34,14 +34,15 @@ public class Snake {
         for (int i = 0; i < length; i++) {
             positions.add(spawn);
         }
+        this.dead = false; //snake spawn and is alive
     }
 
     public void move(Direction input){
         //move the head and set the tail to each previous Element
         //head is first element in posList
         //first copy tail then set head
-        for (int i = 1; i < positions.size()-2; i++) {
-            positions.set(i,positions.get(i+1)); //copies all elements to the previous element
+        for (int i = 1; i < positions.size(); i++) {
+            positions.set(i,positions.get(i-1)); //copies all elements to the previous element
         }
 
         Pos head = positions.get(0);
