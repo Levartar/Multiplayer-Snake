@@ -32,7 +32,7 @@ public class Snake {
         }
 
         for (int i = 0; i < length; i++) {
-            positions.add(spawn);
+            positions.add(new Pos(spawn));
         }
         this.dead = false; //snake spawn and is alive
     }

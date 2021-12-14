@@ -12,6 +12,12 @@ public class Pos {
         this.y = y;
     }
 
+    // copy constructor
+    public Pos(Pos position) {
+        this.x = position.x;
+        this.y = position.y;
+    }
+
     public void add(int x, int y) {
         this.x += x;
         this.y += y;

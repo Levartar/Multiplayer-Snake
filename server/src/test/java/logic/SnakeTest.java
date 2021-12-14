@@ -1,11 +1,11 @@
 package logic;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class SnakeTest {
 
@@ -22,7 +22,12 @@ class SnakeTest {
 
         Snake snake = new Snake(spawnPosition, 0, 5);
 
+
         assertEquals(testPositions, snake.getPositions());
+
+        for (int i = 0; i < snake.getPositions().size() - 1; i++) {
+            assertNotSame(snake.getPositions().get(i), snake.getPositions().get(i + 1));
+        }
     }
 
     @Test
