@@ -1,12 +1,11 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Snake {
 
-    List<Pos> positions;
+    List<Position> positions;
     boolean dead;
     Integer speed;
 
@@ -17,14 +16,14 @@ public class Snake {
         right
     }
 
-    public Snake(Pos spawn, int speed, int length) {
+    public Snake(Position spawn, int speed, int length) {
         this.dead = true;
         this.speed = speed;
 
         spawnSnake(spawn, length);
     }
 
-    private void spawnSnake(Pos spawn, int length) {
+    private void spawnSnake(Position spawn, int length) {
         if (positions == null) {
             this.positions = new ArrayList<>();
         } else {
@@ -32,20 +31,20 @@ public class Snake {
         }
 
         for (int i = 0; i < length; i++) {
-            positions.add(new Pos(spawn));
+            positions.add(new Position(spawn));
         }
         this.dead = false; //snake spawn and is alive
     }
 
     public void move(Direction input){
-        //move the head and set the tail to each previous Element
-        //head is first element in posList
-        //first copy tail then set head
+
         for (int i = positions.size() - 1; i > 0; i--) {
-            positions.set(i,positions.get(i-1)); //sets all elements to the previous element
+            Position thisElement = positions.get(i);
+            Position priorElement = positions.get(i - 1);
+            thisElement.set(priorElement);
         }
 
-        Pos head = new Pos(positions.get(0));
+        Position head = positions.get(0);
 
         switch (input) { //switch case can be edited to support more directions. Also maybe put it in directions class
             case up -> head.add(0,1);
@@ -53,14 +52,11 @@ public class Snake {
             case left -> head.add(-1,0);
             case right -> head.add(1,0);
         }
-        //set first to new head
-        positions.set(0,head);
-
     }
 
 
 
-    public List<Pos> getPositions() {
+    public List<Position> getPositions() {
         return positions;
     }
 }

@@ -2,18 +2,18 @@ package logic;
 
 import java.util.Objects;
 
-public class Pos {
+public class Position {
 
     int x;
     int y;
 
-    public Pos(int x, int y) {
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
     // copy constructor
-    public Pos(Pos position) {
+    public Position(Position position) {
         this.x = position.x;
         this.y = position.y;
     }
@@ -23,17 +23,27 @@ public class Pos {
         this.y += y;
     }
 
-    public void add(Pos position) {
+    public void add(Position position) {
         this.x = x+position.x;
         this.y = y+position.y;
+    }
+
+    public void set(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void set(Position position) {
+        this.x = position.x;
+        this.y = position.y;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Pos pos = (Pos) o;
-        return x == pos.x && y == pos.y;
+        Position position = (Position) o;
+        return x == position.x && y == position.y;
     }
 
     @Override
