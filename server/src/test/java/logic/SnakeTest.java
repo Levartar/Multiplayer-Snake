@@ -64,4 +64,21 @@ class SnakeTest {
             assertNotSame(testSnake.getPositions().get(i), testSnake.getPositions().get(i + 1));
         }
     }
+
+    @Test
+    void complexMoveSnake(){
+        List<Position> testPositions = new ArrayList<>();
+        testPositions.add(new Position(3,3));
+        testPositions.add(new Position(3,2));
+        testPositions.add(new Position(2,2));
+        testPositions.add(new Position(2,1));
+
+        Snake testSnake = new Snake(new Position(1,1), 1, 4);
+        testSnake.move(Snake.Direction.right);
+        testSnake.move(Snake.Direction.up);
+        testSnake.move(Snake.Direction.right);
+        testSnake.move(Snake.Direction.up);
+
+        assertEquals(testPositions, testSnake.getPositions());
+    }
 }
