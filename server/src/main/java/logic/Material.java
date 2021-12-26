@@ -1,9 +1,9 @@
 package logic;
 
 public enum Material {
-    WALL ('.'),
+    WALL ('#'),
     FREESPACE (' '),
-    APPLE ('#');
+    APPLE ('@') ;
 
     private final char material;
 
@@ -17,14 +17,6 @@ public enum Material {
         return this.material;
     }
 
-    //Propably isnt needed
-    //public char getStatus() {
-    //    switch (this.material) {
-    //        case WALL -> {return 'd';}
-    //        case APPLE -> {return 'g';}
-    //        case FREESPACE -> {return ' ';}
-    //    }
-    //}
 }
 
 

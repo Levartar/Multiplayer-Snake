@@ -9,13 +9,6 @@ public class Snake {
     boolean dead;
     Integer speed;
 
-    enum Direction{ //maybe create new class for enum or put in Pos class
-        up,
-        down,
-        left,
-        right
-    }
-
     public Snake(Position spawn, int speed, int length) {
         this.dead = true;
         this.speed = speed;

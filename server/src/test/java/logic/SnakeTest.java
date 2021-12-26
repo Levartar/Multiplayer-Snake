@@ -36,7 +36,7 @@ class SnakeTest {
         List<Position> testPositions = new ArrayList<>();
         testPositions.add(new Position(1,2));
         Snake testSnake = new Snake(new Position(1,1), 1, 1);
-        testSnake.move(Snake.Direction.up);
+        testSnake.move(Direction.up);
 
         assertEquals(testPositions, testSnake.getPositions());
 
@@ -55,7 +55,7 @@ class SnakeTest {
 
         Snake testSnake = new Snake(new Position(1,1), 1, 3);
         for (int i = 0; i < 2 ; i++) { //move right 2 times
-            testSnake.move(Snake.Direction.right);
+            testSnake.move(Direction.right);
         }
 
         assertEquals(testPositions, testSnake.getPositions());
@@ -74,10 +74,10 @@ class SnakeTest {
         testPositions.add(new Position(2,1));
 
         Snake testSnake = new Snake(new Position(1,1), 1, 4);
-        testSnake.move(Snake.Direction.right);
-        testSnake.move(Snake.Direction.up);
-        testSnake.move(Snake.Direction.right);
-        testSnake.move(Snake.Direction.up);
+        testSnake.move(Direction.right);
+        testSnake.move(Direction.up);
+        testSnake.move(Direction.right);
+        testSnake.move(Direction.up);
 
         assertEquals(testPositions, testSnake.getPositions());
     }
