@@ -24,6 +24,7 @@ public class Map {
     public HashMap<Position, Material> getPositions(){
         return Positions;
     }
+
     public Material get(Position pos){
         return Positions.get(pos);
     }

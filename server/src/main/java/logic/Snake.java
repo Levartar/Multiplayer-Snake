@@ -47,6 +47,10 @@ public class Snake {
         }
     }
 
+    public void die(){
+        this.dead=true;
+    }
+
 
 
     public List<Position> getPositions() {

@@ -3,7 +3,7 @@ package logic;
 public enum Material {
     WALL ('#'),
     FREESPACE (' '),
-    APPLE ('@') ;
+    APPLE ('@');
 
     private final char material;
 
@@ -16,7 +16,6 @@ public enum Material {
     public char getSymbol() {
         return this.material;
     }
-
 }
 
 
