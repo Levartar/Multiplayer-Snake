@@ -16,16 +16,22 @@ public class Gamemode {
     int playerNumber;
     List<Player> players;
     List<Snake> snakes;
-    Map playMap;
+    Map map;
 
-    public Gamemode(int playerNumber, List<Player> players, Map playMap) {
+    public Gamemode(List<Player> players, Map map) {
         this.playerNumber = playerNumber;
         this.players = players;
-        this.playMap = playMap;
+        this.map = map;
 
         //TODO create one Snake for each player
-        //Set Spawnpoints on each map and use them by random???
-        this.snakes = null;
+        players.forEach(player -> {
+            Snake playerSnake = new Snake(map.getSpawn(),5,player.getName());
+            this.snakes.add(playerSnake);
+        });
+
+    }
+    private void addSnake(Snake snake){
+
     }
 
     public String gameLoop() {
@@ -33,17 +39,38 @@ public class Gamemode {
         for (int i = 0; i < players.toArray().length-1; i++) {
             snakes.get(i).move(players.get(i).getDirection());
         }
-        checkCollision(playMap,snakes);
-        //TODO build Return MapString
+        checkCollision();
+        //Think about how to not send something if nothing changed
         JSONObject worldMessage = new JSONObject();
-        worldMessage.put("world",playMap.toString());
-        JSONArray replaceMessage = new JSONArray();
-        //worldMessage.put("replace",)
-
-        return null;
+        worldMessage.put("world", map.toString());
+        worldMessage.put("replace", printReplace());
+        worldMessage.put("snakes", printSnakes());
+        return worldMessage.toString();
     }
 
-    public void checkCollision(Map map, List<Snake> snakes) {
+    private JSONArray printSnakes() {
+        JSONArray snakeArray = new JSONArray();
+        snakes.forEach(snake -> {
+            JSONObject snakeObject = new JSONObject();
+            snakeObject.put("name",snake.getName());
+            snakeObject.put("direction",snake.getDirection());
+            JSONArray positionsArray = new JSONArray();
+            snake.getPositions().forEach(position -> {
+                positionsArray.put(new JSONObject(position.toString()));
+            });
+            snakeObject.put("positions",positionsArray);
+            snakeArray.put(snakeObject);
+        });
+        return snakeArray;
+    }
+
+    private JSONArray printReplace() {
+        JSONArray replaceArray = new JSONArray();
+        //TODO call Apple/Food spawns here
+        return replaceArray;
+    }
+
+    private void checkCollision() {
         //Collision rules are made here!
         // # = Wall = Death
         // @ = Apple = grow

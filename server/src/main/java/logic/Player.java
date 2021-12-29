@@ -16,7 +16,11 @@ public class Player {
         return null;
     }
 
-    public void setHighScore() {
+    public void writeHighScoreToDB() {
         //TODO write HS to DataBase
+    }
+
+    public String getName(){
+        return name;
     }
 }

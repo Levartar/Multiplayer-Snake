@@ -6,12 +6,13 @@ import java.util.List;
 public class Snake {
 
     List<Position> positions;
+    String name;
+    Direction direction = null;
     boolean dead;
-    Integer speed;
 
-    public Snake(Position spawn, int speed, int length) {
+    public Snake(Position spawn, int length, String name) {
         this.dead = true;
-        this.speed = speed;
+        this.name = name;
 
         spawnSnake(spawn, length);
     }
@@ -30,6 +31,7 @@ public class Snake {
     }
 
     public void move(Direction input){
+        this.direction = input;
 
         for (int i = positions.size() - 1; i > 0; i--) {
             Position thisElement = positions.get(i);
@@ -51,9 +53,15 @@ public class Snake {
         this.dead=true;
     }
 
-
+    public String getName() {
+        return name;
+    }
 
     public List<Position> getPositions() {
         return positions;
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 }

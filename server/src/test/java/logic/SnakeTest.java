@@ -20,7 +20,7 @@ class SnakeTest {
             testPositions.add(spawnPosition);
         }
 
-        Snake snake = new Snake(spawnPosition, 0, 5);
+        Snake snake = new Snake(spawnPosition, 0, "test");
 
 
         assertEquals(testPositions, snake.getPositions());
@@ -35,7 +35,7 @@ class SnakeTest {
         //testHead
         List<Position> testPositions = new ArrayList<>();
         testPositions.add(new Position(1,2));
-        Snake testSnake = new Snake(new Position(1,1), 1, 1);
+        Snake testSnake = new Snake(new Position(1,1), 1, "test");
         testSnake.move(Direction.up);
 
         assertEquals(testPositions, testSnake.getPositions());
@@ -53,7 +53,7 @@ class SnakeTest {
         testPositions.add(new Position(2,1));
         testPositions.add(new Position(1,1));
 
-        Snake testSnake = new Snake(new Position(1,1), 1, 3);
+        Snake testSnake = new Snake(new Position(1,1), 1, "test");
         for (int i = 0; i < 2 ; i++) { //move right 2 times
             testSnake.move(Direction.right);
         }
@@ -73,7 +73,7 @@ class SnakeTest {
         testPositions.add(new Position(2,2));
         testPositions.add(new Position(2,1));
 
-        Snake testSnake = new Snake(new Position(1,1), 1, 4);
+        Snake testSnake = new Snake(new Position(1,1), 1, "test");
         testSnake.move(Direction.right);
         testSnake.move(Direction.up);
         testSnake.move(Direction.right);

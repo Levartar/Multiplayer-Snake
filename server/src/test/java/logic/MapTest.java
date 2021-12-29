@@ -35,4 +35,9 @@ class MapTest {
         assertTrue(squareMap.get(new Position(3,3)).equals(Material.APPLE));
         assertTrue(squareMap.get(new Position(5,4)).equals(Material.WALL));
     }
+
+    @Test
+    void getSpawnpoint() {
+
+    }
 }
