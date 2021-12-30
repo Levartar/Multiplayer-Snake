@@ -48,10 +48,14 @@ public class Map {
             if (c == '\n') {
                 y++;
                 x = 1;
-
             } else {
+                Material material = Material.getMaterial(c);
+
                 Position newPos = new Position(x, y);
-                this.Positions.put(newPos, getMaterial(c));
+                this.Positions.put(newPos, material);
+                if (material == Material.SPAWN) {
+                    spawnPoints.add(new Position(x - 1, y - 1));
+                }
                 x++;
             }
         }
@@ -81,7 +85,7 @@ public class Map {
     private void updateMapString() {
         char[][] charArray = new char[width][height];
         Positions.forEach((position, material) -> {
-            charArray[position.x-1][position.y-1] = material.getSymbol();//hope this works
+            charArray[position.getX()-1][position.getY()-1] = material.getSymbol();//hope this works
         });
         StringBuilder sb = new StringBuilder();
         for (char[] subArray : charArray) {
@@ -96,25 +100,14 @@ public class Map {
         Object[] posArray = Positions.keySet().toArray();
         for (int i = 0; i < posArray.length; i++) {
             Position pos = (Position) posArray[i];
-            if (pos.x> width){
-                width = pos.x;
+            if (pos.getX()> width){
+                width = pos.getX();
             }
-            if (pos.y> height){
-                height = pos.y;
+            if (pos.getY()> height){
+                height = pos.getY();
             }
         }
     }
-
-        //TODO this should be in Material enum but i dont know how to put it there
-        private Material getMaterial(char symbol) {
-            switch (symbol) {
-                case '#' -> {return Material.WALL;}
-                case '@' -> {return Material.APPLE;}
-                case ' ' -> {return Material.FREESPACE;}
-            }
-            return null;
-        }
-
 
     public List<Position> getSpawnPoints() {
         return spawnPoints;

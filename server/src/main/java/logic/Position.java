@@ -4,8 +4,8 @@ import java.util.Objects;
 
 public class Position {
 
-    int x;
-    int y;
+    private int x;
+    private int y;
 
     public Position(int x, int y) {
         this.x = x;
@@ -56,5 +56,13 @@ public class Position {
         return
                 "x:" + x +"," +
                 "y:" + y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }
