@@ -5,15 +5,14 @@ import java.util.List;
 
 public class Snake {
 
-    List<Position> positions;
-    Direction direction = null;
-    boolean dead;
-    Player player;
+    private List<Position> positions;
+    private Direction direction = null;
+    private boolean dead;
+    private Player player;
 
     public Snake(Position spawn, int length, Player player) {
         this.dead = true;
         this.player = player;
-
         createSnakeOnSpawn(spawn, length);
     }
 
@@ -31,7 +30,7 @@ public class Snake {
     }
 
     public void move(){
-        this.direction = player.getDirection();
+        this.direction = Direction.getDirection(player.getInput());
 
         for (int i = positions.size() - 1; i > 0; i--) {
             Position thisElement = positions.get(i);
@@ -41,18 +40,12 @@ public class Snake {
 
         Position head = positions.get(0);
         direction.addDirection(direction,head);
-
-        //switch (direction) { //switch case can be edited to support more directions. Also maybe put it in directions class
-        //    case up -> head.add(0,1);
-        //    case down -> head.add(0,-1);
-        //    case left -> head.add(-1,0);
-        //    case right -> head.add(1,0);
-        //}
     }
 
     //TODO what happens when snakes dies
     public void die(){
-        this.dead=true;
+        dead = true;
+        positions = null;
     }
 
     public String getName() {

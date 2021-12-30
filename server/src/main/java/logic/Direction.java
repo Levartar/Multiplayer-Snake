@@ -16,4 +16,14 @@ public enum Direction {
         return head;
     }
 
+    public static Direction getDirection(char input){
+        switch (input) {
+            case 'w':return Direction.up;
+            case 'a':return Direction.left;
+            case 's':return Direction.down;
+            case 'd':return Direction.right;
+        }
+        return null;
+    }
+
 }

@@ -28,10 +28,10 @@ class MapTest {
                 #   #
                 #####""";
         Map squareMap = new Map(testMap);
-        assertEquals(squareMap.get(new Position(0, 0)), Material.WALL);
-        assertEquals(squareMap.get(new Position(1, 1)), Material.FREESPACE);
-        assertEquals(squareMap.get(new Position(2, 2)), Material.APPLE);
-        assertEquals(squareMap.get(new Position(4, 3)), Material.WALL);
+        assertEquals(Material.WALL, squareMap.getMaterialAt(new Position(0, 0)));
+        assertEquals(Material.FREESPACE, squareMap.getMaterialAt(new Position(1, 1)));
+        assertEquals(Material.APPLE, squareMap.getMaterialAt(new Position(2, 2)));
+        assertEquals(Material.WALL, squareMap.getMaterialAt(new Position(4, 3)));
     }
 
     @Test
@@ -62,25 +62,26 @@ class MapTest {
         Map squareMap = new Map(startMap);
         squareMap.changeMaterial(new Position(0,0),Material.APPLE);
         String testMap = """
-                @####
+                #####
                 #   #
                 # @ #
                 #   #
-                #####""";
+                @####""";
         assertEquals(squareMap.toString(),testMap);
     }
 
     @Test
     void testToStringUpdate2(){
-        String startMap = """
+        String startMap = """  
                 #####
                 #   #
                 # @ #
                 #   #
-                #####""";
+                #####                
+                """;
         Map squareMap = new Map(startMap);
-        squareMap.changeMaterial(new Position(0,0),Material.APPLE);
-        squareMap.changeMaterial(new Position(2,1),Material.APPLE);
+        squareMap.changeMaterial(new Position(0,4),Material.APPLE);
+        squareMap.changeMaterial(new Position(2,3),Material.APPLE);
         String testMap = """
                 @####
                 # @ #

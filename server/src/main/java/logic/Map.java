@@ -8,84 +8,75 @@ import java.util.*;
 
 public class Map {
 
-    Material[][] Positions;
-    //HashMap<Position, Material> Positions = new HashMap<>();
-    List<Position> spawnPoints = new ArrayList<>();
-    String mapString;
+    private Material[][] map;
+    private List<Position> spawnPoints = new ArrayList<>();
+    private String mapString;
+    //private final int spawnDistanceX = 0;
+    //private final int spawnDistanceY = 0;
 
     public Map(String mapString) {//Overloaded Method to Load Map via String or Path
         this.mapString = mapString;
         parseMapString(mapString);
+        generateRandomSortedSpawns();
     }
 
     public Map(Path mapPath) throws IOException {
         this.mapString = Files.readString(mapPath, StandardCharsets.UTF_8);
         parseMapString(mapString);
+        generateRandomSortedSpawns();
     }
 
     public void changeMaterial(Position pos, Material material) {
-        Positions[pos.getY()][pos.getX()] = material;
+        map[pos.getX()][pos.getY()] = material;
         updateMapString();
     }
 
     public void changeMaterial(int x, int y, Material material) {
-        Positions[y][x] = material;
+        map[x][y] = material;
         updateMapString();
     }
 
-    public Material[][] getPositions() {
-        return Positions;
+    public Material[][] getMap() { //maybe useless
+        return map;
     }
 
-    public Material get(Position pos) {
-        return Positions[pos.getY()][pos.getX()];
+    public Material getMaterialAt(Position pos) {
+        return map[pos.getX()][pos.getY()];
     }
 
-    public Material get(int x, int y) {
-        return Positions[y][x];
+    public Material getMaterialAt(int x, int y) {
+        return map[x][y];
+    }
+
+    private void generateRandomSortedSpawns() {
+//        Position spawnUpLeft = new Position(spawnDistanceX,getHeight() - spawnDistanceY);
+//        Position spawnUpRight = new Position(getWidth() - spawnDistanceX,getHeight() - spawnDistanceY);
+//        Position spawnDownLeft = new Position(spawnDistanceX,spawnDistanceY);
+//        Position spawnDownRight = new Position(getWidth() - spawnDistanceX,spawnDistanceY);
+//
+//        spawnPoints.add(spawnUpLeft);
+//        spawnPoints.add(spawnUpRight);
+//        spawnPoints.add(spawnDownLeft);
+//        spawnPoints.add(spawnDownRight);
+        Collections.shuffle(spawnPoints);
     }
 
     private void parseMapString(String mapString) {
-        this.Positions = getNewMaterialArray(mapString);
+        String[] splitStrings = mapString.split("\n");
+        map = new Material[splitStrings[0].length()][splitStrings.length];
 
-        int x = 0;
-        int y = 0;
-        char[] mapCharArray = mapString.toCharArray();
-        for (char c : mapCharArray) {
-            if (c == '\n') {
-                y++;
-                x = 0;
-            } else {
-                Material material = Material.getMaterial(c);
-                this.Positions[y][x] = material;
-                if (material == Material.SPAWN) {
-                    spawnPoints.add(new Position(x - 1, y - 1));
+        for (int i = 0; i < splitStrings.length; i++) {
+            char[] tmp = splitStrings[i].toCharArray();
+            for (int j = 0; j < tmp.length; j++) {
+                if (tmp[j] == 's'){
+                    map[j][getHeight() - i - 1] = Material.FREESPACE;
+                    spawnPoints.add(new Position(j,i));
+                } else {
+                    map[j][getHeight() - i - 1] = Material.getMaterial(tmp[j]);
                 }
-                x++;
             }
         }
-        //TODO get randomized Spawnpoints and write them into Spawnpoints list
-        // spawns should be marked as 's'
     }
-
-    private Material[][] getNewMaterialArray(String mapString){
-        int x = 0;
-        int y = 0;
-        while (mapString.endsWith("\n")) {
-            mapString = mapString.substring(0,mapString.length()-1);
-        }
-        char[] mapCharArray = mapString.toCharArray();
-        for (char a : mapCharArray) {
-            if (a == '\n') {
-                y++;
-                x = 1;
-            } else {
-                x++;
-            }
-        }
-        return new Material[y + 1][x - 1];
-    }
-
 
     //public Position getSpawn() {
     //    Position newSpawn = spawnPoints.get(0);
@@ -105,9 +96,10 @@ public class Map {
 
     private void updateMapString() {
         StringBuilder sb = new StringBuilder();
-        for (Material[] subMaterial : Positions) {
-            for (int i = 0; i < subMaterial.length; i++) {
-                sb.append(subMaterial[i]);
+
+        for (int i = 0; i < getHeight(); i++) {
+            for (int j = 0; j < getWidth(); j++) {
+                sb.append(map[j][getHeight() - 1 - i]);
             }
             sb.append('\n');
         }
@@ -116,25 +108,12 @@ public class Map {
     }
 
     public int getWidth() {
-        return Positions.length;
+        return map.length;
     }
 
     public int getHeight() {
-        return Positions[0].length;
+        return map[0].length;
     }
-
-    //private void calculateWidthAndHeight(){
-    //    Object[] posArray = Positions.keySet().toArray();
-    //    for (int i = 0; i < posArray.length; i++) {
-    //        Position pos = (Position) posArray[i];
-    //        if (pos.getX()> width){
-    //            width = pos.getX();
-    //        }
-    //        if (pos.getY()> height){
-    //            height = pos.getY();
-    //        }
-    //    }
-    //}
 
     public List<Position> getSpawnPoints() {
         return spawnPoints;

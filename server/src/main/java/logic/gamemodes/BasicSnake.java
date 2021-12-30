@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 
 public class BasicSnake implements Gamemode {
 
-    protected Map map;
+    private Map map;
 
-    protected List<Snake> snakes;
+    private List<Snake> snakes;
 
     public BasicSnake(List<Player> players, Map map) {
         this.map = map;
@@ -49,7 +49,7 @@ public class BasicSnake implements Gamemode {
             //Generate head
             Position head = snake.getPositions().get(0);
             //Check head collides with wall
-            if (map.get(head) == Material.WALL) {
+            if (map.getMaterialAt(head) == Material.WALL) {
                 snake.die();
             }
             //TODO check apple/(items) collisions

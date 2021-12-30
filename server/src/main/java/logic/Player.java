@@ -1,21 +1,42 @@
 package logic;
 
 public class Player {
-    String name;
-    char input;
-    String color;
-    int id;
+    private String name;
+    private char input;
+    private String color;
+    private int id;
+    private int highScore;
 
-    int highScore;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public Direction getDirection(){
-        switch (this.input) {
-            case 'w':return Direction.up;
-            case 'a':return Direction.left;
-            case 's':return Direction.down;
-            case 'd':return Direction.right;
-        }
-        return null;
+    public char getInput() {
+        return input;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getHighScore() {
+        return highScore;
+    }
+
+    public void setHighScore(int highScore) {
+        this.highScore = highScore;
     }
 
     public void setInput(char input){
