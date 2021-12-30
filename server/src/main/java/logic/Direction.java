@@ -7,7 +7,7 @@ public enum Direction {
     right;
 
     public static Position addDirection(Direction direction, Position head){
-        switch (direction) { //switch case can be edited to support more directions. Also maybe put it in directions class
+        switch (direction) {
             case up -> head.add(0,1);
             case down -> head.add(0,-1);
             case left -> head.add(-1,0);

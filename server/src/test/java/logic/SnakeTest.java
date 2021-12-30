@@ -50,7 +50,7 @@ class SnakeTest {
     }
 
     @Test
-    void moveSnake() {//TODO test snake with length 3 moving
+    void moveSnake() {
         List<Position> testPositions = new ArrayList<>();
         testPositions.add(new Position(3,1));
         testPositions.add(new Position(2,1));
@@ -59,7 +59,7 @@ class SnakeTest {
         Player testPlayer = new Player();
         testPlayer.setInput('d');
 
-        Snake testSnake = new Snake(new Position(1,1), 1, testPlayer);
+        Snake testSnake = new Snake(new Position(1,1), 3, testPlayer);
 
         for (int i = 0; i < 2 ; i++) { //move right 2 times
             testSnake.move();
@@ -82,7 +82,7 @@ class SnakeTest {
 
         Player testPlayer = new Player();
 
-        Snake testSnake = new Snake(new Position(1,1), 1, testPlayer);
+        Snake testSnake = new Snake(new Position(1,1), 4, testPlayer);
 
         testPlayer.setInput('d');
         testSnake.move();

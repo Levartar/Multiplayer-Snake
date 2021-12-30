@@ -17,7 +17,7 @@ class MapTest {
                 #####""";
         Map squareMap = new Map();
         squareMap.Map(testMap);
-        assertTrue(squareMap.toString().equals(testMap));
+        assertEquals(squareMap.toString(), testMap);
     }
 
     @Test
@@ -30,10 +30,10 @@ class MapTest {
                 #####""";
         Map squareMap = new Map();
         squareMap.Map(testMap);
-        assertTrue(squareMap.get(new Position(1,1)).equals(Material.WALL));
-        assertTrue(squareMap.get(new Position(2,2)).equals(Material.FREESPACE));
-        assertTrue(squareMap.get(new Position(3,3)).equals(Material.APPLE));
-        assertTrue(squareMap.get(new Position(5,4)).equals(Material.WALL));
+        assertEquals(squareMap.get(new Position(0, 0)), Material.WALL);
+        assertEquals(squareMap.get(new Position(1, 1)), Material.FREESPACE);
+        assertEquals(squareMap.get(new Position(2, 2)), Material.APPLE);
+        assertEquals(squareMap.get(new Position(4, 3)), Material.WALL);
     }
 
     @Test
@@ -51,7 +51,47 @@ class MapTest {
                 #####""";
         Map squareMap = new Map();
         squareMap.Map(testMap);
-        System.out.println(squareMap);
+        assertEquals(squareMap.toString(),testMap);
+    }
+
+    @Test
+    void testToStringUpdate(){
+        String startMap = """
+                #####
+                #   #
+                # @ #
+                #   #
+                #####""";
+        Map squareMap = new Map();
+        squareMap.Map(startMap);
+        squareMap.changeMaterial(new Position(0,0),Material.APPLE);
+        String testMap = """
+                @####
+                #   #
+                # @ #
+                #   #
+                #####""";
+        assertEquals(squareMap.toString(),testMap);
+    }
+
+    @Test
+    void testToStringUpdate2(){
+        String startMap = """
+                #####
+                #   #
+                # @ #
+                #   #
+                #####""";
+        Map squareMap = new Map();
+        squareMap.Map(startMap);
+        squareMap.changeMaterial(new Position(0,0),Material.APPLE);
+        squareMap.changeMaterial(new Position(2,1),Material.APPLE);
+        String testMap = """
+                @####
+                # @ #
+                # @ #
+                #   #
+                #####""";
         assertEquals(squareMap.toString(),testMap);
     }
 

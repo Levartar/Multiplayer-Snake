@@ -8,51 +8,64 @@ import java.util.*;
 
 public class Map {
 
-    HashMap<Position, Material> Positions = new HashMap<>();
+    Material[][] Positions;
+    //HashMap<Position, Material> Positions = new HashMap<>();
     List<Position> spawnPoints = new ArrayList<>();
     String mapString;
-    int width =0;
-    int height =0;
 
     public void Map(String mapString){//Overloaded Method to Load Map via String or Path
         this.mapString = mapString;
         parseMapString(mapString);
-        calculateWidthAndHeight();
     }
 
     public void Map(Path mapPath) throws IOException {
         this.mapString = Files.readString(mapPath, StandardCharsets.UTF_8);
         parseMapString(mapString);
-        calculateWidthAndHeight();
     }
 
     public void changeMaterial(Position pos, Material material){
-        Positions.put(pos,material);
+        Positions[pos.getY()][pos.getX()] = material;
+        updateMapString();
+    }
+    public void changeMaterial(int x, int y, Material material){
+        Positions[y][x] = material;
         updateMapString();
     }
 
-    public HashMap<Position, Material> getPositions(){
+    public Material[][] getPositions(){
         return Positions;
     }
 
     public Material get(Position pos){
-        return Positions.get(pos);
+        return Positions[pos.getY()][pos.getX()];
+    }
+    public Material get(int x, int y){
+        return Positions[y][x];
     }
 
     private void parseMapString(String mapString) {
-        this.Positions.clear();
+        int x=0;
+        int y=0;
         char[] mapCharArray = mapString.toCharArray();
-        int x=1;
-        int y=1;
-        for (char c : mapCharArray) {
-            if (c == '\n') {
+        for (char a : mapCharArray) {
+            if (a == '\n') {
                 y++;
                 x = 1;
             } else {
-                Material material = Material.getMaterial(c);
+                x++;
+            }
+        }
+        this.Positions = new Material[y+1][x-1];
 
-                Position newPos = new Position(x, y);
-                this.Positions.put(newPos, material);
+        x=0;
+        y=0;
+        for (char c : mapCharArray) {
+            if (c == '\n') {
+                y++;
+                x = 0;
+            } else {
+                Material material = Material.getMaterial(c);
+                this.Positions[y][x] = material;
                 if (material == Material.SPAWN) {
                     spawnPoints.add(new Position(x - 1, y - 1));
                 }
@@ -73,7 +86,6 @@ public class Map {
     //        newSpawn = new Position(spawnPoints.get(0).x+rand.nextInt(10)*spawnPointWidth,spawnPoints.get(0).y+rand.nextInt(10)*spawnPointHeight);
     //    }
     //    spawnPoints.add(newSpawn);
-    //    //TODO return specific OR random spawns from map
     //    return newSpawn;
     //}
 
@@ -83,31 +95,46 @@ public class Map {
     }
 
     private void updateMapString() {
-        char[][] charArray = new char[width][height];
-        Positions.forEach((position, material) -> {
-            charArray[position.getX()-1][position.getY()-1] = material.getSymbol();//hope this works
-        });
+        //char[][] charArray = new char[width][height];
+        //Positions.forEach((position, material) -> {
+        //    charArray[position.getX()-1][position.getY()-1] = material.getSymbol();//hope this works
+        //});
         StringBuilder sb = new StringBuilder();
-        for (char[] subArray : charArray) {
-            sb.append(subArray);
+        for (Material[] subMaterial : Positions){
+            for (int i = 0; i < subMaterial.length; i++) {
+                sb.append(subMaterial[i]);
+            }
             sb.append('\n');
         }
+        //StringBuilder sb = new StringBuilder();
+        //for (char[] subArray : charArray) {
+        //    sb.append(subArray);
+        //    sb.append('\n');
+        //}
         sb.deleteCharAt(sb.length()-1);
-        mapString =  sb.toString();
+        this.mapString =  sb.toString();
     }
 
-    private void calculateWidthAndHeight(){
-        Object[] posArray = Positions.keySet().toArray();
-        for (int i = 0; i < posArray.length; i++) {
-            Position pos = (Position) posArray[i];
-            if (pos.getX()> width){
-                width = pos.getX();
-            }
-            if (pos.getY()> height){
-                height = pos.getY();
-            }
-        }
+    public int getWidth(){
+        return Positions.length;
     }
+
+    public int getHeight(){
+        return Positions[0].length;
+    }
+
+    //private void calculateWidthAndHeight(){
+    //    Object[] posArray = Positions.keySet().toArray();
+    //    for (int i = 0; i < posArray.length; i++) {
+    //        Position pos = (Position) posArray[i];
+    //        if (pos.getX()> width){
+    //            width = pos.getX();
+    //        }
+    //        if (pos.getY()> height){
+    //            height = pos.getY();
+    //        }
+    //    }
+    //}
 
     public List<Position> getSpawnPoints() {
         return spawnPoints;
