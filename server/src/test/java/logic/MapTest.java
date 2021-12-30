@@ -15,8 +15,7 @@ class MapTest {
                 # @ #
                 #   #
                 #####""";
-        Map squareMap = new Map();
-        squareMap.Map(testMap);
+        Map squareMap = new Map(testMap);
         assertEquals(squareMap.toString(), testMap);
     }
 
@@ -28,8 +27,7 @@ class MapTest {
                 # @ #
                 #   #
                 #####""";
-        Map squareMap = new Map();
-        squareMap.Map(testMap);
+        Map squareMap = new Map(testMap);
         assertEquals(squareMap.get(new Position(0, 0)), Material.WALL);
         assertEquals(squareMap.get(new Position(1, 1)), Material.FREESPACE);
         assertEquals(squareMap.get(new Position(2, 2)), Material.APPLE);
@@ -49,8 +47,7 @@ class MapTest {
                 # @ #
                 #   #
                 #####""";
-        Map squareMap = new Map();
-        squareMap.Map(testMap);
+        Map squareMap = new Map(testMap);
         assertEquals(squareMap.toString(),testMap);
     }
 
@@ -62,8 +59,7 @@ class MapTest {
                 # @ #
                 #   #
                 #####""";
-        Map squareMap = new Map();
-        squareMap.Map(startMap);
+        Map squareMap = new Map(startMap);
         squareMap.changeMaterial(new Position(0,0),Material.APPLE);
         String testMap = """
                 @####
@@ -82,8 +78,7 @@ class MapTest {
                 # @ #
                 #   #
                 #####""";
-        Map squareMap = new Map();
-        squareMap.Map(startMap);
+        Map squareMap = new Map(startMap);
         squareMap.changeMaterial(new Position(0,0),Material.APPLE);
         squareMap.changeMaterial(new Position(2,1),Material.APPLE);
         String testMap = """
@@ -93,6 +88,17 @@ class MapTest {
                 #   #
                 #####""";
         assertEquals(squareMap.toString(),testMap);
+    }
+
+    @Test
+    void testMapConstructor(){
+        String mapString = """
+                #####
+                #   #
+                # s #
+                #   #
+                #####""";
+        Map map = new Map(mapString);
     }
 
 }

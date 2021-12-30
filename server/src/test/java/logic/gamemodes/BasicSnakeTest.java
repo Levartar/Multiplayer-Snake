@@ -17,12 +17,11 @@ class BasicSnakeTest {
         String mapString = """
                 #####
                 #   #
-                # + #
+                # s #
                 #   #
                 #####
                 """;
-        Map map = new Map();
-        map.Map(mapString);
+        Map map = new Map(mapString);
 
         List<Player> players = new ArrayList<>();
         for (int i = 0; i < 4; i++) {

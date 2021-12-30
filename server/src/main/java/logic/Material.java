@@ -5,7 +5,7 @@ public enum Material {
     FREESPACE(' '),
     APPLE('@'),
     SNAKE('o'),
-    SPAWN('+');
+    SPAWN('s');
 
     private final char symbol;
 

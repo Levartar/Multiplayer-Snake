@@ -13,52 +13,44 @@ public class Map {
     List<Position> spawnPoints = new ArrayList<>();
     String mapString;
 
-    public void Map(String mapString){//Overloaded Method to Load Map via String or Path
+    public Map(String mapString) {//Overloaded Method to Load Map via String or Path
         this.mapString = mapString;
         parseMapString(mapString);
     }
 
-    public void Map(Path mapPath) throws IOException {
+    public Map(Path mapPath) throws IOException {
         this.mapString = Files.readString(mapPath, StandardCharsets.UTF_8);
         parseMapString(mapString);
     }
 
-    public void changeMaterial(Position pos, Material material){
+    public void changeMaterial(Position pos, Material material) {
         Positions[pos.getY()][pos.getX()] = material;
         updateMapString();
     }
-    public void changeMaterial(int x, int y, Material material){
+
+    public void changeMaterial(int x, int y, Material material) {
         Positions[y][x] = material;
         updateMapString();
     }
 
-    public Material[][] getPositions(){
+    public Material[][] getPositions() {
         return Positions;
     }
 
-    public Material get(Position pos){
+    public Material get(Position pos) {
         return Positions[pos.getY()][pos.getX()];
     }
-    public Material get(int x, int y){
+
+    public Material get(int x, int y) {
         return Positions[y][x];
     }
 
     private void parseMapString(String mapString) {
-        int x=0;
-        int y=0;
-        char[] mapCharArray = mapString.toCharArray();
-        for (char a : mapCharArray) {
-            if (a == '\n') {
-                y++;
-                x = 1;
-            } else {
-                x++;
-            }
-        }
-        this.Positions = new Material[y+1][x-1];
+        this.Positions = getNewMaterialArray(mapString);
 
-        x=0;
-        y=0;
+        int x = 0;
+        int y = 0;
+        char[] mapCharArray = mapString.toCharArray();
         for (char c : mapCharArray) {
             if (c == '\n') {
                 y++;
@@ -76,6 +68,23 @@ public class Map {
         // spawns should be marked as 's'
     }
 
+    private Material[][] getNewMaterialArray(String mapString){
+        int x = 0;
+        int y = 0;
+        while (mapString.endsWith("\n")) {
+            mapString = mapString.substring(0,mapString.length()-1);
+        }
+        char[] mapCharArray = mapString.toCharArray();
+        for (char a : mapCharArray) {
+            if (a == '\n') {
+                y++;
+                x = 1;
+            } else {
+                x++;
+            }
+        }
+        return new Material[y + 1][x - 1];
+    }
 
 
     //public Position getSpawn() {
@@ -95,31 +104,22 @@ public class Map {
     }
 
     private void updateMapString() {
-        //char[][] charArray = new char[width][height];
-        //Positions.forEach((position, material) -> {
-        //    charArray[position.getX()-1][position.getY()-1] = material.getSymbol();//hope this works
-        //});
         StringBuilder sb = new StringBuilder();
-        for (Material[] subMaterial : Positions){
+        for (Material[] subMaterial : Positions) {
             for (int i = 0; i < subMaterial.length; i++) {
                 sb.append(subMaterial[i]);
             }
             sb.append('\n');
         }
-        //StringBuilder sb = new StringBuilder();
-        //for (char[] subArray : charArray) {
-        //    sb.append(subArray);
-        //    sb.append('\n');
-        //}
-        sb.deleteCharAt(sb.length()-1);
-        this.mapString =  sb.toString();
+        sb.deleteCharAt(sb.length() - 1);
+        this.mapString = sb.toString();
     }
 
-    public int getWidth(){
+    public int getWidth() {
         return Positions.length;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return Positions[0].length;
     }
 
@@ -139,4 +139,5 @@ public class Map {
     public List<Position> getSpawnPoints() {
         return spawnPoints;
     }
+
 }
