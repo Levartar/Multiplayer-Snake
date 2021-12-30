@@ -8,10 +8,10 @@ import java.util.List;
 
 public class Gamemode {
 
-    //this enum belongs somewhere else
+    //TODO think about gamemodes
+    // this enum belongs somewhere else
     enum gamemode{
         BasicSnake,
-        OctagonSnake,
         UnderworldSnake
     }
 
@@ -67,6 +67,8 @@ public class Gamemode {
         return replaceArray;
     }
 
+    //TODO Food Spawns
+
     private void checkCollision() {
         //Collision rules are made here!
         // # = Wall = Death
@@ -78,6 +80,7 @@ public class Gamemode {
             if (map.get(head)==Material.WALL) {
                 snake.die();
             }
+            //TODO check apple/(items) collisions
             //Check head collide with snakes
             snakes.forEach(s -> {
                 s.getPositions().forEach(position -> {

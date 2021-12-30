@@ -52,6 +52,7 @@ public class Map {
             }
         }
         //TODO get randomized Spawnpoints and write them into Spawnpoints list
+        // spawns should be marked as 's'
     }
 
     //public Map() {

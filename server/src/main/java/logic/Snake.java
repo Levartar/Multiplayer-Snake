@@ -30,6 +30,7 @@ public class Snake {
         this.dead = false; //snake spawn and is alive
     }
 
+    //TODO snakes can move to the other side
     public void move(){
         this.direction = player.getDirection();
 
@@ -49,6 +50,7 @@ public class Snake {
         }
     }
 
+    //TODO what happens when snakes dies
     public void die(){
         this.dead=true;
     }
