@@ -26,6 +26,11 @@ public class Map {
         calculateWidthAndHeight();
     }
 
+    public void changeMaterial(Position pos, Material material){
+        Positions.put(pos,material);
+        updateMapString();
+    }
+
     public HashMap<Position, Material> getPositions(){
         return Positions;
     }
@@ -70,7 +75,10 @@ public class Map {
 
     @Override
     public String toString() {
-        //TODO parse Positions back into string
+        return mapString;
+    }
+
+    private void updateMapString() {
         char[][] charArray = new char[width][height];
         Positions.forEach((position, material) -> {
             charArray[position.x-1][position.y-1] = material.getSymbol();//hope this works
@@ -81,8 +89,7 @@ public class Map {
             sb.append('\n');
         }
         sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
-        //return mapString; //can stay like this as long as the map stays the same
+        mapString =  sb.toString();
     }
 
     private void calculateWidthAndHeight(){
