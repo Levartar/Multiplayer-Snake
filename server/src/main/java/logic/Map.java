@@ -13,8 +13,8 @@ public class Map {
 
     HashMap<Position, Material> Positions = new HashMap<>();
     List<Position> spawnPoints = new ArrayList<>();
-    int spawnPointWidth;
-    int spawnPointHeight;
+    //int spawnPointWidth;
+    //int spawnPointHeight;
     String mapString;
 
     public void loadMap(String mapString){//Overloaded Method to Load Map via String or Path
@@ -51,25 +51,26 @@ public class Map {
                 x++;
             }
         }
+        //TODO get randomized Spawnpoints and write them into Spawnpoints list
     }
 
-    public Map() {
-        spawnPoints.add(new Position(2,2));
-        spawnPointWidth = 10;
-        spawnPointHeight = 10;
-    }
+    //public Map() {
+    //    spawnPoints.add(new Position(2,2));
+    //    spawnPointWidth = 10;
+    //    spawnPointHeight = 10;
+    //}
 
-    public Position getSpawn() {
-        Position newSpawn = spawnPoints.get(0);
-        while (spawnPoints.contains(newSpawn)/*&&Positions.get(newSpawn)!=Material.WALL*/){
-            Random rand = new Random();
-            //10 is max steps. Could lead to Map out of bounds Problems
-            newSpawn = new Position(spawnPoints.get(0).x+rand.nextInt(10)*spawnPointWidth,spawnPoints.get(0).y+rand.nextInt(10)*spawnPointHeight);
-        }
-        spawnPoints.add(newSpawn);
-        //TODO return specific OR random spawns from map
-        return newSpawn;
-    }
+    //public Position getSpawn() {
+    //    Position newSpawn = spawnPoints.get(0);
+    //    while (spawnPoints.contains(newSpawn)/*&&Positions.get(newSpawn)!=Material.WALL*/){
+    //        Random rand = new Random();
+    //        //10 is max steps. Could lead to Map out of bounds Problems
+    //        newSpawn = new Position(spawnPoints.get(0).x+rand.nextInt(10)*spawnPointWidth,spawnPoints.get(0).y+rand.nextInt(10)*spawnPointHeight);
+    //    }
+    //    spawnPoints.add(newSpawn);
+    //    //TODO return specific OR random spawns from map
+    //    return newSpawn;
+    //}
 
     @Override
     public String toString() {
@@ -93,6 +94,7 @@ public class Map {
         }
 
 
-
-
+    public List<Position> getSpawnPoints() {
+        return spawnPoints;
+    }
 }

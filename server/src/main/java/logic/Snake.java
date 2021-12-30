@@ -6,18 +6,18 @@ import java.util.List;
 public class Snake {
 
     List<Position> positions;
-    String name;
     Direction direction = null;
     boolean dead;
+    Player player;
 
-    public Snake(Position spawn, int length, String name) {
+    public Snake(Position spawn, int length, Player player) {
         this.dead = true;
-        this.name = name;
+        this.player = player;
 
-        spawnSnake(spawn, length);
+        createSnakeOnSpawn(spawn, length);
     }
 
-    private void spawnSnake(Position spawn, int length) {
+    private void createSnakeOnSpawn(Position spawn, int length) {
         if (positions == null) {
             this.positions = new ArrayList<>();
         } else {
@@ -30,8 +30,8 @@ public class Snake {
         this.dead = false; //snake spawn and is alive
     }
 
-    public void move(Direction input){
-        this.direction = input;
+    public void move(){
+        this.direction = player.getDirection();
 
         for (int i = positions.size() - 1; i > 0; i--) {
             Position thisElement = positions.get(i);
@@ -41,7 +41,7 @@ public class Snake {
 
         Position head = positions.get(0);
 
-        switch (input) { //switch case can be edited to support more directions. Also maybe put it in directions class
+        switch (direction) { //switch case can be edited to support more directions. Also maybe put it in directions class
             case up -> head.add(0,1);
             case down -> head.add(0,-1);
             case left -> head.add(-1,0);
@@ -54,7 +54,7 @@ public class Snake {
     }
 
     public String getName() {
-        return name;
+        return player.getName();
     }
 
     public List<Position> getPositions() {

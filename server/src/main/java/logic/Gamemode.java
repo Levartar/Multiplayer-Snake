@@ -2,6 +2,8 @@ package logic;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class Gamemode {
@@ -22,23 +24,18 @@ public class Gamemode {
         this.playerNumber = playerNumber;
         this.players = players;
         this.map = map;
+        List<Position> spawns = map.getSpawnPoints();
 
-        //TODO create one Snake for each player
-        players.forEach(player -> {
-            Snake playerSnake = new Snake(map.getSpawn(),5,player.getName());
-            this.snakes.add(playerSnake);
-        });
-
-    }
-    private void addSnake(Snake snake){
-
+        for (int i = 0; i < players.size(); i++) {
+            snakes.add(new Snake(spawns.get(i),5,players.get(i)));
+        }
     }
 
     public String gameLoop() {
         //move Snakes in DIRECTION
-        for (int i = 0; i < players.toArray().length-1; i++) {
-            snakes.get(i).move(players.get(i).getDirection());
-        }
+        snakes.forEach(snake -> {
+            snake.move();
+        });
         checkCollision();
         //Think about how to not send something if nothing changed
         JSONObject worldMessage = new JSONObject();

@@ -2,9 +2,11 @@ package logic;
 
 public class Player {
     String name;
-    int highScore;
     char input;
+    String color;
+    int id;
 
+    int highScore;
 
     public Direction getDirection(){
         switch (this.input) {
@@ -14,6 +16,10 @@ public class Player {
             case 'd':return Direction.right;
         }
         return null;
+    }
+
+    public void setInput(char input){
+        this.input = input;
     }
 
     public void writeHighScoreToDB() {
