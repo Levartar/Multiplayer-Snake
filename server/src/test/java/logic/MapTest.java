@@ -16,7 +16,7 @@ class MapTest {
                 #   #
                 #####""";
         Map squareMap = new Map();
-        squareMap.loadMap(testMap);
+        squareMap.Map(testMap);
         assertTrue(squareMap.toString().equals(testMap));
     }
 
@@ -29,7 +29,7 @@ class MapTest {
                 #   #
                 #####""";
         Map squareMap = new Map();
-        squareMap.loadMap(testMap);
+        squareMap.Map(testMap);
         assertTrue(squareMap.get(new Position(1,1)).equals(Material.WALL));
         assertTrue(squareMap.get(new Position(2,2)).equals(Material.FREESPACE));
         assertTrue(squareMap.get(new Position(3,3)).equals(Material.APPLE));
@@ -40,4 +40,19 @@ class MapTest {
     void getSpawnpoint() {
 
     }
+
+    @Test
+    void testToString(){
+        String testMap = """
+                #####
+                #   #
+                # @ #
+                #   #
+                #####""";
+        Map squareMap = new Map();
+        squareMap.Map(testMap);
+        System.out.println(squareMap);
+        assertEquals(squareMap.toString(),testMap);
+    }
+
 }

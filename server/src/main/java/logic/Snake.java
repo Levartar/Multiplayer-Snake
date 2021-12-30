@@ -41,13 +41,14 @@ public class Snake {
         }
 
         Position head = positions.get(0);
+        direction.addDirection(direction,head);
 
-        switch (direction) { //switch case can be edited to support more directions. Also maybe put it in directions class
-            case up -> head.add(0,1);
-            case down -> head.add(0,-1);
-            case left -> head.add(-1,0);
-            case right -> head.add(1,0);
-        }
+        //switch (direction) { //switch case can be edited to support more directions. Also maybe put it in directions class
+        //    case up -> head.add(0,1);
+        //    case down -> head.add(0,-1);
+        //    case left -> head.add(-1,0);
+        //    case right -> head.add(1,0);
+        //}
     }
 
     //TODO what happens when snakes dies

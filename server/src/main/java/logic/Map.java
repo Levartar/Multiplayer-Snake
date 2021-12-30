@@ -4,27 +4,26 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Map {
 
     HashMap<Position, Material> Positions = new HashMap<>();
     List<Position> spawnPoints = new ArrayList<>();
-    //int spawnPointWidth;
-    //int spawnPointHeight;
     String mapString;
+    int width =0;
+    int height =0;
 
-    public void loadMap(String mapString){//Overloaded Method to Load Map via String or Path
+    public void Map(String mapString){//Overloaded Method to Load Map via String or Path
         this.mapString = mapString;
         parseMapString(mapString);
+        calculateWidthAndHeight();
     }
 
-    public void loadMap(Path mapPath) throws IOException {
+    public void Map(Path mapPath) throws IOException {
         this.mapString = Files.readString(mapPath, StandardCharsets.UTF_8);
         parseMapString(mapString);
+        calculateWidthAndHeight();
     }
 
     public HashMap<Position, Material> getPositions(){
@@ -55,11 +54,7 @@ public class Map {
         // spawns should be marked as 's'
     }
 
-    //public Map() {
-    //    spawnPoints.add(new Position(2,2));
-    //    spawnPointWidth = 10;
-    //    spawnPointHeight = 10;
-    //}
+
 
     //public Position getSpawn() {
     //    Position newSpawn = spawnPoints.get(0);
@@ -76,12 +71,31 @@ public class Map {
     @Override
     public String toString() {
         //TODO parse Positions back into string
-        //char[] returnString = new char[0];
-        //Positions.forEach();
-        //for (int i = 0; i < Positions.size(); i++) {
-        //    returnString[i] = Positions.get(i);
-        //}
-        return mapString; //can stay like this as long as the map stays the same
+        char[][] charArray = new char[width][height];
+        Positions.forEach((position, material) -> {
+            charArray[position.x-1][position.y-1] = material.getSymbol();//hope this works
+        });
+        StringBuilder sb = new StringBuilder();
+        for (char[] subArray : charArray) {
+            sb.append(subArray);
+            sb.append('\n');
+        }
+        sb.deleteCharAt(sb.length()-1);
+        return sb.toString();
+        //return mapString; //can stay like this as long as the map stays the same
+    }
+
+    private void calculateWidthAndHeight(){
+        Object[] posArray = Positions.keySet().toArray();
+        for (int i = 0; i < posArray.length; i++) {
+            Position pos = (Position) posArray[i];
+            if (pos.x> width){
+                width = pos.x;
+            }
+            if (pos.y> height){
+                height = pos.y;
+            }
+        }
     }
 
         //TODO this should be in Material enum but i dont know how to put it there
