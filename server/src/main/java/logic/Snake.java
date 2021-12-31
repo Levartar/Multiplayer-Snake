@@ -45,12 +45,14 @@ public class Snake {
     //TODO what happens when snakes dies
     public void die(){
         dead = true;
-        positions = null;
+        positions.clear();
     }
 
     public String getName() {
         return player.getName();
     }
+
+    public Position getHead() {return positions.get(0);}
 
     public List<Position> getPositions() {
         return positions;

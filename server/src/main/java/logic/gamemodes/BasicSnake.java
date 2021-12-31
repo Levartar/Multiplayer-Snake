@@ -45,22 +45,35 @@ public class BasicSnake implements Gamemode {
         //Collision rules are made here!
         // # = Wall = Death
         // @ = Apple = grow
+
+        //Build Snake Collider without heads
+        List<Position> snakeCollider = new ArrayList<>();
+        snakes.forEach(snake -> {
+            for (int i = 1; i < snake.getPositions().size(); i++) {
+                snakeCollider.add(snake.getPositions().get(i));
+            }
+        });
+
         snakes.forEach(snake -> {
             //Generate head
-            Position head = snake.getPositions().get(0);
+            Position head = snake.getHead();
             //Check head collides with wall
             if (map.getMaterialAt(head) == Material.WALL) {
                 snake.die();
             }
             //TODO check apple/(items) collisions
+
             //Check head collide with snakes
+            List<Position> specificSnakeCollider = new ArrayList<>(snakeCollider);
             snakes.forEach(s -> {
-                s.getPositions().forEach(position -> {
-                    if (position == head) {
-                        snake.die();
-                    }
-                });
+                //Make Positionslist of all snakes without own head
+                if (!(s==snake)){//Add all heads except own
+                    specificSnakeCollider.add(s.getHead());
+                }
             });
+            if (specificSnakeCollider.contains(snake.getHead())){
+                snake.die();
+            };
         });
     }
 
@@ -72,7 +85,7 @@ public class BasicSnake implements Gamemode {
             snakeObject.put("direction", snake.getDirection());
             JSONArray positionsArray = new JSONArray();
             snake.getPositions().forEach(position -> {
-                positionsArray.put(new JSONObject(position.toString()));
+                positionsArray.put("{"+position.toString()+"}");
             });
             snakeObject.put("positions", positionsArray);
             snakeArray.put(snakeObject);

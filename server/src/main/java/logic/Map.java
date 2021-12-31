@@ -17,12 +17,14 @@ public class Map {
     public Map(String mapString) {//Overloaded Method to Load Map via String or Path
         this.mapString = mapString;
         parseMapString(mapString);
+        updateMapString();
         generateRandomSortedSpawns();
     }
 
     public Map(Path mapPath) throws IOException {
         this.mapString = Files.readString(mapPath, StandardCharsets.UTF_8);
         parseMapString(mapString);
+        updateMapString();
         generateRandomSortedSpawns();
     }
 
@@ -62,7 +64,9 @@ public class Map {
     }
 
     private void parseMapString(String mapString) {
+        mapString = parseString(mapString);
         String[] splitStrings = mapString.split("\n");
+        //have to remove '\n' = carriage return as well if it exists
         map = new Material[splitStrings[0].length()][splitStrings.length];
 
         for (int i = 0; i < splitStrings.length; i++) {
@@ -76,6 +80,11 @@ public class Map {
                 }
             }
         }
+    }
+
+    //this removes all \r if they exist
+    private String parseString(String str) {
+        return str.replace("\r","");
     }
 
     //public Position getSpawn() {
