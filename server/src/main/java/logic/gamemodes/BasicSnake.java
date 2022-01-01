@@ -122,13 +122,13 @@ public class BasicSnake implements Gamemode {
                 lines) {
             result.append(line).append('\n');
         }
-        return result.toString().substring(0,result.length()-1);
+        return result.substring(0,result.length()-1);
     }
 
     private void kill(List<Snake> snakes){
         for (int i = 0; i < snakes.size(); i++) {
             if (snakes.get(i).isDead()){
-                snakes.remove(snakes.get(i));
+                snakes.remove(snakes.get(i--));
             }
         }
     }

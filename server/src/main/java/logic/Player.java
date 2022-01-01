@@ -45,7 +45,9 @@ public class Player {
     }
 
     public void setHighScore(int highScore) {
-        this.highScore = highScore;
+        if (highScore>this.highScore){
+            this.highScore = highScore;
+        }
     }
 
     public void setInput(char input){

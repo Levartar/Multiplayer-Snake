@@ -110,10 +110,8 @@ class BasicSnakeTest {
             player.setInput('d');
         });
         gamemode.gameLoop();
-        gamemode.gameLoop();
-        gamemode.gameLoop();
-        logger.info("\n"+gamemode);
-        logger.info("\n"+basicMap50x50);
+        //logger.info("\n"+gamemode);
+        //logger.info("\n"+basicMap50x50);
 
         assertEquals(basicMap50x50.toString(),gamemode.toString());
     }

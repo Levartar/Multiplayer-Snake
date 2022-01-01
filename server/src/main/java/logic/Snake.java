@@ -46,10 +46,10 @@ public class Snake {
         direction.addDirection(direction,head);
     }
 
-    //TODO what happens when snakes dies
     public void die(){
         dead = true;
         logger.info("snake: " +getName()+ " died");
+        player.setHighScore(this.getPositions().size());
     }
 
     public String getName() {
