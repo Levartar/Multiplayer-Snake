@@ -24,8 +24,17 @@ public class Position {
     }
 
     public void add(Position position) {
-        this.x = x+position.x;
-        this.y = y+position.y;
+        this.x = x + position.x;
+        this.y = y + position.y;
+    }
+
+    public void add(Direction direction) {
+        switch (direction) {
+            case up -> this.add(0, -1);
+            case down -> this.add(0, 1);
+            case left -> this.add(-1, 0);
+            case right -> this.add(1, 0);
+        }
     }
 
     public void set(int x, int y) {
@@ -53,9 +62,7 @@ public class Position {
 
     @Override
     public String toString() {
-        return
-                "x:" + x +"," +
-                "y:" + y;
+        return "x:" + x + "," + "y:" + y;
     }
 
     public int getX() {

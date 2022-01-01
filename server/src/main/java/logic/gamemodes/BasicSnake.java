@@ -10,9 +10,10 @@ import java.util.stream.Collectors;
 
 public class BasicSnake implements Gamemode {
 
-    private Map map;
+    private final Map map;
+    private final List<Snake> snakes;
 
-    private List<Snake> snakes;
+    private final List<Snake> scheduledForRemoval = new ArrayList<>();
 
     public BasicSnake(List<Player> players, Map map) {
         this.map = map;
@@ -41,41 +42,42 @@ public class BasicSnake implements Gamemode {
     }
 
     private void checkCollision() {
-        // TODO: 30.12.2021 rework
-        //Collision rules are made here!
+        // Collision rules are made here!
         // # = Wall = Death
         // @ = Apple = grow
 
-        //Build Snake Collider for checking Snake collisions
-        List<Position> snakeCollider = new ArrayList<>();
-        snakes.forEach(snake -> {
-            for (int i = 1; i < snake.getPositions().size(); i++) {
-                snakeCollider.add(snake.getPositions().get(i));
-            }
-        });
+        scheduledForRemoval.clear();
 
         snakes.forEach(snake -> {
+            if (snake == null) return;
+
             Position head = snake.getHead();
-            //Check if head collides with wall
-            if (map.getMaterialAt(head) == Material.WALL) {
-                snake.die();
-            }
-            //TODO check apple/(items) collisions
 
-            //Check if head collide with snakes
-            List<Position> specificSnakeCollider = new ArrayList<>(snakeCollider);
-            snakes.forEach(s -> {
-                //Make Positionslist of all snakes without own head
-                if (!(s==snake)){//Add all heads except own
-                    specificSnakeCollider.add(s.getHead());
-                }
+            // wall collisions
+            if (map.getMaterialAt(head) == Material.WALL) {
+                scheduledForRemoval.add(snake);
+            }
+
+            // snake collisions
+            snakes.forEach(snake2 -> {
+                if (snake2 == null) return;
+
+                snake2.getPositions().forEach(position -> {
+                    // remove snake, if its head collides with another snake or its own body
+                    if (head.equals(position) && position != head) {
+                        scheduledForRemoval.add(snake);
+                    }
+                });
             });
-            if (specificSnakeCollider.contains(snake.getHead())){
-                snake.die();
-            };
+
+            // apple collisions
+            if (map.getMaterialAt(head) == Material.APPLE) {
+                snake.grow(1);
+            }
         });
-        //Remove all snakes that died in this loop
-        kill(snakes);
+
+        scheduledForRemoval.forEach(snakes::remove);
+        scheduledForRemoval.clear();
     }
 
     private JSONArray printSnakes() {
@@ -86,7 +88,7 @@ public class BasicSnake implements Gamemode {
             snakeObject.put("direction", snake.getDirection());
             JSONArray positionsArray = new JSONArray();
             snake.getPositions().forEach(position -> {
-                positionsArray.put("{"+position.toString()+"}");
+                positionsArray.put("{" + position.toString() + "}");
             });
             snakeObject.put("positions", positionsArray);
             snakeArray.put(snakeObject);
@@ -107,12 +109,24 @@ public class BasicSnake implements Gamemode {
 
         // add snakes
         snakes.forEach(snake -> {
+            Position head = snake.getHead();
             snake.getPositions().forEach(position -> {
                 int x = position.getX();
                 int y = position.getY();
                 String line = lines.get(y);
 
-                line = line.substring(0, x) + Material.SNAKE + line.substring(x + 1, line.length());
+                char insert;
+                // if the current position is the head -> write H
+                if (position == head) {
+                    insert = 'H';
+                // if the current position is at the position of the head -> don't override the head symbol
+                } else if (position.equals(head)) {
+                    return;
+                } else {
+                    insert = Material.SNAKE.getSymbol();
+                }
+
+                line = line.substring(0, x) + insert + line.substring(x + 1);
                 lines.set(y, line);
             });
         });
@@ -122,14 +136,7 @@ public class BasicSnake implements Gamemode {
                 lines) {
             result.append(line).append('\n');
         }
-        return result.substring(0,result.length()-1);
-    }
-
-    private void kill(List<Snake> snakes){
-        for (int i = 0; i < snakes.size(); i++) {
-            if (snakes.get(i).isDead()){
-                snakes.remove(snakes.get(i--));
-            }
-        }
+        result.deleteCharAt(result.length() - 1);
+        return result.toString();
     }
 }

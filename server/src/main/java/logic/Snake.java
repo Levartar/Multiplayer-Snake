@@ -1,21 +1,19 @@
 package logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
-import org.apache.log4j.LogManager;
 
 public class Snake {
 
+    private static final Logger logger = LogManager.getLogger(Snake.class);
+    private final Player player;
     private List<Position> positions;
     private Direction direction = null;
-    private boolean dead;
-    private final Player player;
-
-    private static final Logger logger = LogManager.getLogger(Snake.class);
 
     public Snake(Position spawn, int length, Player player) {
-        this.dead = true;
         this.player = player;
         createSnakeOnSpawn(spawn, length);
     }
@@ -30,33 +28,34 @@ public class Snake {
         for (int i = 0; i < length; i++) {
             positions.add(new Position(spawn));
         }
-        this.dead = false; //snake spawn and is alive
     }
 
-    public void move(){
-        this.direction = Direction.getDirection(player.getInput());
-
+    public void move() {
+        // move body parts except head
         for (int i = positions.size() - 1; i > 0; i--) {
             Position thisElement = positions.get(i);
             Position priorElement = positions.get(i - 1);
             thisElement.set(priorElement);
         }
 
-        Position head = positions.get(0);
-        direction.addDirection(direction,head);
-    }
+        Direction newDirection = Direction.getDirection(player.getInput());
+        // only change direction, if a correct input is set
+        if (newDirection != null) {
+            this.direction = newDirection;
+        }
 
-    public void die(){
-        dead = true;
-        logger.info("snake: " +getName()+ " died");
-        player.setHighScore(this.getPositions().size());
+        // move head
+        Position head = positions.get(0);
+        head.add(direction);
     }
 
     public String getName() {
         return player.getName();
     }
 
-    public Position getHead() {return positions.get(0);}
+    public Position getHead() {
+        return positions.get(0);
+    }
 
     public List<Position> getPositions() {
         return positions;
@@ -66,7 +65,14 @@ public class Snake {
         return direction;
     }
 
-    public Boolean isDead(){
-        return dead;
+    public void grow(int count) {
+        Position lastPosition = positions.get(positions.size() - 1);
+        for (int i = 0; i < count; i++) {
+            positions.add(new Position(lastPosition));
+        }
+    }
+
+    public int length() {
+        return positions.size();
     }
 }
