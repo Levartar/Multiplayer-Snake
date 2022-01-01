@@ -58,8 +58,6 @@ public class BasicSnake implements Gamemode {
                 scheduledForRemoval.add(snake);
             }
 
-            // TODO apple collisions
-
             // snake collisions
             snakes.forEach(snake2 -> {
                 if (snake2 == null) return;
@@ -71,6 +69,11 @@ public class BasicSnake implements Gamemode {
                     }
                 });
             });
+
+            // apple collisions
+            if (map.getMaterialAt(head) == Material.APPLE) {
+                snake.grow(1);
+            }
         });
 
         scheduledForRemoval.forEach(snakes::remove);

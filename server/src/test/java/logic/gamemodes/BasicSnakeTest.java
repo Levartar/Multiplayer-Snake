@@ -42,7 +42,7 @@ class BasicSnakeTest {
     void testToString() {
         String mapString = """
                 #####
-                #   #
+                # @ #
                 # s #
                 #   #
                 #####
@@ -56,7 +56,7 @@ class BasicSnakeTest {
 
         String expected = """
                 #####
-                #   #
+                # @ #
                 # H #
                 #   #
                 #####""";
@@ -291,6 +291,47 @@ class BasicSnakeTest {
         assertNotEquals(expected, gamemode.toString());
         gamemode.gameLoop();
         assertEquals(expected, gamemode.toString());
+    }
+
+    @Test
+    void testSnakeCollidesWithApple() {
+        String mapString = """
+                ############
+                #          #
+                # s     @  #
+                #          #
+                ############
+                """;
+        Map map = new Map(mapString);
+
+        List<Player> _players = new ArrayList<>();
+        Player player = new Player();
+        _players.add(player);
+        Gamemode gamemode = new BasicSnake(_players, map);
+
+        player.setInput('d');
+
+        String expected = """
+                ############
+                #          #
+                #   ooooH  #
+                #          #
+                ############""";
+
+        for (int i = 0; i < 6; i++) {
+            gamemode.gameLoop();
+        }
+        assertEquals(expected, gamemode.toString());
+
+        expected = """
+                ############
+                #          #
+                #   oooooH #
+                #          #
+                ############""";
+        gamemode.gameLoop();
+        assertEquals(expected, gamemode.toString());
+
     }
 
     @Test
