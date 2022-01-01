@@ -10,9 +10,10 @@ import java.util.stream.Collectors;
 
 public class BasicSnake implements Gamemode {
 
-    private Map map;
+    private final Map map;
+    private final List<Snake> snakes;
 
-    private List<Snake> snakes;
+    private final List<Snake> scheduledForRemoval = new ArrayList<>();
 
     public BasicSnake(List<Player> players, Map map) {
         this.map = map;
@@ -41,48 +42,39 @@ public class BasicSnake implements Gamemode {
     }
 
     private void checkCollision() {
-        // TODO: 30.12.2021 rework
-        //Collision rules are made here!
+        // Collision rules are made here!
         // # = Wall = Death
         // @ = Apple = grow
 
-        //Build Snake Collider for checking Snake collisions
-        List<Position> snakeCollider = new ArrayList<>();
-        snakes.forEach(snake -> {
-            for (int i = 1; i < snake.getPositions().size(); i++) {
-                snakeCollider.add(snake.getPositions().get(i));
-            }
-        });
+        scheduledForRemoval.clear();
 
         snakes.forEach(snake -> {
-            if (snake == null) {
-                return;
-            }
-            //Generate head
+            if (snake == null) return;
+
             Position head = snake.getHead();
-            //Check if head collides with wall
-            if (map.getMaterialAt(head) == Material.WALL) {
-                snake.die();
-            }
-            //TODO check apple/(items) collisions
 
-            //Check if head collide with snakes
-            List<Position> specificSnakeCollider = new ArrayList<>(snakeCollider);
-            snakes.forEach(s -> {
-                if (s == null) {
-                    return;
-                }
-                //Make Positionslist of all snakes without own head
-                if (s != snake) {//Add all heads except own
-                    specificSnakeCollider.add(s.getHead());
-                }
-            });
-            if (specificSnakeCollider.contains(head)) {
-                snake.die();
+            // wall collisions
+            if (map.getMaterialAt(head) == Material.WALL) {
+                scheduledForRemoval.add(snake);
             }
+
+            // TODO apple collisions
+
+            // snake collisions
+            snakes.forEach(snake2 -> {
+                if (snake2 == null) return;
+
+                snake2.getPositions().forEach(position -> {
+                    // remove snake, if its head collides with another snake or its own body
+                    if (head.equals(position) && position != head) {
+                        scheduledForRemoval.add(snake);
+                    }
+                });
+            });
         });
-        //Remove all snakes that died in this loop
-        kill(snakes);
+
+        scheduledForRemoval.forEach(snakes::remove);
+        scheduledForRemoval.clear();
     }
 
     private JSONArray printSnakes() {
@@ -143,13 +135,5 @@ public class BasicSnake implements Gamemode {
         }
         result.deleteCharAt(result.length() - 1);
         return result.toString();
-    }
-
-    private void kill(List<Snake> snakes){
-        for (int i = 0; i < snakes.size(); i++) {
-            if (snakes.get(i).isDead()){
-                snakes.remove(snakes.get(i));
-            }
-        }
     }
 }
