@@ -4,10 +4,10 @@ import helpers.ResourceManager;
 import logic.Gamemode;
 import logic.Map;
 import logic.Player;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import logic.Snake;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -31,7 +31,6 @@ class BasicSnakeTest {
         for (int i = 0; i < 4; i++) {
             players.add(new Player(names[i],colors[i],i ));
         }
-        org.apache.log4j.BasicConfigurator.configure();
 
     }
 
