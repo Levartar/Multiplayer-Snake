@@ -61,8 +61,7 @@ class BasicSnakeTest {
                 #   #
                 # H #
                 #   #
-                #####
-                """;
+                #####""";
         Assertions.assertEquals(expected, gamemode.toString());
     }
 
@@ -90,8 +89,7 @@ class BasicSnakeTest {
                 #   #
                 # H #
                 #   #
-                #####
-                """;
+                #####""";
         Assertions.assertEquals(expected, gamemode.toString());
 
         _players.get(0).setInput('w');
@@ -101,8 +99,7 @@ class BasicSnakeTest {
                 # H #
                 # o #
                 #   #
-                #####
-                """;
+                #####""";
         Assertions.assertEquals(expected, gamemode.toString());
 
         _players.get(0).setInput('a');
@@ -112,8 +109,7 @@ class BasicSnakeTest {
                 #Ho #
                 # o #
                 #   #
-                #####
-                """;
+                #####""";
         Assertions.assertEquals(expected, gamemode.toString());
 
         _players.get(0).setInput('s');
@@ -123,8 +119,7 @@ class BasicSnakeTest {
                 #oo #
                 #Ho #
                 #   #
-                #####
-                """;
+                #####""";
         Assertions.assertEquals(expected, gamemode.toString());
 
         _players.get(0).setInput('s');
@@ -134,8 +129,7 @@ class BasicSnakeTest {
                 #oo #
                 #oo #
                 #H  #
-                #####
-                """;
+                #####""";
         Assertions.assertEquals(expected, gamemode.toString());
 
         _players.get(0).setInput('d');
@@ -145,8 +139,7 @@ class BasicSnakeTest {
                 #oo #
                 #o  #
                 #oH #
-                #####
-                """;
+                #####""";
         Assertions.assertEquals(expected, gamemode.toString());
     }
 

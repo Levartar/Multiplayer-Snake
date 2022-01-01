@@ -141,7 +141,8 @@ public class BasicSnake implements Gamemode {
                 lines) {
             result.append(line).append('\n');
         }
-        return result.toString().substring(0,result.length()-1);
+        result.deleteCharAt(result.length() - 1);
+        return result.toString();
     }
 
     private void kill(List<Snake> snakes){
