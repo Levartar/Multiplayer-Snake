@@ -5,6 +5,9 @@ import logic.Gamemode;
 import logic.Map;
 import logic.Player;
 import org.junit.jupiter.api.Assertions;
+import logic.Snake;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -14,25 +17,27 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class BasicSnakeTest {
 
+    private static final Logger logger = LogManager.getLogger(Snake.class);
+
     List<Player> players = new ArrayList<>();
-    char[] inputs = {'w','a','s','d'};
+    String[] names = {"alpha","beta","gamma","delta"};
+    String[] colors = {"blue","green","red","yellow"};
 
     public BasicSnakeTest() {
         for (int i = 0; i < 4; i++) {
-            players.add(new Player());
+            players.add(new Player(names[i],colors[i],i ));
         }
+        org.apache.log4j.BasicConfigurator.configure();
 
     }
 
-    /**
-     *
-     * @param max maximum result (exclusive)
-     * @return random int from 0 to max (exclusive) if max is 3 the result is 0, 1 or 2
-     */
-    private int getRandomInt(int max) {
-        return (int) Math.floor(Math.random() * max);
+    private char getRandomInput() {
+        char[] inputs = {'w','a','s','d'};
+        return inputs[(int) Math.floor(Math.random() * 4)];
     }
 
     @Test
@@ -152,12 +157,12 @@ class BasicSnakeTest {
         Map basicMap50x50 = new Map(basicMap50x50Path);
 
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
-        players.forEach(player -> player.setInput(inputs[getRandomInt(4)]));
-        for (int i = 0; i < 5; i++) {
-            System.out.println(gamemode);
+        players.forEach(player -> {
+            player.setInput(getRandomInput());
+        });
+        for (int i = 0; i < 10; i++) {
             gamemode.gameLoop();
         }
-        System.out.println(gamemode);
         // TODO: 01.01.2022 add assert statement
     }
 
@@ -170,12 +175,43 @@ class BasicSnakeTest {
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
 
         for (int i = 0; i < 5; i++) {
-            players.forEach(player -> player.setInput(inputs[getRandomInt(4)]));
+            players.forEach(player -> {
+                player.setInput(getRandomInput());
+            });
             gamemode.gameLoop();
-            // current problem: the snakes are killing themselves, because of the random input
-            //                  after being dead, snake.positions is empty, but still used -> IndexOutOfBounds
-            System.out.println(gamemode);
         }
         // TODO: 01.01.2022 add assert statement
+        logger.info("\n"+gamemode);
+
+    }
+
+    @Test
+    void testDie() throws IOException {
+        Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
+
+        Map basicMap50x50 = new Map(basicMap50x50Path);
+        Gamemode gamemode = new BasicSnake(players, basicMap50x50);
+        players.forEach(player -> {
+            player.setInput('w');
+        });
+        gamemode.gameLoop();
+        players.forEach(player -> {
+            player.setInput('a');
+        });
+        gamemode.gameLoop();
+        players.forEach(player -> {
+            player.setInput('s');
+        });
+        gamemode.gameLoop();
+        players.forEach(player -> {
+            player.setInput('d');
+        });
+        gamemode.gameLoop();
+        gamemode.gameLoop();
+        gamemode.gameLoop();
+        logger.info("\n"+gamemode);
+        logger.info("\n"+basicMap50x50);
+
+        assertEquals(basicMap50x50.toString(),gamemode.toString());
     }
 }

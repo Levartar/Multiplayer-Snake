@@ -2,13 +2,17 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
 
 public class Snake {
 
     private List<Position> positions;
     private Direction direction = null;
     private boolean dead;
-    private Player player;
+    private final Player player;
+
+    private static final Logger logger = LogManager.getLogger(Snake.class);
 
     public Snake(Position spawn, int length, Player player) {
         this.dead = true;
@@ -45,7 +49,7 @@ public class Snake {
     //TODO what happens when snakes dies
     public void die(){
         dead = true;
-        positions.clear();
+        logger.info("snake: " +getName()+ " died");
     }
 
     public String getName() {
@@ -60,5 +64,9 @@ public class Snake {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public Boolean isDead(){
+        return dead;
     }
 }
