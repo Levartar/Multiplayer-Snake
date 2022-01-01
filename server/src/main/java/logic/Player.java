@@ -7,6 +7,15 @@ public class Player {
     private int id;
     private int highScore;
 
+    public Player() {
+    }
+
+    public Player(String name, String color, int id) {
+        this.name = name;
+        this.color = color;
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -40,6 +49,12 @@ public class Player {
     }
 
     public void setInput(char input){
+        switch (input) {
+            case 'w':if (!(this.input=='s')){this.input = 'w';}
+            case 'a':if (!(this.input=='d')){this.input = 'a';}
+            case 's':if (!(this.input=='w')){this.input = 's';}
+            case 'd':if (!(this.input=='a')){this.input = 'd';}
+        }
         this.input = input;
     }
 

@@ -4,6 +4,9 @@ import helpers.ResourceManager;
 import logic.Gamemode;
 import logic.Map;
 import logic.Player;
+import logic.Snake;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,18 +18,23 @@ import java.util.List;
 
 class BasicSnakeTest {
 
+    private static final Logger logger = LogManager.getLogger(Snake.class);
+
     List<Player> players = new ArrayList<>();
-    char[] inputs = {'w','a','s','d'};
+    String[] names = {"alpha","beta","gamma","delta"};
+    String[] colors = {"blue","green","red","yellow"};
 
     public BasicSnakeTest() {
         for (int i = 0; i < 4; i++) {
-            players.add(new Player());
+            players.add(new Player(names[i],colors[i],i ));
         }
+        org.apache.log4j.BasicConfigurator.configure();
 
     }
 
-    private int getRandomInt(int max) {
-        return (int) Math.floor(Math.random() * max);
+    private char getRandomInput() {
+        char[] inputs = {'w','a','s','d'};
+        return inputs[(int) Math.floor(Math.random() * 3)];
     }
 
     @Test
@@ -42,7 +50,7 @@ class BasicSnakeTest {
 
         Gamemode gamemode = new BasicSnake(players, map);
 
-        System.out.println("gamemode = \n" + gamemode);
+        logger.info("gamemode = \n" + gamemode);
     }
 
     @Test
@@ -53,12 +61,11 @@ class BasicSnakeTest {
 
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
         players.forEach(player -> {
-            player.setInput(inputs[getRandomInt(3)]);
+            player.setInput(getRandomInput());
         });
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             gamemode.gameLoop();
         }
-        System.out.println(gamemode);
     }
 
     @Test
@@ -71,9 +78,11 @@ class BasicSnakeTest {
 
         for (int i = 0; i < 5; i++) {
             players.forEach(player -> {
-                player.setInput(inputs[getRandomInt(3)]);
+                player.setInput(getRandomInput());
             });
             gamemode.gameLoop();
         }
+        logger.info("\n"+gamemode);
+
     }
 }

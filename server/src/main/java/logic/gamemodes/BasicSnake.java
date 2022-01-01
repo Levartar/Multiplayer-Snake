@@ -46,7 +46,7 @@ public class BasicSnake implements Gamemode {
         // # = Wall = Death
         // @ = Apple = grow
 
-        //Build Snake Collider without heads
+        //Build Snake Collider for checking Snake collisions
         List<Position> snakeCollider = new ArrayList<>();
         snakes.forEach(snake -> {
             for (int i = 1; i < snake.getPositions().size(); i++) {
@@ -55,15 +55,14 @@ public class BasicSnake implements Gamemode {
         });
 
         snakes.forEach(snake -> {
-            //Generate head
             Position head = snake.getHead();
-            //Check head collides with wall
+            //Check if head collides with wall
             if (map.getMaterialAt(head) == Material.WALL) {
                 snake.die();
             }
             //TODO check apple/(items) collisions
 
-            //Check head collide with snakes
+            //Check if head collide with snakes
             List<Position> specificSnakeCollider = new ArrayList<>(snakeCollider);
             snakes.forEach(s -> {
                 //Make Positionslist of all snakes without own head
@@ -75,6 +74,8 @@ public class BasicSnake implements Gamemode {
                 snake.die();
             };
         });
+        //Remove all snakes that died in this loop
+        kill(snakes);
     }
 
     private JSONArray printSnakes() {
@@ -122,5 +123,13 @@ public class BasicSnake implements Gamemode {
             result.append(line).append('\n');
         }
         return result.toString();
+    }
+
+    private void kill(List<Snake> snakes){
+        for (int i = 0; i < snakes.size(); i++) {
+            if (snakes.get(i).isDead()){
+                snakes.remove(snakes.get(i));
+            }
+        }
     }
 }
