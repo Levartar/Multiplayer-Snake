@@ -95,4 +95,25 @@ class SnakeTest {
 
         assertEquals(testPositions, testSnake.getPositions());
     }
+
+    @Test
+    void grow() {
+        Player player = new Player();
+        Snake snake = new Snake(new Position(1, 1), 4, player);
+
+        List<Position> expected = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            expected.add(new Position(1, 1));
+        }
+
+        assertEquals(expected, snake.getPositions());
+
+        snake.grow(3);
+        assertNotEquals(expected, snake.getPositions());
+
+        for (int i = 0; i < 3; i++) {
+            expected.add(new Position(1, 1));
+        }
+        assertEquals(expected, snake.getPositions());
+    }
 }
