@@ -35,16 +35,22 @@ public class Snake {
     }
 
     public void move(){
-        this.direction = Direction.getDirection(player.getInput());
-
+        // move body parts except head
         for (int i = positions.size() - 1; i > 0; i--) {
             Position thisElement = positions.get(i);
             Position priorElement = positions.get(i - 1);
             thisElement.set(priorElement);
         }
 
+        Direction newDirection = Direction.getDirection(player.getInput());
+        // only change direction, if a correct input is set
+        if (newDirection != null) {
+            this.direction = newDirection;
+        }
+
+        // move head
         Position head = positions.get(0);
-        direction.addDirection(direction,head);
+        head.add(direction);
     }
 
     //TODO what happens when snakes dies

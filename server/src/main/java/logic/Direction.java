@@ -6,24 +6,13 @@ public enum Direction {
     left,
     right;
 
-    public static Position addDirection(Direction direction, Position head){
-        switch (direction) {
-            case up -> head.add(0,-1);
-            case down -> head.add(0,1);
-            case left -> head.add(-1,0);
-            case right -> head.add(1,0);
-        }
-        return head;
+    public static Direction getDirection(char input) {
+        return switch (input) {
+            case 'w' -> Direction.up;
+            case 'a' -> Direction.left;
+            case 's' -> Direction.down;
+            case 'd' -> Direction.right;
+            default -> null;
+        };
     }
-
-    public static Direction getDirection(char input){
-        switch (input) {
-            case 'w':return Direction.up;
-            case 'a':return Direction.left;
-            case 's':return Direction.down;
-            case 'd':return Direction.right;
-        }
-        return null;
-    }
-
 }
