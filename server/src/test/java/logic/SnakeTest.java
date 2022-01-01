@@ -34,7 +34,7 @@ class SnakeTest {
     void moveHead() {
         //testHead
         List<Position> testPositions = new ArrayList<>();
-        testPositions.add(new Position(1,2));
+        testPositions.add(new Position(1,0));
 
         Player testPlayer = new Player();
         testPlayer.setInput('w');
@@ -75,9 +75,9 @@ class SnakeTest {
     @Test
     void complexMoveSnake(){
         List<Position> testPositions = new ArrayList<>();
-        testPositions.add(new Position(3,3));
-        testPositions.add(new Position(3,2));
-        testPositions.add(new Position(2,2));
+        testPositions.add(new Position(3,-1));
+        testPositions.add(new Position(3,0));
+        testPositions.add(new Position(2,0));
         testPositions.add(new Position(2,1));
 
         Player testPlayer = new Player();

@@ -8,8 +8,8 @@ public enum Direction {
 
     public static Position addDirection(Direction direction, Position head){
         switch (direction) {
-            case up -> head.add(0,1);
-            case down -> head.add(0,-1);
+            case up -> head.add(0,-1);
+            case down -> head.add(0,1);
             case left -> head.add(-1,0);
             case right -> head.add(1,0);
         }
