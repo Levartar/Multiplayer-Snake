@@ -15,4 +15,14 @@ public enum Direction {
             default -> null;
         };
     }
+
+    @Override
+    public String toString() {
+        return switch (this) {
+            case up -> "up";
+            case down -> "down";
+            case left -> "left";
+            case right -> "right";
+        };
+    }
 }
