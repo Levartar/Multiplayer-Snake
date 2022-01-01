@@ -55,6 +55,9 @@ public class BasicSnake implements Gamemode {
         });
 
         snakes.forEach(snake -> {
+            if (snake == null) {
+                return;
+            }
             //Generate head
             Position head = snake.getHead();
             //Check head collides with wall
@@ -66,14 +69,17 @@ public class BasicSnake implements Gamemode {
             //Check head collide with snakes
             List<Position> specificSnakeCollider = new ArrayList<>(snakeCollider);
             snakes.forEach(s -> {
+                if (s == null) {
+                    return;
+                }
                 //Make Positionslist of all snakes without own head
-                if (!(s==snake)){//Add all heads except own
+                if (!(s == snake)) {//Add all heads except own
                     specificSnakeCollider.add(s.getHead());
                 }
             });
-            if (specificSnakeCollider.contains(snake.getHead())){
+            if (specificSnakeCollider.contains(head)) {
                 snake.die();
-            };
+            }
         });
     }
 
@@ -85,7 +91,7 @@ public class BasicSnake implements Gamemode {
             snakeObject.put("direction", snake.getDirection());
             JSONArray positionsArray = new JSONArray();
             snake.getPositions().forEach(position -> {
-                positionsArray.put("{"+position.toString()+"}");
+                positionsArray.put("{" + position.toString() + "}");
             });
             snakeObject.put("positions", positionsArray);
             snakeArray.put(snakeObject);
@@ -106,12 +112,24 @@ public class BasicSnake implements Gamemode {
 
         // add snakes
         snakes.forEach(snake -> {
+            Position head = snake.getHead();
             snake.getPositions().forEach(position -> {
                 int x = position.getX();
                 int y = position.getY();
                 String line = lines.get(y);
 
-                line = line.substring(0, x) + Material.SNAKE + line.substring(x + 1, line.length());
+                char insert;
+                // if the current position is the head -> write H
+                if (position == head) {
+                    insert = 'H';
+                // if the current position is at the position of the head -> don't override the head symbol
+                } else if (position.equals(head)) {
+                    return;
+                } else {
+                    insert = Material.SNAKE.getSymbol();
+                }
+
+                line = line.substring(0, x) + insert + line.substring(x + 1);
                 lines.set(y, line);
             });
         });

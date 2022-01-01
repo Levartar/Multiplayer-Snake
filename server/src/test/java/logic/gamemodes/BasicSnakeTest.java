@@ -4,6 +4,7 @@ import helpers.ResourceManager;
 import logic.Gamemode;
 import logic.Map;
 import logic.Player;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -25,6 +26,11 @@ class BasicSnakeTest {
 
     }
 
+    /**
+     *
+     * @param max maximum result (exclusive)
+     * @return random int from 0 to max (exclusive) if max is 3 the result is 0, 1 or 2
+     */
     private int getRandomInt(int max) {
         return (int) Math.floor(Math.random() * max);
     }
@@ -40,9 +46,103 @@ class BasicSnakeTest {
                 """;
         Map map = new Map(mapString);
 
-        Gamemode gamemode = new BasicSnake(players, map);
+        List<Player> _players = new ArrayList<>();
+        _players.add(new Player());
 
-        System.out.println("gamemode = \n" + gamemode);
+        Gamemode gamemode = new BasicSnake(_players, map);
+
+        String expected = """
+                #####
+                #   #
+                # H #
+                #   #
+                #####
+                """;
+        Assertions.assertEquals(expected, gamemode.toString());
+    }
+
+    /**
+     * tests movement in all directions
+     */
+    @Test
+    void testMoveSnake() {
+        String mapString = """
+                #####
+                #   #
+                # s #
+                #   #
+                #####
+                """;
+        Map map = new Map(mapString);
+
+        List<Player> _players = new ArrayList<>();
+        _players.add(new Player());
+
+        Gamemode gamemode = new BasicSnake(_players, map);
+
+        String expected = """
+                #####
+                #   #
+                # H #
+                #   #
+                #####
+                """;
+        Assertions.assertEquals(expected, gamemode.toString());
+
+        _players.get(0).setInput('w');
+        gamemode.gameLoop();
+        expected = """
+                #####
+                # H #
+                # o #
+                #   #
+                #####
+                """;
+        Assertions.assertEquals(expected, gamemode.toString());
+
+        _players.get(0).setInput('a');
+        gamemode.gameLoop();
+        expected = """
+                #####
+                #Ho #
+                # o #
+                #   #
+                #####
+                """;
+        Assertions.assertEquals(expected, gamemode.toString());
+
+        _players.get(0).setInput('s');
+        gamemode.gameLoop();
+        expected = """
+                #####
+                #oo #
+                #Ho #
+                #   #
+                #####
+                """;
+        Assertions.assertEquals(expected, gamemode.toString());
+
+        _players.get(0).setInput('s');
+        gamemode.gameLoop();
+        expected = """
+                #####
+                #oo #
+                #oo #
+                #H  #
+                #####
+                """;
+        Assertions.assertEquals(expected, gamemode.toString());
+
+        _players.get(0).setInput('d');
+        gamemode.gameLoop();
+        expected = """
+                #####
+                #oo #
+                #o  #
+                #oH #
+                #####
+                """;
+        Assertions.assertEquals(expected, gamemode.toString());
     }
 
     @Test
@@ -52,13 +152,13 @@ class BasicSnakeTest {
         Map basicMap50x50 = new Map(basicMap50x50Path);
 
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
-        players.forEach(player -> {
-            player.setInput(inputs[getRandomInt(3)]);
-        });
+        players.forEach(player -> player.setInput(inputs[getRandomInt(4)]));
         for (int i = 0; i < 5; i++) {
+            System.out.println(gamemode);
             gamemode.gameLoop();
         }
         System.out.println(gamemode);
+        // TODO: 01.01.2022 add assert statement
     }
 
     @Test
@@ -70,10 +170,12 @@ class BasicSnakeTest {
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
 
         for (int i = 0; i < 5; i++) {
-            players.forEach(player -> {
-                player.setInput(inputs[getRandomInt(3)]);
-            });
+            players.forEach(player -> player.setInput(inputs[getRandomInt(4)]));
             gamemode.gameLoop();
+            // current problem: the snakes are killing themselves, because of the random input
+            //                  after being dead, snake.positions is empty, but still used -> IndexOutOfBounds
+            System.out.println(gamemode);
         }
+        // TODO: 01.01.2022 add assert statement
     }
 }
