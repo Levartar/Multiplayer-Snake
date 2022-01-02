@@ -102,7 +102,7 @@ class Join_session extends React.Component{
 class Main_menu extends React.Component {
     render(){
         return (
-            <div>
+            <div className="Frame">
                 <header>
                     <Banner />
                 </header>
@@ -172,16 +172,18 @@ class Lobby extends React.Component {
 
     render() {
         return(
-            <div>
-                <div id="lobby">
+            <div className="Frame">
+                <div id="exitLobby">
+                    <Button name={"exitLobby"} text={"return to Main menu"}/>
+                </div>
+                <div id="lobby" className="noMargin">
                     <div id="lobbyDetails">
                         <div id="lobbyHeadlineDIV">
                             <h1 id="lobbyHeadline">Lobby</h1>
                         </div>
                         <div id="sessionIDDIV">
-                            <h2 id="sessionIDHeadline">SessionID:</h2>
-                            <br />
-                            <p id="sessionIDtext">X15QW4B</p>
+                            <h2 id="sessionIDHeadline" className="noMargin">SessionID:</h2>
+                            <p id="sessionIDtext" className="noMargin">X15QW4B</p>
                         </div>
                         <div id="startGameDIV">
                             <Button text={"Start Game"} name={"startGame"}/>
@@ -191,20 +193,24 @@ class Lobby extends React.Component {
                         <Table />
                     </div>
                 </div>
-                <div>
-                    <Button name={"exitLobby"} text={"return to Main menu"}/>
-                </div>
+
             </div>
         )
     }
 }
 
 class Game extends React.Component {
+    render() {
+        return(
+            <div className="Frame">
 
+            </div>
+        )
+    }
 }
 
 ReactDOM.render(
-    <Main_menu />,
+    <Lobby />,
     document.getElementById('root')
 );
 

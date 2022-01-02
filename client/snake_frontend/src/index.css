@@ -103,7 +103,6 @@ main{
 /* for the Lobby */
 table, th, td{
     border: 1px solid black;
-    width: 25%;
 }
 th{
     text-align: center;
@@ -111,6 +110,7 @@ th{
 #lobby{
     display: flex;
     justify-content: space-between;
+    margin-right: 0;
 }
 #lobbyDetails{
     display: flex;
@@ -120,15 +120,31 @@ th{
 }
 #playerTable{
     display: flex;
-    margin-top: 20%;
+    justify-content: center;
+    flex-direction: column;
+}
+#sessionIDDIV{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #lobbyHeadlineDIV{
     display: flex;
+    justify-content: center;
 }
 #sessionIDDIV{
     display: flex;
 }
 #startGameDIV{
     display: flex;
+}
+.noMargin{
+    margin: 0;
+}
+#exitLobby{
+    display: flex;
+}
+.Frame{
+    aspect-ratio: 1.5;
 }
