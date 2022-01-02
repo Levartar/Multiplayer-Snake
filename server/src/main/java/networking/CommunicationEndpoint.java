@@ -4,10 +4,10 @@ import javax.websocket.server.ServerEndpoint;
 
 public class CommunicationEndpoint {
 
-    private static Lobby lobby;
-    private static Player player;
+    private Lobby lobby;
+    private Player player;
 
-    public static Player getPlayer(){
+    public Player getPlayer(){
         return null;
     }
 
