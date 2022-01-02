@@ -14,10 +14,15 @@ public class BasicSnake implements Gamemode {
     private final List<Snake> snakes;
 
     private final List<Snake> scheduledForRemoval = new ArrayList<>();
+    private final JSONArray JSON_replace = new JSONArray();
+    private final JSONObject JSON_synchronizationMessage = new JSONObject();
 
     public BasicSnake(List<Player> players, Map map) {
         this.map = map;
         snakes = new ArrayList<>();
+
+        // initial message
+        JSON_synchronizationMessage.put("world", map.toString());
 
         // create snakes
         List<Position> spawnPoints = map.getSpawnPoints();
@@ -33,12 +38,23 @@ public class BasicSnake implements Gamemode {
         snakes.forEach(Snake::move);
         // TODO: 30.12.2021 Snake can move to other side
         checkCollision();
+        // TODO: 01.01.2022 spawn food
         //Think about how to not send something if nothing changed
-        JSONObject worldMessage = new JSONObject();
-        worldMessage.put("world", map.toString());
-        worldMessage.put("replace", printReplace());
-        worldMessage.put("snakes", printSnakes());
-        return worldMessage.toString();
+        return getSynchronizationMessage();
+    }
+
+    private String getSynchronizationMessage() {
+        if (!JSON_replace.isEmpty()) {
+            JSON_synchronizationMessage.put("replace", JSON_replace);
+        }
+        if (!printSnakes().isEmpty()) {
+            JSON_synchronizationMessage.put("snakes", printSnakes());
+        }
+
+        String message = JSON_synchronizationMessage.toString();
+        JSON_synchronizationMessage.clear();
+        JSON_replace.clear();
+        return message;
     }
 
     private void checkCollision() {
@@ -73,6 +89,8 @@ public class BasicSnake implements Gamemode {
             // apple collisions
             if (map.getMaterialAt(head) == Material.APPLE) {
                 snake.grow(1);
+                map.changeMaterial(head, Material.FREESPACE);
+                jsonChangeMaterial(head, Material.FREESPACE);
             }
         });
 
@@ -80,26 +98,35 @@ public class BasicSnake implements Gamemode {
         scheduledForRemoval.clear();
     }
 
+    private void jsonChangeMaterial(Position position, Material material) {
+        // bad performance, because many objects are created
+        JSONObject materialChange = new JSONObject();
+        JSONObject pos = new JSONObject();
+        pos.put("x", position.getX());
+        pos.put("y", position.getY());
+        materialChange.put("pos", pos);
+        materialChange.put("mat", material.toString());
+        JSON_replace.put(materialChange);
+    }
+
     private JSONArray printSnakes() {
+        // bad performance, because many objects are created
         JSONArray snakeArray = new JSONArray();
         snakes.forEach(snake -> {
             JSONObject snakeObject = new JSONObject();
             snakeObject.put("name", snake.getName());
-            snakeObject.put("direction", snake.getDirection());
+            snakeObject.put("direction", snake.getDirection().toString());
             JSONArray positionsArray = new JSONArray();
             snake.getPositions().forEach(position -> {
-                positionsArray.put("{" + position.toString() + "}");
+                JSONObject positionJSON = new JSONObject();
+                positionJSON.put("x", position.getX());
+                positionJSON.put("y", position.getY());
+                positionsArray.put(positionJSON);
             });
             snakeObject.put("positions", positionsArray);
             snakeArray.put(snakeObject);
         });
         return snakeArray;
-    }
-
-    private JSONArray printReplace() {
-        JSONArray replaceArray = new JSONArray();
-        //TODO call Apple/Food spawns here
-        return replaceArray;
     }
 
     @Override

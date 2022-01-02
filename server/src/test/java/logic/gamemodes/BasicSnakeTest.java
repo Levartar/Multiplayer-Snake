@@ -348,4 +348,40 @@ class BasicSnakeTest {
         }
         logger.info("\n" + gamemode);
     }
+
+    @Test
+    void testSynchronizationMessage() {
+        String mapString = """
+                ##########
+                #        #
+                # s   @  #
+                #        #
+                ##########
+                """;
+        Map map = new Map(mapString);
+
+        List<Player> _players = new ArrayList<>();
+        Player player1 = new Player();
+        player1.setName("jakob");
+        _players.add(player1);
+        Gamemode gamemode = new BasicSnake(_players, map);
+
+        _players.forEach(player -> player.setInput('d'));
+
+        String[] expected = new String[10];
+        expected[0] = "{\"world\":\"##########\\n#        #\\n#     @  #\\n#        #\\n##########\",\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[1] = "{\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[2] = "{\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[3] = "{\"replace\":[{\"mat\":\" \",\"pos\":{\"x\":6,\"y\":2}}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[4] = "{\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[5] = "{\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":8,\"y\":2},{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[6] = "{}";
+        expected[7] = "{}";
+        expected[8] = "{}";
+        expected[9] = "{}";
+
+        for (int i = 0; i < 10; i++) {
+            assertEquals(expected[i], gamemode.gameLoop());
+        }
+    }
 }
