@@ -43,7 +43,6 @@ public class BasicSnake implements Gamemode {
     @Override
     public String gameLoop() {
         snakes.forEach(Snake::move);
-        // TODO: 30.12.2021 Snake can move to other side
         checkCollision();
         synchronizeScore();
         loopCount++;
