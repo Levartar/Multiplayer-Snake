@@ -13,6 +13,7 @@ public class BasicSnake implements Gamemode {
     private final Map map;
     private final List<Snake> snakes;
 
+    private int loopCount;
     private final List<Snake> scheduledForRemoval = new ArrayList<>();
     private final JSONArray JSON_replace = new JSONArray();
     private final JSONObject JSON_synchronizationMessage = new JSONObject();
@@ -38,9 +39,29 @@ public class BasicSnake implements Gamemode {
         snakes.forEach(Snake::move);
         // TODO: 30.12.2021 Snake can move to other side
         checkCollision();
-        // TODO: 01.01.2022 spawn food
-        //Think about how to not send something if nothing changed
+        loopCount++;
+        if (loopCount % 20 == 0) {
+            spawnFood();
+        }
         return getSynchronizationMessage();
+    }
+
+    private void spawnFood() {
+        int width = map.getWidth();
+        int height = map.getHeight();
+
+        Position spawnPosition = new Position(0, 0);
+        Material currentMaterial;
+
+        do {
+            spawnPosition.set(
+                    (int) Math.floor(Math.random() * width),
+                    (int) Math.floor(Math.random() * height)
+            );
+            currentMaterial = map.getMaterialAt(spawnPosition);
+        } while (currentMaterial == Material.APPLE || currentMaterial == Material.WALL);
+        map.changeMaterial(spawnPosition, Material.APPLE);
+        jsonChangeMaterial(spawnPosition, Material.APPLE);
     }
 
     private String getSynchronizationMessage() {
@@ -146,7 +167,7 @@ public class BasicSnake implements Gamemode {
                 // if the current position is the head -> write H
                 if (position == head) {
                     insert = 'H';
-                // if the current position is at the position of the head -> don't override the head symbol
+                    // if the current position is at the position of the head -> don't override the head symbol
                 } else if (position.equals(head)) {
                     return;
                 } else {
