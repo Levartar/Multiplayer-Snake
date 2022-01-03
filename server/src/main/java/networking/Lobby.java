@@ -29,11 +29,6 @@ public class Lobby {
 
     public Lobby(int joinCode) {
         this.joinCode = joinCode;
-        try {
-            this.map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
     }
 
     public int getJoinCode() {
@@ -69,6 +64,13 @@ public class Lobby {
     public void start() throws Exception {
         if (gamemode == null) {
             throw new Exception("Cannot start game. No Gamemode was selected.");
+        }
+        if (map == null) {
+            try {
+                this.map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
+            } catch (Exception e) {
+                log.error(e.getMessage());
+            }
         }
         if (!isReadyToStart()) {
             throw new Exception("Not enough players or not every player is ready");

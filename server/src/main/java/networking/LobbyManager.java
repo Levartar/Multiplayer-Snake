@@ -26,16 +26,6 @@ public class LobbyManager {
         return lobby;
     }
 
-    public static void setGamemode(int joinCode, String gamemode) throws Exception {
-        Lobby lobby = getLobby(joinCode);
-        lobby.setGamemode(gamemode);
-    }
-
-    public static void setMap(int joinCode, Map map) throws Exception {
-        Lobby lobby = getLobby(joinCode);
-        lobby.setMap(map);
-    }
-
     private static int generateCode() {
         int joinCode = (int) Math.floor(Math.random() * MAX_LOBBIES);
         for (Lobby lobby : lobbies) {

@@ -10,7 +10,7 @@ public class Player {
     public Player() {
     }
 
-    public Player(String name, String color, int id) {
+    public Player(String name) {
         this.name = name;
     }
 
@@ -28,14 +28,6 @@ public class Player {
 
     public void setColor(String color) {
         this.color = color;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getHighScore() {

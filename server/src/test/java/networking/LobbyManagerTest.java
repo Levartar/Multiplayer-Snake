@@ -30,8 +30,7 @@ class LobbyManagerTest {
         int joinCode = LobbyManager.createLobby();
         Endpoint endpoint = new Endpoint();
 
-        LobbyManager.joinLobby(joinCode, endpoint);
-        Lobby lobby = LobbyManager.getLobby(joinCode);
+        Lobby lobby = LobbyManager.joinLobby(joinCode, endpoint);
 
         assertNotNull(lobby);
         assertTrue(lobby.hasPlayer(endpoint));
