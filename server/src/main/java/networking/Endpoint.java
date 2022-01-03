@@ -33,6 +33,8 @@ public class Endpoint {
 
         try {
             lobby.join(this);
+            log.info("Player with the name " + player.getName() +
+                    " joined Lobby with the code " + lobby.getJoinCode());
         } catch (Exception e) {
             session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, e.getMessage()));
         }
@@ -63,6 +65,7 @@ public class Endpoint {
     public void send(String data) throws GameOverException {
         try {
             session.getBasicRemote().sendText(data);
+            log.trace("synchronization message successfully sent");
         } catch (IOException e) {
             log.error(e.getMessage());
         }

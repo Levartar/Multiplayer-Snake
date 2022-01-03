@@ -46,13 +46,17 @@ public class Lobby {
         if (running) {
             throw new Exception("The game is already running.");
         }
-        players.add(endpoint.getPlayer());
+        Player player = endpoint.getPlayer();
+        players.add(player);
         endpoints.add(endpoint);
+        log.info("Player : "+ player.getName() +" Successfully joined the Lobby with joincode "  + joinCode);
     }
 
     public void removePlayer(Endpoint endpoint) {
-        players.remove(endpoint.getPlayer());
+        Player player = endpoint.getPlayer();
+        players.remove(player);
         endpoints.remove(endpoint);
+        log.info("Player : "+ player.getName() +" Successfully removed from the Lobby with joincode "  + joinCode);
     }
 
     public boolean hasPlayer(Endpoint endpoint) {
@@ -61,7 +65,12 @@ public class Lobby {
 
     public void setGamemode(String gamemode) {
         switch (gamemode) {
-            case "basic_snake" -> this.gamemode = new BasicSnake(players, map);
+            case "basic_snake" -> {
+                this.gamemode = new BasicSnake(players, map);
+                log.info("Gamemode " + this.gamemode.getClass().getName()
+                        + " set for lobby with code " + joinCode);
+            }
+            default -> log.error("Wrong String input for Gamemode");
         }
     }
 
