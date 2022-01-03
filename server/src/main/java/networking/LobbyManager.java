@@ -65,6 +65,7 @@ public class LobbyManager {
      */
     public static void closeAllLobbies() {
         lobbies.clear();
+        log.warn("All open lobbies have been closed!");
     }
 
     // TODO: 02.01.2022 close empty lobbies that are opened for 10 minutes

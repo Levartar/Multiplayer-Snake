@@ -25,6 +25,7 @@ public class Endpoint {
         try {
             lobby = LobbyManager.getLobby(joinCode);
         } catch (Exception e) {
+            log.error(e.getMessage());
             // the client receives: onClose(1003, some text)
             session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, e.getMessage()));
         }
@@ -36,12 +37,14 @@ public class Endpoint {
             log.info("Player with the name " + player.getName() +
                     " joined Lobby with the code " + lobby.getJoinCode());
         } catch (Exception e) {
+            log.error(e.getMessage());
             session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, e.getMessage()));
         }
     }
 
     @OnMessage
     public void onMessage(char input, Session session) {
+        log.debug("input from player " + player.getName() + ": " + input);
         player.setInput(input);
     }
 

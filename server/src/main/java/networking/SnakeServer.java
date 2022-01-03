@@ -39,6 +39,7 @@ public class SnakeServer {
     public void run() {
         try {
             server.start();
+            log.info("Server started successfully");
             server.join();
         } catch (Exception e) {
             log.error(e.getMessage());

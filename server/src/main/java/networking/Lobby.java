@@ -81,6 +81,7 @@ public class Lobby {
         if (map == null) {
             try {
                 this.map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
+                log.info("Default Basic map created");
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -94,11 +95,12 @@ public class Lobby {
 
         executor.scheduleAtFixedRate(() -> {
             try {
-                String data = gamemode.gameLoop();//if doesn't send a string throw exp
+                String data = gamemode.gameLoop();//if doesn't send a string throw exception
                 for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
                 }
             } catch (GameOverException e) {
+                log.info("Game ended from lobby " + joinCode);
                 java.util.Map<String, Integer> highscores = gamemode.getScores();
                 // TODO: 03.01.2022 send highscores data to database
                 running = false;
@@ -118,5 +120,6 @@ public class Lobby {
 
     public void setMap(Map map) {
         this.map = map;
+        log.debug("Changed Map to: " + map + " for lobby " + joinCode);
     }
 }
