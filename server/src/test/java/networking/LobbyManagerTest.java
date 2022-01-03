@@ -18,12 +18,11 @@ class LobbyManagerTest {
 
         for (int i = 0; i < 1000; i++) {
             expectedJoinCodes.add(i);
-            System.out.println("expectedJoinCodes.size() = " + expectedJoinCodes.size());
             actualJoinCodes.add(LobbyManager.createLobby());
-            System.out.println("actualJoinCodes.size() = " + actualJoinCodes.size());
         }
 
         assertTrue(actualJoinCodes.containsAll(expectedJoinCodes));
+        LobbyManager.closeAllLobbies();
     }
 
     @Test
