@@ -1,5 +1,8 @@
 package networking;
 
+import exceptions.GameOverException;
+import logic.Player;
+
 import javax.websocket.server.ServerEndpoint;
 
 public class CommunicationEndpoint {
@@ -8,7 +11,10 @@ public class CommunicationEndpoint {
     private Player player;
 
     public Player getPlayer(){
-        return null;
+        return player;
     }
 
+    public void send(String data) throws GameOverException {
+        // TODO: 03.01.2022 implement
+    }
 }

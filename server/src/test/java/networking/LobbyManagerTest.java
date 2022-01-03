@@ -11,12 +11,16 @@ class LobbyManagerTest {
 
     @Test
     void createLobby() {
-        List<Integer> expectedJoinCodes = new ArrayList<>(10000);
-        List<Integer> actualJoinCodes = new ArrayList<>(10000);
+        List<Integer> expectedJoinCodes = new ArrayList<>(1000);
+        List<Integer> actualJoinCodes = new ArrayList<>(1000);
 
-        for (int i = 0; i < 10000; i++) {
+        LobbyManager.closeAllLobbies();
+
+        for (int i = 0; i < 1000; i++) {
             expectedJoinCodes.add(i);
+            System.out.println("expectedJoinCodes.size() = " + expectedJoinCodes.size());
             actualJoinCodes.add(LobbyManager.createLobby());
+            System.out.println("actualJoinCodes.size() = " + actualJoinCodes.size());
         }
 
         assertTrue(actualJoinCodes.containsAll(expectedJoinCodes));
@@ -32,5 +36,12 @@ class LobbyManagerTest {
 
         assertNotNull(lobby);
         assertTrue(lobby.hasPlayer(endpoint));
+    }
+
+    @Test
+    void closeAllLobbies() {
+        int joinCode = LobbyManager.createLobby();
+        LobbyManager.closeAllLobbies();
+        assertThrows(Exception.class, () -> LobbyManager.getLobby(joinCode));
     }
 }
