@@ -29,7 +29,7 @@ class BasicSnakeTest {
 
     public BasicSnakeTest() {
         for (int i = 0; i < 4; i++) {
-            players.add(new Player(names[i], colors[i], i));
+            players.add(new Player(names[i]));
         }
 
     }

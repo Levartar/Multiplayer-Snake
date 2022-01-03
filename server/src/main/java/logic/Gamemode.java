@@ -11,4 +11,7 @@ public interface Gamemode {
      * @throws GameOverException if the function is called after the game ended
      */
     String gameLoop() throws GameOverException;
+
+    Map<String, Integer> getScores();
+
 }

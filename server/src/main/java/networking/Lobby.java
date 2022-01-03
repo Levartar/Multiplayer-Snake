@@ -90,6 +90,8 @@ public class Lobby {
                     endpoint.send(data);
                 }
             } catch (GameOverException e) {
+                java.util.Map<String, Integer> highscores = gamemode.getScores();
+                // TODO: 03.01.2022 send highscores data to database
                 running = false;
                 executor.shutdown();
             }

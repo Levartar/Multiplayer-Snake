@@ -45,12 +45,14 @@ public class Endpoint {
 
     @OnClose
     public void onClose(Session session) {
+        log.info("Websocket connection with player " + player.getName() + " closed");
+        lobby.removePlayer(this);
         lobby = null;
     }
 
     @OnError
-    public void onError(Session session) {
-        // TODO: 03.01.2022
+    public void onError(Session session, Throwable cause) {
+        log.error("Error in the Websocket connection with player " + player.getName() + ": " + cause.getMessage());
     }
 
 
@@ -59,6 +61,10 @@ public class Endpoint {
     }
 
     public void send(String data) throws GameOverException {
-        // TODO: 03.01.2022 implement
+        try {
+            session.getBasicRemote().sendText(data);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
     }
 }
