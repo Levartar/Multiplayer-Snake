@@ -1,13 +1,8 @@
 package networking;
 
-import logic.Gamemode;
-import logic.Map;
-import logic.Player;
-import logic.gamemodes.BasicSnake;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +20,10 @@ public class LobbyManager {
         return joinCode;
     }
 
-    public static void joinLobby(int joinCode, CommunicationEndpoint endpoint) throws Exception {
+    public static Lobby joinLobby(int joinCode, Endpoint endpoint) throws Exception {
         Lobby lobby = getLobby(joinCode);
         lobby.join(endpoint);
+        return lobby;
     }
 
     public static void setGamemode(int joinCode, String gamemode) throws Exception {
@@ -50,7 +46,7 @@ public class LobbyManager {
         return joinCode;
     }
 
-    public static void leaveLobby(CommunicationEndpoint endpoint) {
+    public static void leaveLobby(Endpoint endpoint) {
         for (Lobby lobby : lobbies) {
             if (lobby.hasPlayer(endpoint)) {
                 lobby.removePlayer(endpoint);

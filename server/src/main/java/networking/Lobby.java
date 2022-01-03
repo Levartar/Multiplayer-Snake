@@ -22,7 +22,7 @@ public class Lobby {
 
     private final int joinCode;
     private final List<Player> players = new ArrayList<>();
-    private final Set<CommunicationEndpoint> endpoints = new CopyOnWriteArraySet<>();
+    private final Set<Endpoint> endpoints = new CopyOnWriteArraySet<>();
     private boolean running = false;
     private Gamemode gamemode;
     private Map map;
@@ -40,7 +40,7 @@ public class Lobby {
         return joinCode;
     }
 
-    public void join(CommunicationEndpoint endpoint) throws Exception {
+    public void join(Endpoint endpoint) throws Exception {
         if (players.size() >= 4) {
             throw new Exception("The lobby is already full. lobby size = " + players.size());
         }
@@ -51,12 +51,12 @@ public class Lobby {
         endpoints.add(endpoint);
     }
 
-    public void removePlayer(CommunicationEndpoint endpoint) {
+    public void removePlayer(Endpoint endpoint) {
         players.remove(endpoint.getPlayer());
         endpoints.remove(endpoint);
     }
 
-    public boolean hasPlayer(CommunicationEndpoint endpoint) {
+    public boolean hasPlayer(Endpoint endpoint) {
         return endpoints.contains(endpoint);
     }
 
@@ -80,7 +80,7 @@ public class Lobby {
         executor.scheduleAtFixedRate(() -> {
             String data = gamemode.gameLoop();
             try {
-                for (CommunicationEndpoint endpoint : endpoints) {
+                for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
                 }
             } catch (GameOverException e) {

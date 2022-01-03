@@ -29,7 +29,7 @@ class LobbyManagerTest {
     @Test
     void joinLobby() throws Exception {
         int joinCode = LobbyManager.createLobby();
-        CommunicationEndpoint endpoint = new CommunicationEndpoint();
+        Endpoint endpoint = new Endpoint();
 
         LobbyManager.joinLobby(joinCode, endpoint);
         Lobby lobby = LobbyManager.getLobby(joinCode);

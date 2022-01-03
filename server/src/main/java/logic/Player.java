@@ -12,8 +12,6 @@ public class Player {
 
     public Player(String name, String color, int id) {
         this.name = name;
-        this.color = color;
-        this.id = id;
     }
 
     public void setName(String name) {
