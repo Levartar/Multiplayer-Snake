@@ -29,6 +29,7 @@ class LobbyManagerTest {
     void joinLobby() throws Exception {
         int joinCode = LobbyManager.createLobby();
         Endpoint endpoint = new Endpoint();
+        endpoint.onOpen(joinCode, "Anjo", null);
 
         Lobby lobby = LobbyManager.joinLobby(joinCode, endpoint);
 
