@@ -4,16 +4,12 @@ public class Player {
     private String name;
     private char input;
     private String color;
-    private int id;
-    private int highScore;
 
     public Player() {
     }
 
-    public Player(String name, String color, int id) {
+    public Player(String name) {
         this.name = name;
-        this.color = color;
-        this.id = id;
     }
 
     public void setName(String name) {
@@ -32,24 +28,6 @@ public class Player {
         this.color = color;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getHighScore() {
-        return highScore;
-    }
-
-    public void setHighScore(int highScore) {
-        if (highScore>this.highScore){
-            this.highScore = highScore;
-        }
-    }
-
     public void setInput(char input){
         switch (input) {
             case 'w':if (!(this.input=='s')){this.input = 'w';}
@@ -60,9 +38,6 @@ public class Player {
         this.input = input;
     }
 
-    public void writeHighScoreToDB() {
-        //TODO write HS to DataBase
-    }
 
     public String getName(){
         return name;

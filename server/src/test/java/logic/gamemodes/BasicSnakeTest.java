@@ -1,5 +1,6 @@
 package logic.gamemodes;
 
+import exceptions.GameOverException;
 import helpers.ResourceManager;
 import logic.Gamemode;
 import logic.Map;
@@ -28,7 +29,7 @@ class BasicSnakeTest {
 
     public BasicSnakeTest() {
         for (int i = 0; i < 4; i++) {
-            players.add(new Player(names[i], colors[i], i));
+            players.add(new Player(names[i]));
         }
 
     }
@@ -67,7 +68,7 @@ class BasicSnakeTest {
      * tests movement in all directions
      */
     @Test
-    void testMoveSnake() {
+    void testMoveSnake() throws GameOverException {
         String mapString = """
                 #####
                 #   #
@@ -142,7 +143,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testBigMapSpawnsAndMove() throws IOException {
+    void testBigMapSpawnsAndMove() throws IOException, GameOverException {
         Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
 
         Map basicMap50x50 = new Map(basicMap50x50Path);
@@ -210,7 +211,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testSnakeCollidesWithWall() {
+    void testSnakeCollidesWithWall() throws GameOverException {
         String mapString = """
                 #####
                 #   #
@@ -241,7 +242,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testSnakeCollidesWithItself() throws IOException {
+    void testSnakeCollidesWithItself() throws IOException, GameOverException {
         Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
 
         Map basicMap50x50 = new Map(basicMap50x50Path);
@@ -261,7 +262,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testSnakeCollidesWithOtherSnake() {
+    void testSnakeCollidesWithOtherSnake() throws GameOverException {
         String mapString = """
                 #########
                 #       #
@@ -292,7 +293,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testSnakeCollidesWithApple() {
+    void testSnakeCollidesWithApple() throws GameOverException {
         String mapString = """
                 ############
                 #          #
@@ -333,7 +334,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testBigMapSpawnsMoveRandomAndDie() throws IOException {
+    void testBigMapSpawnsMoveRandomAndDie() throws IOException, GameOverException {
         Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
 
         Map basicMap50x50 = new Map(basicMap50x50Path);
@@ -348,7 +349,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testSynchronizationMessage() {
+    void testSynchronizationMessage() throws GameOverException {
         String mapString = """
                 ##########
                 #        #

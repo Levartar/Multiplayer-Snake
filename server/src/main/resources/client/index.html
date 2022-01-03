@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test page</title>
+</head>
+<body>
+    test content
+    <script>
+        const wsUrl = "ws://localhost:80/join/12345/name/timo"
+        const ws = new WebSocket(wsUrl)
+
+        ws.onopen = () => {
+            console.log("websocket opened")
+        }
+
+        ws.onclose = (e) => {
+            console.log(e)
+            console.log("websocket closed")
+        }
+    </script>
+</body>
+</html>
