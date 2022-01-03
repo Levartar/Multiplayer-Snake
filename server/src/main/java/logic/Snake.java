@@ -75,4 +75,8 @@ public class Snake {
     public int length() {
         return positions.size();
     }
+
+    public Player getPlayer(){
+        return player;
+    }
 }

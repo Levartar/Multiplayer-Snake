@@ -254,8 +254,6 @@ class BasicSnakeTest {
         gamemode.gameLoop();
         players.forEach(player -> player.setInput('d'));
         gamemode.gameLoop();
-        gamemode.gameLoop();
-        gamemode.gameLoop();
         logger.info("\n" + gamemode);
         logger.info("\n" + basicMap50x50);
 

@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,8 @@ public class BasicSnake implements Gamemode {
     private final List<Snake> scheduledForRemoval = new ArrayList<>();
     private final JSONArray JSON_replace = new JSONArray();
     private final JSONObject JSON_synchronizationMessage = new JSONObject();
+    private final JSONArray JSONArrayScores = new JSONArray();
+    private final HashMap<Player, Integer> scores = new HashMap<>();
 
     public BasicSnake(List<Player> players, Map map) {
         this.map = map;
@@ -24,6 +27,9 @@ public class BasicSnake implements Gamemode {
 
         // initial message
         JSON_synchronizationMessage.put("world", map.toString());
+
+        //init Scores
+        players.forEach(player -> scores.put(player,0));
 
         // create snakes
         List<Position> spawnPoints = map.getSpawnPoints();
@@ -39,12 +45,15 @@ public class BasicSnake implements Gamemode {
         snakes.forEach(Snake::move);
         // TODO: 30.12.2021 Snake can move to other side
         checkCollision();
+        synchronizeScore();
         loopCount++;
         if (loopCount % 20 == 0) {
             spawnFood();
         }
         return getSynchronizationMessage();
     }
+
+
 
     private void spawnFood() {
         int width = map.getWidth();
@@ -71,10 +80,14 @@ public class BasicSnake implements Gamemode {
         if (!printSnakes().isEmpty()) {
             JSON_synchronizationMessage.put("snakes", printSnakes());
         }
+        if (!JSONArrayScores.isEmpty()) {
+            JSON_synchronizationMessage.put("scores", printScores());
+        }
 
         String message = JSON_synchronizationMessage.toString();
         JSON_synchronizationMessage.clear();
         JSON_replace.clear();
+
         return message;
     }
 
@@ -117,6 +130,7 @@ public class BasicSnake implements Gamemode {
 
         scheduledForRemoval.forEach(snakes::remove);
         scheduledForRemoval.clear();
+
     }
 
     private void jsonChangeMaterial(Position position, Material material) {
@@ -148,6 +162,17 @@ public class BasicSnake implements Gamemode {
             snakeArray.put(snakeObject);
         });
         return snakeArray;
+    }
+
+    private JSONArray printScores(){
+        JSONArrayScores.clear();
+        scores.forEach((player, points) ->  {
+            JSONObject score = new JSONObject();
+            score.put("name",player.getName());
+            score.put("points",points);
+            JSONArrayScores.put(score);
+        });
+        return JSONArrayScores;
     }
 
     @Override
@@ -186,5 +211,21 @@ public class BasicSnake implements Gamemode {
         }
         result.deleteCharAt(result.length() - 1);
         return result.toString();
+    }
+
+    private void raiseScoreForAll(int points){
+        snakes.forEach(snake -> {
+            scores.put(snake.getPlayer(),points);
+        });
+    }
+
+    private void raiseScore(Snake snake,int points){
+        scores.put(snake.getPlayer(),points);
+    }
+
+    private void synchronizeScore() {
+        snakes.forEach(snake -> {
+            raiseScore(snake, snake.length());
+        });
     }
 }
