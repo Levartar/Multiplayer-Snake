@@ -77,12 +77,10 @@ public class BasicSnake implements Gamemode {
         if (!JSON_replace.isEmpty()) {
             JSON_synchronizationMessage.put("replace", JSON_replace);
         }
-        if (!printSnakes().isEmpty()) {
-            JSON_synchronizationMessage.put("snakes", printSnakes());
-        }
-        if (!JSONArrayScores.isEmpty()) {
-            JSON_synchronizationMessage.put("scores", printScores());
-        }
+        JSON_synchronizationMessage.put("snakes", printSnakes());
+
+        JSON_synchronizationMessage.put("scores", printScores());
+
 
         String message = JSON_synchronizationMessage.toString();
         JSON_synchronizationMessage.clear();
