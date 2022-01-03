@@ -22,29 +22,12 @@ function Input(props){
                 <label htmlFor={"input" + props.name}>{props.text}</label>
             </div>
             <div id={props.name + "InputDiv"}>
-                <input id={"input" + props.name} type={props.type} name={props.name}/>
+                <input id={"input" + props.name} type={props.type} name={props.name} maxLength={props.maxLength}/>
             </div>
         </div>
     )
 }
 
-function Banner(){
-    return(
-        <div>
-            <img src={images.banner} alt="Snake.IO banner image" />
-        </div>
-    )
-}
-
-class Enter_name extends React.Component{
-    render() {
-        return(
-            <div>
-                <Input name={"Name"} type={"text"} text={"Enter your name: "}/>
-            </div>
-        )
-    }
-}
 class Create_session extends React.Component{
     componentDidMount() {
         document.getElementById("buttonnewGame").addEventListener("click", () => {
@@ -92,7 +75,7 @@ class Join_session extends React.Component{
     render() {
         return(
             <div>
-                <Input name={"sessionId"} type={"text"} text={"Join a Session"}/>
+                <Input name={"sessionId"} type={"text"} text={"Join a Session"} maxLength={"10"}/>
                 <Button text={"join"} name={"sessionId"}/>
             </div>
         )
@@ -104,10 +87,12 @@ class Main_menu extends React.Component {
         return (
             <div className="Frame">
                 <header>
-                    <Banner />
+                    <img src={images.banner} alt="Snake.IO banner image" />
                 </header>
                 <main>
-                    <Enter_name />
+                    <div>
+                        <Input name={"Name"} type={"text"} text={"Enter your name: "} maxLength={"10"}/>
+                    </div>
                     <div id="enterLobby">
                         <Create_session />
                         <Join_session />
@@ -119,30 +104,43 @@ class Main_menu extends React.Component {
 }
 
 let player = [
-    {name: "player1", color: "red"},
-    {name: "player2", color: "green"},
-    {name: "player3", color: "yellow"},
-    {name: "player4", color: "blue"}
+    {name: "Tim", color: "red"},
+    {name: "Lukas", color: "green"},
+    {name: "Felix", color: "yellow"},
+    {name: "Timo", color: "blue"}
 ]
 
-function Table(){
+function TablePlayer(props){
     return(
         <div>
             <table>
                 <thead>
                     <tr>
-                        <th colSpan="2">Player</th>
+                        <th colSpan="2">{props.tableHead}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {player.map((player, i) =>
+                    {props.data.map((player, i) =>
                         <tr key={i}>
-                            <td>{player.name}</td>
-                            <td>{player.color}</td>
+                            <td>{props.data[i].name}</td>
+                            <td>{props.data[i].color}</td>
                         </tr>
                     )}
                 </tbody>
             </table>
+        </div>
+    )
+}
+
+function List(){
+    return(
+        <div>
+            <h2>Player:</h2>
+            <ul>
+                {player.map((player, i) =>
+                    <li id={"player" + i}>{player.name}</li>
+                )}
+            </ul>
         </div>
     )
 }
@@ -174,26 +172,23 @@ class Lobby extends React.Component {
         return(
             <div className="Frame">
                 <div id="exitLobby">
-                    <Button name={"exitLobby"} text={"return to Main menu"}/>
+                    <Button name={"exitLobby"} text={"exit Lobby"}/>
+                </div>
+                <div id="lobbyHeadlineDIV">
+                    <h1 id="lobbyHeadline">Lobby</h1>
                 </div>
                 <div id="lobby" className="noMargin">
-                    <div id="lobbyDetails">
-                        <div id="lobbyHeadlineDIV">
-                            <h1 id="lobbyHeadline">Lobby</h1>
-                        </div>
-                        <div id="sessionIDDIV">
-                            <h2 id="sessionIDHeadline" className="noMargin">SessionID:</h2>
-                            <p id="sessionIDtext" className="noMargin">X15QW4B</p>
-                        </div>
-                        <div id="startGameDIV">
-                            <Button text={"Start Game"} name={"startGame"}/>
-                        </div>
+                    <div id="sessionIDDIV">
+                        <h2 id="sessionIDHeadline" className="noMargin">SessionID:</h2>
+                        <p id="sessionIDtext" className="noMargin">X15QW4B</p>
                     </div>
                     <div id="playerTable">
-                        <Table />
+                        <List />
                     </div>
                 </div>
-
+                <div id="startGameDIV">
+                    <Button text={"Start Game"} name={"startGame"}/>
+                </div>
             </div>
         )
     }
@@ -210,7 +205,9 @@ class Game extends React.Component {
 }
 
 ReactDOM.render(
-    <Lobby />,
+    <React.StrictMode>
+        <Lobby />
+    </React.StrictMode>,
     document.getElementById('root')
 );
 
