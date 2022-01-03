@@ -52,6 +52,11 @@ public class BasicSnake implements Gamemode {
         return getSynchronizationMessage();
     }
 
+    @Override
+    public java.util.Map<String, Integer> getScores() {
+        // TODO: 03.01.2022 convert scores to Map<String, Integer> and return it
+        return null;
+    }
 
 
     private void spawnFood() {

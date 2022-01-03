@@ -2,6 +2,8 @@ package networking;
 
 import exceptions.GameOverException;
 import logic.Player;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -10,6 +12,7 @@ import java.io.IOException;
 
 @ServerEndpoint("/join/{code}/name/{name}")
 public class Endpoint {
+    private static final Logger log = LogManager.getLogger(Endpoint.class);
 
     private Session session;
 
@@ -27,6 +30,7 @@ public class Endpoint {
         }
 
         player = new Player(name);
+
         try {
             lobby.join(this);
         } catch (Exception e) {
@@ -36,14 +40,12 @@ public class Endpoint {
 
     @OnMessage
     public void onMessage(char input, Session session) {
-
-        // TODO: 03.01.2022 input message handler
+        player.setInput(input);
     }
 
     @OnClose
     public void onClose(Session session) {
         lobby = null;
-        // TODO: 03.01.2022 remove endpoint
     }
 
     @OnError

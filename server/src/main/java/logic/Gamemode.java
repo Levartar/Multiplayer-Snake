@@ -2,6 +2,8 @@ package logic;
 
 import exceptions.GameOverException;
 
+import java.util.Map;
+
 public interface Gamemode {
     /**
      *
