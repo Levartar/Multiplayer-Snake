@@ -35,6 +35,10 @@ public class Lobby {
         return joinCode;
     }
 
+    /**
+     *
+     * @throws Exception if the lobby is full or the game is running
+     */
     public void join(Endpoint endpoint) throws Exception {
         if (players.size() >= 4) {
             throw new Exception("The lobby is already full. lobby size = " + players.size());
@@ -80,8 +84,8 @@ public class Lobby {
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
         executor.scheduleAtFixedRate(() -> {
-            String data = gamemode.gameLoop();
             try {
+                String data = gamemode.gameLoop();//if doesn't send a string throw exp
                 for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
                 }

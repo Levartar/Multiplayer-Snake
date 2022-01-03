@@ -26,12 +26,17 @@ public class Endpoint {
             session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, e.getMessage()));
         }
 
-        //player = new Player(name)
-        // TODO: 03.01.2022
+        player = new Player(name);
+        try {
+            lobby.join(this);
+        } catch (Exception e) {
+            session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, e.getMessage()));
+        }
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) {
+    public void onMessage(char input, Session session) {
+
         // TODO: 03.01.2022 input message handler
     }
 
@@ -47,7 +52,7 @@ public class Endpoint {
     }
 
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     }
 

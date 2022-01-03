@@ -1,5 +1,12 @@
 package logic;
 
+import exceptions.GameOverException;
+
 public interface Gamemode {
-    String gameLoop();
+    /**
+     *
+     * @return String that contains the changes of this gameloop
+     * @throws GameOverException if the function is called after the game ended
+     */
+    String gameLoop() throws GameOverException;
 }
