@@ -8,6 +8,7 @@ import logic.Player;
 import logic.gamemodes.BasicSnake;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import Database.SQLConnection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +103,23 @@ public class Lobby {
             } catch (GameOverException e) {
                 log.info("Game ended from lobby " + joinCode);
                 java.util.Map<String, Integer> highscores = gamemode.getScores();
-                // TODO: 03.01.2022 send highscores data to database
+                try{
+                    SQLConnection.connectToServer("testdb");
+                    log.info("Successfully connected to Database: ");
+                }catch(Exception ex){
+                    log.error("Couldn't connect to Database : " + ex.getMessage());
+                }
+                highscores.forEach((key,value) -> {
+                    // TODO: 05.01.2022 insert the highscores of the players
+                    System.out.println(key + " " + value);
+                });
+                SQLConnection.getAllDBNames();
+                try{
+                    SQLConnection.closeConnections();
+                    log.info("Successfully disconnected from Database: ");
+                }catch(Exception exp){
+                    log.error(exp.getMessage());
+                }
                 running = false;
                 executor.shutdown();
             }

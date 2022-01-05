@@ -1,8 +1,12 @@
+package Database;
+
 import java.sql.*;
 
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 import com.mysql.cj.jdbc.MysqlDataSource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.sql.Connection;
@@ -10,13 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SQLConnection {
+    private static final Logger log = LogManager.getLogger(SQLConnection.class);
+
 
     private static Connection connection = null;
     private static Session session = null;
 
-    private static void connectToServer(String dataBaseName) throws SQLException {
+    public static void connectToServer(String dataBaseName) throws SQLException {
         connectSSH();
         connectToDataBase(dataBaseName);
+        log.info("Successfully connected to Database: " + dataBaseName);
     }
 
     public static void main(String[] args) {
@@ -33,8 +40,8 @@ public class SQLConnection {
 
     private static void connectSSH() {
         String sshHost = "193.196.53.28";
-        String sshuser = "x";
-        String SshKeyFilepath = "x";
+        String sshuser = "se3dbUser";
+        String SshKeyFilepath = "ser22pentes";
 
         int localPort = 8740; // any free port can be used
         String remoteHost = "127.0.0.1";
@@ -87,15 +94,16 @@ public class SQLConnection {
     }
 
 
-    private static void closeConnections() {
+    public static void closeConnections() {
         CloseDataBaseConnection();
         CloseSSHConnection();
+        log.info("Successfully disconnected from Database: ");
     }
 
     private static void CloseDataBaseConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
-                System.out.println("Closing Database Connection");
+                log.info("Closing Database Connection");
                 connection.close();
             }
         } catch (SQLException e) {
@@ -106,7 +114,7 @@ public class SQLConnection {
 
     private static void CloseSSHConnection() {
         if (session != null && session.isConnected()) {
-            System.out.println("Closing SSH Connection");
+            log.info("Closing SSH Connection");
             session.disconnect();
         }
     }
@@ -120,7 +128,7 @@ public class SQLConnection {
             connectToServer(dataBaseName);
             Statement stmt = connection.createStatement();
             resultSet = stmt.executeQuery(query);
-            System.out.println("Database connection success");
+            log.info("Database connection success");
         } catch (SQLException e) {
             e.printStackTrace();
         }
