@@ -45,6 +45,7 @@ verify:
   stage: testServer 
   script:
     - echo "$DBUserName"
+    - echo "$DBUserPassword"
     - cd server
     - 'mvn $MAVEN_CLI_OPTS verify'
   except:
