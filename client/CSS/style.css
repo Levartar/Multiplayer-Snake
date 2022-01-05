@@ -1,5 +1,5 @@
+/* for The main page */
 body{
-    margin: 5em; /*small border around everything*/
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 
     /* checkered background */
@@ -11,12 +11,6 @@ body{
             linear-gradient(90deg, rgba(0, 0, 0, 0.28) 1px, transparent 1px);
     background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
     background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
-
-    /* flexbox */
-    display: flex;
-    flex-direction: column;
-    margin-left: 20%;
-    margin-right: 20%;
 }
 input{
     border-color: black;
@@ -82,4 +76,80 @@ main{
 #sessionIdButtonDiv{
     display: flex;
     justify-content: center;
+}
+
+/* for the Lobby */
+table, th, td{
+    border: 1px solid black;
+}
+th{
+    text-align: center;
+}
+#lobby{
+    display: flex;
+    justify-content: space-around;
+    margin-right: 0;
+}
+#playerTable{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+#sessionIDDIV{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+#sessionIDtext{
+    text-align: center;
+    font-size: 1.1em;
+}
+
+#lobbyHeadlineDIV{
+    display: flex;
+    justify-content: center;
+}
+#lobbyHeadline{
+    font-size: 3em;
+}
+#startGameDIV{
+    display: flex;
+    justify-content: center;
+}
+.noMargin{
+    margin: 0;
+}
+#exitLobby{
+    display: flex;
+}
+.Frame{
+    aspect-ratio: 1.5;
+    margin: 3em;
+}
+
+li{
+    list-style-type: none;
+    margin: 0.4em;
+    padding: 0;
+}
+ul{
+    padding: 0;
+    font-size: 1.4em;
+    margin: 0.5em;
+}
+h2{
+    font-size: 1.5em;
+    margin: 0.5em;
+}
+#player0{
+    color: #ff0000;
+}
+#player1{
+    color: #ffbf7bff;
+}
+#player2{
+    color: #5abbbeff;
+}
+#player3{
+    color: #036c99ff;
 }
