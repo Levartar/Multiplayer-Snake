@@ -121,7 +121,7 @@ public class SQLConnection {
 
 
     // works ONLY FOR  single query (one SELECT or one DELETE etc)
-    private static ResultSet executeMyQuery(String query, String dataBaseName) {
+    public static ResultSet executeMyQuery(String query, String dataBaseName) {
         ResultSet resultSet = null;
 
         try {

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import Database.SQLConnection;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -104,16 +105,15 @@ public class Lobby {
                 log.info("Game ended from lobby " + joinCode);
                 java.util.Map<String, Integer> highscores = gamemode.getScores();
                 try{
-                    SQLConnection.connectToServer("testdb");
-                    log.info("Successfully connected to Database: ");
+                    highscores.forEach((key,value) -> {
+                        // TODO: 05.01.2022 test the highscore saving!!!
+                        String query = "insert into highscores values ("+ key+", "+ value+")";
+                        ResultSet resultSet = SQLConnection.executeMyQuery(query,"testdb");
+                        log.debug(resultSet);
+                    });
                 }catch(Exception ex){
-                    log.error("Couldn't connect to Database : " + ex.getMessage());
+                    log.error(ex.getMessage());
                 }
-                highscores.forEach((key,value) -> {
-                    // TODO: 05.01.2022 insert the highscores of the players
-                    System.out.println(key + " " + value);
-                });
-                SQLConnection.getAllDBNames();
                 try{
                     SQLConnection.closeConnections();
                     log.info("Successfully disconnected from Database: ");
