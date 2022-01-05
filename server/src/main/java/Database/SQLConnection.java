@@ -40,8 +40,8 @@ public class SQLConnection {
 
     private static void connectSSH() {
         String sshHost = "193.196.53.28";
-        String sshuser = "se3dbUser";
-        String SshKeyFilepath = "ser22pentes";
+        String sshuser = "x";
+        String SshKeyFilepath = "x";
 
         int localPort = 8740; // any free port can be used
         String remoteHost = "127.0.0.1";
