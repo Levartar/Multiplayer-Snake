@@ -19,6 +19,11 @@ public class SQLConnection {
 
     private static Connection connection = null;
     private static Session session = null;
+    private static String DBUser;
+    private static String DBUserPW;
+    private static String DBIP;
+    private static String SSHPrivatKey;
+
 
     public static void connectToServer(String dataBaseName) throws SQLException {
         connectSSH();
@@ -27,24 +32,30 @@ public class SQLConnection {
     }
 
     public static void main(String[] args) {
+        DBUser = args[0];
+        DBUserPW = args[1];
+        DBIP = args[2];
+        SSHPrivatKey = "C:\\Users\\nikoh\\.ssh\\id_rsa";
+        System.out.println(DBUser + DBUserPW + DBIP + "Privat Key: " + SSHPrivatKey);
 
-        List<String> dbNames = getAllDBNames();
-        System.out.println("DBNames:");
-        for (String s: dbNames
-             ) {
-            System.out.println(s);
-
+        try {
+            ResultSet resultSet = executeMyQuery("Select * from highscores;", "testdb");
+            while (resultSet.next()) {
+                log.debug(resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            log.info(e);
         }
         closeConnections();
     }
 
     private static void connectSSH() {
-        String sshHost = "193.196.53.28";
-        String sshuser = "x";
-        String SshKeyFilepath = "x";
+        String sshHost = DBIP;
+        String sshuser = "root";
 
-        int localPort = 8740; // any free port can be used
-        String remoteHost = "127.0.0.1";
+
+        int localPort = 8000; // any free port can be used
+        String remoteHost = DBIP;
         int remotePort = 3306;
 
 
@@ -52,7 +63,7 @@ public class SQLConnection {
             java.util.Properties config = new java.util.Properties();
             JSch jsch = new JSch();
             session = jsch.getSession(sshuser, sshHost, 22);
-            jsch.addIdentity(SshKeyFilepath);
+            jsch.addIdentity(SSHPrivatKey);
             config.put("StrictHostKeyChecking", "no");
             config.put("ConnectionAttempts", "3");
             session.setConfig(config);
@@ -70,20 +81,19 @@ public class SQLConnection {
         }
     }
 
-    private static void connectToDataBase(String dataBaseName)  {
-        String dbuserName = "x";
-        String dbpassword = "x";
-        int localPort = 8740; // any free port can be used
-        String localSSHUrl = "x";
+    private static void connectToDataBase(String dataBaseName) {
+
+        int localPort = 8000; // any free port can be used
+        String localSSHUrl = "127.0.0.1";
         try {
             //mysql database connectivity
             MysqlDataSource dataSource = new MysqlDataSource();
             dataSource.setServerName(localSSHUrl);
-           dataSource.setPortNumber(localPort);
-           dataSource.setUser(dbuserName);
-           dataSource.setAllowMultiQueries(true);
+            dataSource.setPortNumber(localPort);
+            dataSource.setUser(DBUser);
+            dataSource.setAllowMultiQueries(true);
 
-            dataSource.setPassword(dbpassword);
+            dataSource.setPassword(DBUserPW);
             dataSource.setDatabaseName(dataBaseName);
             connection = dataSource.getConnection();
 
@@ -147,12 +157,9 @@ public class SQLConnection {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnections();
         }
         return organisationDbNames;
     }
 
 
-    
 }
