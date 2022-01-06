@@ -36,6 +36,8 @@
         class Create_session extends React.Component{
             componentDidMount() {
                 document.getElementById("buttonnewGame").addEventListener("click", () => {
+                    //create a new lobby
+
                     ReactDOM.render(
                         <Lobby />,
                         document.getElementById('root')
@@ -62,6 +64,8 @@
         class Join_session extends React.Component{
             componentDidMount() {
                 document.getElementById("buttonsessionId").addEventListener("click", () => {
+                    // connect to lobby if SessionID is correct
+
                     ReactDOM.render(
                         <Lobby />,
                         document.getElementById('root')
@@ -214,7 +218,19 @@
                     }
                     context.strokeStyle = "black";
 
-                    context.stroke()})
+                    context.stroke()
+                })
+
+                document.addEventListener("keydown", (event) => {
+                    switch (event.key){
+                        case 'w':
+                        case 'a':
+                        case 's':
+                        case 'd':
+                            //ws.send(event.key)
+                            console.log("Key pressed: " + event.key)
+                    }
+                })
             }
 
             render() {
