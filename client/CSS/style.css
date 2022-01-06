@@ -44,6 +44,22 @@ main{
     flex-direction: column;
     justify-content: space-evenly;
 }
+table {
+    border-collapse: collapse;
+    table-layout: auto;
+    width: 130%;
+    background: white;
+    text-align: left;
+    border-style: solid;
+    border-color: black;
+}
+th{
+    padding: 0.3rem;
+    background: lightgray;
+}
+td{
+    padding: 0.3rem;
+}
 #enterLobby{
     display: flex;
     justify-content: space-around;
@@ -79,12 +95,6 @@ main{
 }
 
 /* for the Lobby */
-table, th, td{
-    border: 1px solid black;
-}
-th{
-    text-align: center;
-}
 #lobby{
     display: flex;
     justify-content: space-around;
@@ -119,12 +129,12 @@ th{
 .noMargin{
     margin: 0;
 }
-#exitLobby{
-    display: flex;
+.frame{
+    margin: 10%;
 }
-.Frame{
-    aspect-ratio: 1.5;
-    margin: 3em;
+.flexed{
+    display: flex;
+    justify-content: center;
 }
 
 li{
@@ -152,4 +162,10 @@ h2{
 }
 #player3{
     color: #036c99ff;
+}
+#mapCanvas{
+    background: white;
+}
+#gameScores{
+    margin-left: 2em;
 }

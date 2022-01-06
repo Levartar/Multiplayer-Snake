@@ -43,10 +43,6 @@
                 })
             }
 
-            componentWillUnmount() {
-                document.getElementById("buttonnewGame").removeEventListener("click", () => {})
-            }
-
             render() {
                 return(
                     <div>
@@ -73,10 +69,6 @@
                 })
             }
 
-            componentWillUnmount() {
-                document.getElementById("buttonsessionId").removeEventListener("click", () => {})
-            }
-
             render() {
                 return(
                     <div>
@@ -90,7 +82,7 @@
         class Main_menu extends React.Component {
             render(){
                 return (
-                    <div className="Frame">
+                    <div className="frame">
                         <header>
                             <img src="./assets/img.png" alt="Snake.IO banner image" />
                         </header>
@@ -121,7 +113,8 @@
                     <table>
                         <thead>
                         <tr>
-                            <th colSpan="2">{props.tableHead}</th>
+                            <th >{props.tableHead1}</th>
+                            <th >{props.tableHead2}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -167,17 +160,11 @@
                 })
             }
 
-            componentWillUnmount() {
-                document.getElementById("buttonexitLobby").removeEventListener("click", () => {
-
-                })
-            }
-
             render() {
                 return(
-                    <div className="Frame">
-                        <div id="exitLobby">
-                            <Button name={"exitLobby"} text={"exit Lobby"}/>
+                    <div className="frame">
+                        <div>
+                            <Button name={"exitLobby"} text={"back"}/>
                         </div>
                         <div id="lobbyHeadlineDIV">
                             <h1 id="lobbyHeadline">Lobby</h1>
@@ -192,7 +179,7 @@
                             </div>
                         </div>
                         <div id="startGameDIV">
-                            <Button text={"Start Game"} name={"startGame"}/>
+                            <Button name={"startGame"} text={"Start"}/>
                         </div>
                     </div>
                 )
@@ -200,10 +187,51 @@
         }
 
         class Game extends React.Component {
+            componentDidMount() {
+                document.getElementById("buttonexitGame").addEventListener("click", () => {
+                    ReactDOM.render(
+                        <Lobby />,
+                        document.getElementById('root')
+                    );
+                })
+                /*button placeholder for network eventlistener*/
+                document.getElementById("test").addEventListener("click", () => {
+                    const canvasMap = document.getElementById("mapCanvas")
+                    const context = canvasMap.getContext("2d")
+
+                    let bw = 400;
+                    // Box height and width
+                    let bh = 400;
+
+                    for (let x = 0; x <= bw; x += 40) {
+                        context.moveTo(0.5 + x, 0);
+                        context.lineTo(0.5 + x, bh);
+                    }
+
+                    for (let x = 0; x <= bh; x += 40) {
+                        context.moveTo(0, 0.5 + x);
+                        context.lineTo(bw, 0.5 + x);
+                    }
+                    context.strokeStyle = "black";
+
+                    context.stroke()})
+            }
+
             render() {
                 return(
-                    <div className="Frame">
-
+                    <div className="frame">
+                        <Button name={"exitGame"} text={"back"}/>
+                        <div className="flexed" id="gameScreen">
+                            <div id="gameMap">
+                                <canvas id="mapCanvas" width="401" height="401">
+                                </canvas>
+                            </div>
+                            <div id="gameScores">
+                                <TablePlayer data={player} tableHead1={"Player"} tableHead2={"Score"}/>
+                            </div>
+                            {/*button (placeholder) prints canvas things after canvas is created, otherwise it would throw errors*/}
+                        </div>
+                        <button id="test">test</button>
                     </div>
                 )
             }
