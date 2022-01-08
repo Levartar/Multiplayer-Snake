@@ -64,6 +64,9 @@ public class WebsocketTest {
         Thread.sleep(1000); // wait 1 second
 
         assertFalse(clientEndpoint.isOpen());
+        String reason = clientEndpoint.getCloseReason().getReasonPhrase();
+        assertEquals("No matching Lobby found for joinCode: 5", reason);
+
     }
 
     @Test
