@@ -19,13 +19,14 @@ public class WebsocketTest {
     private static Server server;
 
     @BeforeAll
-    static void beforeAll() {
+    static void beforeAll() throws InterruptedException {
         Thread serverThread = new Thread(() -> {
             SnakeServer snakeServer = new SnakeServer(80);
             server = snakeServer.getServer();
             snakeServer.run();
         });
         serverThread.start();
+        Thread.sleep(5000); // wait 5 seconds
     }
 
     @AfterAll
@@ -45,7 +46,7 @@ public class WebsocketTest {
     }
 
     @Test
-    void joinNonExistingLobby() throws Exception {
+    void joinNonExistingLobby() throws InterruptedException, URISyntaxException, DeploymentException, IOException {
         int lobbyJoinCode = 5;
 
         // try to join a lobby that does not exist
