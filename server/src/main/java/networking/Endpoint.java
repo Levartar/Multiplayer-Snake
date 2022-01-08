@@ -82,7 +82,11 @@ public class Endpoint {
     public static void closeAllEndpoints() {
         endpoints.forEach(endpoint -> {
             try {
-                endpoint.session.close();
+                if (endpoint.session == null) {
+                    log.warn("Trying to close endpoint, but endpoint.session is null");
+                } else {
+                    endpoint.session.close();
+                }
             } catch (IOException e) {
                 log.error("Error while closing endpoint: " + e.getMessage());
             }
