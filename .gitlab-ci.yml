@@ -47,7 +47,7 @@ verify:
     - echo "$DBUserName"
     - echo "$DBUserPassword"
     - cd server
-    - 'mvn $MAVEN_CLI_OPTS verify'
+    - 'mvn MAVEN_OPTS="$DBUserName","$DBUserPassword","Server_IP","SSH_PRIVATE_KEY" $MAVEN_CLI_OPTS verify'
   except:
     variables:
       - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
