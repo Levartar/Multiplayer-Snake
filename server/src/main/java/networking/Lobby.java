@@ -64,6 +64,9 @@ public class Lobby {
     }
 
     public void setGamemode(String gamemode) {
+        if (map == null) {
+            createDefaultMap();
+        }
         switch (gamemode) {
             case "basic_snake" -> {
                 this.gamemode = new BasicSnake(players, map);
@@ -75,16 +78,11 @@ public class Lobby {
     }
 
     public void start() throws Exception {
+        if (map == null) {
+            createDefaultMap();
+        }
         if (gamemode == null) {
             throw new Exception("Cannot start game. No Gamemode was selected.");
-        }
-        if (map == null) {
-            try {
-                this.map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
-                log.info("Default Basic map created");
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
         }
         if (!isReadyToStart()) {
             throw new Exception("Not enough players or not every player is ready");
@@ -96,8 +94,10 @@ public class Lobby {
         executor.scheduleAtFixedRate(() -> {
             try {
                 String data = gamemode.gameLoop();//if doesn't send a string throw exception
+                log.trace("gameLoop data: " + data);
                 for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
+                    log.trace("sent data to player " + endpoint.getPlayer().getName());
                 }
             } catch (GameOverException e) {
                 log.info("Game ended from lobby " + joinCode);
@@ -109,9 +109,18 @@ public class Lobby {
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
+    private void createDefaultMap() {
+        try {
+            this.map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
+            log.info("Default Basic map created");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
     public boolean isReadyToStart() {
         // TODO: 02.01.2022 check if all players are ready, Player needs a isReady() method
-        return false;
+        return true;
     }
 
     public List<Player> getPlayers() {
