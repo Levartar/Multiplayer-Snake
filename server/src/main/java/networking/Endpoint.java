@@ -9,10 +9,14 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @ServerEndpoint("/join/{code}/name/{name}")
 public class Endpoint {
     private static final Logger log = LogManager.getLogger(Endpoint.class);
+
+    private static List<Endpoint> endpoints = new ArrayList<>();
 
     private Session session;
 
@@ -22,6 +26,8 @@ public class Endpoint {
     @OnOpen
     public void onOpen(@PathParam("code") int joinCode, @PathParam("name") String name, Session session) throws IOException {
         this.session = session;
+        endpoints.add(this);
+
         try {
             lobby = LobbyManager.getLobby(joinCode);
         } catch (Exception e) {
@@ -34,8 +40,6 @@ public class Endpoint {
 
         try {
             lobby.join(this);
-            log.info("Player with the name " + player.getName() +
-                    " joined Lobby with the code " + lobby.getJoinCode());
         } catch (Exception e) {
             log.error(e.getMessage());
             session.close(new CloseReason(CloseReason.CloseCodes.CANNOT_ACCEPT, e.getMessage()));
@@ -72,5 +76,16 @@ public class Endpoint {
         } catch (IOException e) {
             log.error(e.getMessage());
         }
+    }
+
+    public static void closeAllEndpoints() {
+        endpoints.forEach(endpoint -> {
+            try {
+                endpoint.session.close();
+            } catch (IOException e) {
+                log.error("Error while closing endpoint: " + e.getMessage());
+            }
+        });
+        log.warn("All Endpoints have been closed!");
     }
 }

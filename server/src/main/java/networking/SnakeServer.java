@@ -45,4 +45,8 @@ public class SnakeServer {
             log.error(e.getMessage());
         }
     }
+
+    public Server getServer() {
+        return server;
+    }
 }
