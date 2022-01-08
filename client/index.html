@@ -37,11 +37,19 @@
             componentDidMount() {
                 document.getElementById("buttonnewGame").addEventListener("click", () => {
                     //create a new lobby
+                    const url = "http://localhost:3000/create"
+                    const request = new Request(url, {
+                            method: 'GET'
+                        }
+                    )
 
-                    ReactDOM.render(
-                        <Lobby />,
-                        document.getElementById('root')
-                    );
+                    fetch(request)
+                        .then(response => {
+                            // connect the player to the lobby
+                            sessionID = response.toString()
+                            ws = new WebSocket("ws://localhost:3000/join/" + sessionID + "/name/" + name)
+                        })
+                        .catch(err => console.log(err.message))
                 })
             }
 
@@ -66,10 +74,32 @@
                 document.getElementById("buttonsessionId").addEventListener("click", () => {
                     // connect to lobby if SessionID is correct
 
-                    ReactDOM.render(
-                        <Lobby />,
-                        document.getElementById('root')
-                    );
+                    const url = "http://localhost:3000/game-info?code=" + sessionID
+                    const request = new Request(url, {
+                            method: 'GET'
+                        }
+                    )
+
+                    fetch(request)
+                        .then(response => {
+                            // look if the lobby with the sessionID is running if yes open ws
+                            response.json()
+                        })
+                        .then(obj => {
+                            const isValideId = obj.isValide // boolean if SessionID is valide
+                            const isFull = obj.isFull // boolean if there is space for the player to join
+                        })
+                        .catch(err => console.log(err.message))
+
+                    if(isValideId){
+                        if(!isFull){
+                            ws = new WebSocket("ws://localhost:3000/join/" + sessionID + "/name/" + name)
+                        }else {
+                            alert("The lobby with SessionID " + sessionID + " already has no free slots for new players to join")
+                        }
+                    }else{
+                        alert("No lobby with SessionID " + sessionID + " is currently open")
+                    }
                 })
             }
 
@@ -198,28 +228,6 @@
                         document.getElementById('root')
                     );
                 })
-                /*button placeholder for network eventlistener*/
-                document.getElementById("test").addEventListener("click", () => {
-                    const canvasMap = document.getElementById("mapCanvas")
-                    const context = canvasMap.getContext("2d")
-
-                    let bw = 400;
-                    // Box height and width
-                    let bh = 400;
-
-                    for (let x = 0; x <= bw; x += 40) {
-                        context.moveTo(0.5 + x, 0);
-                        context.lineTo(0.5 + x, bh);
-                    }
-
-                    for (let x = 0; x <= bh; x += 40) {
-                        context.moveTo(0, 0.5 + x);
-                        context.lineTo(bw, 0.5 + x);
-                    }
-                    context.strokeStyle = "black";
-
-                    context.stroke()
-                })
 
                 document.addEventListener("keydown", (event) => {
                     switch (event.key){
@@ -227,8 +235,7 @@
                         case 'a':
                         case 's':
                         case 'd':
-                            //ws.send(event.key)
-                            console.log("Key pressed: " + event.key)
+                            ws.send(event.key)
                     }
                 })
             }
@@ -239,15 +246,13 @@
                         <Button name={"exitGame"} text={"back"}/>
                         <div className="flexed" id="gameScreen">
                             <div id="gameMap">
-                                <canvas id="mapCanvas" width="401" height="401">
+                                <canvas id="mapCanvas" width={this.props.width} height={this.props.height}>
                                 </canvas>
                             </div>
                             <div id="gameScores">
                                 <TablePlayer data={player} tableHead1={"Player"} tableHead2={"Score"}/>
                             </div>
-                            {/*button (placeholder) prints canvas things after canvas is created, otherwise it would throw errors*/}
                         </div>
-                        <button id="test">test</button>
                     </div>
                 )
             }
@@ -257,6 +262,147 @@
             <Lobby />,
             document.getElementById('root')
         );
+
+        // values of the input fields
+        let sessionID = document.getElementById("inputSessionId").value
+        const name = document.getElementById("inputName").value
+        let ws
+        const cellSize = 40
+
+        function drawChanges(x, y, material){
+            const canvasMap = document.getElementById("mapCanvas")
+            const context = canvasMap.getContext("2d")
+
+            switch (material) {
+                case "#":
+                    context.fillStyle = "red"
+                    context.fillRect(x, y, 40, 40)
+                    break
+                case "@":
+                    context.fillStyle = "green"
+                    context.fillRect(x, y, 40, 40)
+                    break
+                case " ":
+                    context.fillStyle = "blue"
+                    context.fillRect(x, y, 40, 40)
+                    break
+                case "\n":
+                    x = 0
+                    y += 40
+                    break
+            }
+        }
+
+        function drawGrid(bw, bh, cellSize){
+            const canvasMap = document.getElementById("mapCanvas")
+            const context = canvasMap.getContext("2d")
+
+            for (let x = 0; x <= bw; x += cellSize) {
+                context.moveTo(0.5 + x, 0);
+                context.lineTo(0.5 + x, bh);
+            }
+
+            for (let x = 0; x <= bh; x += cellSize) {
+                context.moveTo(0, 0.5 + x);
+                context.lineTo(bw, 0.5 + x);
+            }
+            context.strokeStyle = "black";
+
+            context.stroke()
+        }
+
+        function drawWorld(world, cellSize){
+            const canvasMap = document.getElementById("mapCanvas")
+            const context = canvasMap.getContext("2d")
+
+            let x = 0
+            let y = 0
+
+            // draw the World array
+            for (let i = 0; i < world.length; i++) {
+                switch (world[i]) {
+                    case "#":
+                        context.fillStyle = "red"
+                        context.fillRect(x, y, cellSize, cellSize)
+                        x += cellSize
+                        break
+                    case "@":
+                        context.fillStyle = "green"
+                        context.fillRect(x, y, cellSize, cellSize)
+                        x += cellSize
+                        break
+                    case " ":
+                        context.fillStyle = "blue"
+                        context.fillRect(x, y, cellSize, cellSize)
+                        x += cellSize
+                        break
+                    case "\n":
+                        x = 0
+                        y += cellSize
+                        break
+                    default:
+                        break
+                }
+            }
+        }
+
+        if ("Websocket" in window){
+            ws.onopen = function () {
+                // perform Action when connection is opened
+                ReactDOM.render(
+                    <Lobby />,
+                    document.getElementById('root')
+                );
+            }
+            ws.onmessage = function (evt) {
+                // finding out width + height of the canvas
+                let endOfFirstLine = evt.world.findIndex(element => element === "\n")
+                const firstLine = evt.world.slice(0,endOfFirstLine)
+                let amountOfLines = 1
+                for (let i = 0; i < evt.world.length; i++) {
+                    if(evt.world[i] == "\n"){
+                        amountOfLines++
+                    }
+                }
+
+                //render Game World
+                ReactDOM.render(
+                    <Game  width={firstLine.length * cellSize + 1} height={amountOfLines * cellSize + 1}/>,
+                    document.getElementById('root')
+                )
+
+                // draw the grid
+                drawGrid(firstLine.length * cellSize + 1, amountOfLines * cellSize + 1, cellSize)
+
+                // draw the world string
+                drawWorld(evt.world.length, cellSize)
+
+                // draw the
+                for (let i = 0; i < evt.replace.length; i++) {
+                    let x = evt.replace.pos.x
+                    let y = evt.replace.pos.y
+                    let material = evt.replace.mat
+
+                    drawChanges(x, y, material)
+                }
+
+
+            }
+            ws.onclose = function () {
+                // websocket is closed.
+                alert("Connection is closed...");
+                ReactDOM.render(
+                    <Main_menu />,
+                    document.getElementById('root')
+                );
+            };
+            ws.onerror = function (error){
+                console.log("Error: " + error)
+            }
+        }else {
+            // The browser doesn't support WebSocket
+            alert("WebSocket NOT supported by your Browser!");
+        }
     </script>
 </body>
 
