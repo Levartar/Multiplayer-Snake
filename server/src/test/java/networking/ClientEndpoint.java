@@ -11,4 +11,8 @@ public class ClientEndpoint {
     public void onOpen(Session session) {
         this.session = session;
     }
+
+    public boolean isOpen() {
+        return session.isOpen();
+    }
 }

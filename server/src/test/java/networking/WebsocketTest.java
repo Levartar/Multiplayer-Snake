@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class WebsocketTest {
 
     private static Server server;
@@ -28,7 +30,6 @@ public class WebsocketTest {
 
     @AfterAll
     static void afterAll() throws Exception {
-        Endpoint.closeAllEndpoints();
         LobbyManager.closeAllLobbies();
         server.stop();
     }
@@ -41,5 +42,20 @@ public class WebsocketTest {
         ClientEndpoint clientEndpoint = new ClientEndpoint();
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         container.connectToServer(clientEndpoint, new URI(destination));
+    }
+
+    @Test
+    void joinNonExistingLobby() throws Exception {
+        int lobbyJoinCode = 5;
+
+        // try to join a lobby that does not exist
+        String destination = "ws://localhost:80/join/" + lobbyJoinCode + "/name/schneck";
+        ClientEndpoint clientEndpoint = new ClientEndpoint();
+        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+        container.connectToServer(clientEndpoint, new URI(destination));
+
+        Thread.sleep(1000); // wait 1 second
+
+        assertFalse(clientEndpoint.isOpen());
     }
 }

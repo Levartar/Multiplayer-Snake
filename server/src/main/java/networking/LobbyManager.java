@@ -64,6 +64,7 @@ public class LobbyManager {
      * closes all lobbies, even if games are running
      */
     public static void closeAllLobbies() {
+        Endpoint.closeAllEndpoints();
         lobbies.clear();
         log.warn("All open lobbies have been closed!");
     }
