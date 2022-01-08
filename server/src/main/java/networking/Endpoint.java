@@ -54,6 +54,7 @@ public class Endpoint {
 
     @OnClose
     public void onClose(Session session) {
+        endpoints.remove(this);
         log.info("Websocket connection with player " + player.getName() + " closed");
         lobby.removePlayer(this);
         lobby = null;
