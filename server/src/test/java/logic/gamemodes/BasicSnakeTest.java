@@ -367,14 +367,15 @@ class BasicSnakeTest {
 
         _players.forEach(player -> player.setInput('d'));
 
+        //can't really test the timer
         String[] expected = new String[10];
-        expected[0] = "{\"world\":\"##########\\n#        #\\n#     @  #\\n#        #\\n##########\",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
-        expected[1] = "{\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
-        expected[2] = "{\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
-        expected[3] = "{\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"replace\":[{\"mat\":\" \",\"pos\":{\"x\":6,\"y\":2}}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
-        expected[4] = "{\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
-        expected[5] = "{\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":8,\"y\":2},{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2}],\"direction\":\"right\"}]}";
-        expected[6] = "{\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[]}";
+        expected[0] = "{\"timer\":"+ ",\"world\":\"##########\\n#        #\\n#     @  #\\n#        #\\n##########\",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[1] = "{\"timer\":"+ ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[2] = "{\"timer\":"+ ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[3] = "{\"timer\":"+ ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"replace\":[{\"mat\":\" \",\"pos\":{\"x\":6,\"y\":2}}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[4] = "{\"timer\":"+ ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[5] = "{\"timer\":"+ ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":8,\"y\":2},{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[6] = "{\"timer\":"+ ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[],\"gameover\":{\"winner\":\"jakob\"}}";
 
         for (int i = 0; i < 7; i++) {
             assertEquals(expected[i], gamemode.gameLoop());

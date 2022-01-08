@@ -14,4 +14,5 @@ public interface Gamemode {
 
     Map<String, Integer> getScores();
 
+    int getTimer();
 }
