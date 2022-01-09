@@ -33,6 +33,7 @@ public class WebsocketTest {
 
     @AfterAll
     static void afterAll() throws Exception {
+        Thread.sleep(5000); // wait
         LobbyManager.closeAllLobbies();
         server.stop();
     }
@@ -111,7 +112,7 @@ public class WebsocketTest {
         lobby.setGamemode("basic_snake");
         lobby.start();
 
-        Thread.sleep(5000); // wait
+        Thread.sleep(10000); // wait
 
         assertNotNull(clientEndpoint.getLastMessage());
     }
