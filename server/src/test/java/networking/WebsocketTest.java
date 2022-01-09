@@ -1,5 +1,6 @@
 package networking;
 
+import logic.Map;
 import logic.Player;
 import org.eclipse.jetty.server.Server;
 import org.junit.jupiter.api.AfterAll;
@@ -13,8 +14,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class WebsocketTest {
 
@@ -89,8 +89,30 @@ public class WebsocketTest {
         clientEndpoint.send(input);
 
         Thread.sleep(1000); // wait 1 second
-        Player player = lobby.getPlayers().get(0);
 
-        assertEquals(input, player.getInput());
+        try {
+            Player player = lobby.getPlayers().get(0);
+            assertEquals(input, player.getInput());
+        } catch (IndexOutOfBoundsException e) {
+            fail("Player not found");
+        }
+    }
+
+    @Test
+    void joinLobbyAndReceiveData() throws Exception {
+        int lobbyJoinCode = LobbyManager.createLobby();
+        Lobby lobby = LobbyManager.getLobby(lobbyJoinCode);
+
+        String destination = "ws://localhost:80/join/" + lobbyJoinCode + "/name/schneck";
+        ClientEndpoint clientEndpoint = new ClientEndpoint();
+        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+        container.connectToServer(clientEndpoint, new URI(destination));
+
+        lobby.setGamemode("basic_snake");
+        lobby.start();
+
+        Thread.sleep(5000); // wait
+
+        assertNotNull(clientEndpoint.getLastMessage());
     }
 }

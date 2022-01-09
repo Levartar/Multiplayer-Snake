@@ -12,10 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class Lobby {
     private static final Logger log = LogManager.getLogger(Lobby.class);
@@ -97,7 +94,6 @@ public class Lobby {
                 log.trace("gameLoop data: " + data);
                 for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
-                    log.trace("sent data to player " + endpoint.getPlayer().getName());
                 }
             } catch (GameOverException e) {
                 log.info("Game ended from lobby " + joinCode);

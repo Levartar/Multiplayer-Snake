@@ -73,7 +73,7 @@ public class Endpoint {
     public void send(String data) throws GameOverException {
         try {
             session.getBasicRemote().sendText(data);
-            log.trace("synchronization message successfully sent");
+            log.trace("synchronization message sent to player " + player.getName());
         } catch (IOException e) {
             log.error(e.getMessage());
         }
