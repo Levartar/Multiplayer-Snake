@@ -418,12 +418,47 @@ class BasicSnakeTest {
 
         _players.forEach(player -> player.setInput('d'));
 
+        for (int i = 0; i < 7; i++) {
+            gamemode.gameLoop();
+        }
+        String endString = """
+                ##########
+                #        #
+                #        #
+                #        #
+                ##########""";
+        assertEquals(endString,gamemode.toString());
+
+    }
+
+    @Test
+    void testTimer() throws GameOverException, GameNotInitializedException, InterruptedException {
+        String mapString = """
+                ##########
+                #        #
+                # s   @  #
+                #        #
+                ##########
+                """;
+        Map map = new Map(mapString);
+
+        List<Player> _players = new ArrayList<>();
+        Player player1 = new Player();
+        player1.setName("jakob");
+        _players.add(player1);
+        Gamemode gamemode = new BasicSnake(_players, map);
+
+        _players.forEach(player -> player.setInput('d'));
+
+        gamemode.init();
+
+
         for (int i = 0; i < 6; i++) {
             gamemode.gameLoop();
-            logger.info(gamemode);
-            logger.info(gamemode.getTimer());
+            Thread.sleep(1000);
+            assertEquals(60-i,gamemode.getTimer());
         }
-        assertEquals("{\"timer\":0,\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[],\"gameover\":{\"winner\":\"jakob\"}}",gamemode.gameLoop());
+
 
     }
 
