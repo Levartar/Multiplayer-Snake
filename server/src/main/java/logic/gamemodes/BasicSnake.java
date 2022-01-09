@@ -164,23 +164,30 @@ public class BasicSnake implements Gamemode {
     }
 
     private void doesGameEnd() {
-        if (snakes.isEmpty()){ //Game ends when all snakes are dead
+        if ((System.currentTimeMillis()-gameStartTime)>gameMaxTime){ //endif gameMaxTime is surpassed
             gameover = true;
             JSONObjectGameover.put("winner",getWinner());
-        } else if ((System.currentTimeMillis()-gameStartTime)>gameMaxTime){ //endif gameMaxTime is surpassed
+        } else if (snakes.size() == 1){ //set timer to 30s when only 1 is alive if the timer is above 30s
+            if (getTimer()>30){
+                gameMaxTime= (int) (System.currentTimeMillis()-gameStartTime+30);
+            }
+        } else if (snakes.isEmpty()){ //Game ends when all snakes are dead
             gameover = true;
-            getWinner();
             JSONObjectGameover.put("winner",getWinner());
         }
     }
 
     private String getWinner() {
-        //TODO check for draws
         String winner = "";
         int maxPoints = Collections.max(scores.values());
+        boolean alreadyAWinner = false;
         for (java.util.Map.Entry<Player, Integer> entry : scores.entrySet()) {  // Iterate through hashmap
             if (entry.getValue()==maxPoints) {
+                if (alreadyAWinner){
+                    return "draw";
+                }
                 winner = entry.getKey().getName();
+                alreadyAWinner = true;
             }
         }
         return winner; //should never be reached
