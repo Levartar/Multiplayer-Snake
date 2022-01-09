@@ -306,7 +306,8 @@ public class BasicSnake implements Gamemode {
     }
 
     private void updateTimer(){
-        timer = gameMaxTime-Math.round(((System.currentTimeMillis()-gameStartTime))/1000f);
+        long passedTime = System.currentTimeMillis()-gameStartTime;
+        timer = Math.round((gameMaxTime-passedTime)/1000f);
     }
 
     @Override
