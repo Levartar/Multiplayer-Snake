@@ -5,7 +5,6 @@ import helpers.ResourceManager;
 import logic.Gamemode;
 import logic.Map;
 import logic.Player;
-import logic.Snake;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
@@ -16,12 +15,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BasicSnakeTest {
 
-    private static final Logger logger = LogManager.getLogger(Snake.class);
+    private static final Logger logger = LogManager.getLogger(BasicSnakeTest.class);
 
     List<Player> players = new ArrayList<>();
     String[] names = {"alpha", "beta", "gamma", "delta"};

@@ -19,6 +19,7 @@ public class BasicSnake implements Gamemode {
     private boolean running = false;
     private long gameStartTime;
     private int gameMaxTime;
+    private int timer;
     private final List<Snake> scheduledForRemoval = new ArrayList<>();
     private final JSONArray JSON_replace = new JSONArray();
     private final JSONObject JSON_synchronizationMessage = new JSONObject();
@@ -110,7 +111,7 @@ public class BasicSnake implements Gamemode {
         if (!JSONObjectGameover.isEmpty()){
             JSON_synchronizationMessage.put("gameover",JSONObjectGameover);
         }
-        JSON_synchronizationMessage.put("timer",getTimer());
+        JSON_synchronizationMessage.put("timer",updateTimer());
 
         String message = JSON_synchronizationMessage.toString();
         JSON_synchronizationMessage.clear();
@@ -282,7 +283,13 @@ public class BasicSnake implements Gamemode {
         });
     }
 
-    public int getTimer(){
-        return Math.round((gameMaxTime-(System.currentTimeMillis()-gameStartTime))/1000);
+    private int updateTimer(){
+        timer = Math.round((gameMaxTime-(System.currentTimeMillis()-gameStartTime))/1000f);
+        return timer;
+    }
+
+    @Override
+    public int getTimer() {
+        return timer;
     }
 }
