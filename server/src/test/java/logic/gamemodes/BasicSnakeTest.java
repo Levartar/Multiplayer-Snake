@@ -426,4 +426,36 @@ class BasicSnakeTest {
         assertEquals("{\"timer\":0,\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[],\"gameover\":{\"winner\":\"jakob\"}}",gamemode.gameLoop());
 
     }
+
+    @Test
+    void testGameOverException() throws GameOverException, GameNotInitializedException {
+        String mapString = """
+                ##########
+                #        #
+                # s   @  #
+                #        #
+                ##########
+                """;
+        Map map = new Map(mapString);
+
+        List<Player> _players = new ArrayList<>();
+        Player player1 = new Player();
+        player1.setName("jakob");
+        _players.add(player1);
+        Gamemode gamemode = new BasicSnake(_players, map);
+        _players.forEach(player -> player.setInput('d'));
+        gamemode.init();
+
+        for (int i = 0; i < 7; i++) {
+            gamemode.gameLoop();
+        }
+        try {
+            gamemode.gameLoop();
+            fail("The 8th gameLoop() call should have thrown a GameOverException");
+        } catch (GameNotInitializedException e) {
+            fail(e.getMessage());
+        } catch (GameOverException e) {
+
+        }
+    }
 }
