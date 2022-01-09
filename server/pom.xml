@@ -37,6 +37,11 @@
             <artifactId>websocket-javax-server</artifactId>
             <version>${jetty.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-javax-client</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
 
         <!--JUnit-->
         <dependency>
