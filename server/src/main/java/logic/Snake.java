@@ -38,15 +38,19 @@ public class Snake {
             thisElement.set(priorElement);
         }
 
+        updateDirection();
+
+        // move head
+        Position head = positions.get(0);
+        head.add(direction);
+    }
+
+    private void updateDirection() {
         Direction newDirection = Direction.getDirection(player.getInput());
         // only change direction, if a correct input is set
         if (newDirection != null) {
             this.direction = newDirection;
         }
-
-        // move head
-        Position head = positions.get(0);
-        head.add(direction);
     }
 
     public String getName() {
@@ -62,6 +66,7 @@ public class Snake {
     }
 
     public Direction getDirection() {
+        updateDirection();
         return direction;
     }
 

@@ -1,12 +1,14 @@
 package logic.gamemodes;
 
+import exceptions.GameNotInitializedException;
+import exceptions.GameOverException;
 import logic.*;
+import logic.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.lang.System;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class BasicSnake implements Gamemode {
@@ -15,21 +17,59 @@ public class BasicSnake implements Gamemode {
     private final List<Snake> snakes;
 
     private int loopCount;
+    private boolean gameover = false;
+    private boolean initialized = false;
+    private long gameStartTime;
+    private int gameMaxTime;
+    private int timer;
     private final List<Snake> scheduledForRemoval = new ArrayList<>();
     private final JSONArray JSON_replace = new JSONArray();
     private final JSONObject JSON_synchronizationMessage = new JSONObject();
     private final JSONArray JSONArrayScores = new JSONArray();
+    private final JSONObject JSONObjectGameover = new JSONObject();
+    private final JSONObject JSONObjectWorld = new JSONObject();
     private final HashMap<Player, Integer> scores = new HashMap<>();
+    private final List<Player> players;
 
     public BasicSnake(List<Player> players, Map map) {
+        this.players = players;
         this.map = map;
         snakes = new ArrayList<>();
+    }
+
+    private JSONObject getWorld() {
+        JSONObjectWorld.put("worldstring",map.toString());
+        JSONObjectWorld.put("height",map.getHeight());
+        JSONObjectWorld.put("width",map.getWidth());
+        return JSONObjectWorld;
+    }
+
+    @Override
+    public String gameLoop() throws GameOverException, GameNotInitializedException {
+        if (gameover) throw new GameOverException();
+        if (!initialized) throw new GameNotInitializedException();
+
+        snakes.forEach(Snake::move);
+        checkCollision();
+        synchronizeScore();
+
+        loopCount++;
+        if (loopCount % 20 == 0) {
+            spawnFood();
+        }
+
+        updateTimer();
+        return getSynchronizationMessage();
+    }
+
+    @Override
+    public String init() {
 
         // initial message
-        JSON_synchronizationMessage.put("world", map.toString());
+        JSON_synchronizationMessage.put("world", getWorld());
 
-        //init Scores
-        players.forEach(player -> scores.put(player,0));
+        //init GameTime
+        gameMaxTime = 60000*players.size(); //1 Minute per player
 
         // create snakes
         List<Position> spawnPoints = map.getSpawnPoints();
@@ -38,17 +78,15 @@ public class BasicSnake implements Gamemode {
             Snake snake = new Snake(spawnPoints.get(i), 5, players.get(i));
             snakes.add(snake);
         }
-    }
 
-    @Override
-    public String gameLoop() {
-        snakes.forEach(Snake::move);
-        checkCollision();
+        //init Scores
+        players.forEach(player -> scores.put(player,0));
         synchronizeScore();
-        loopCount++;
-        if (loopCount % 20 == 0) {
-            spawnFood();
-        }
+
+        gameStartTime = System.currentTimeMillis();
+        updateTimer();
+        initialized = true;
+
         return getSynchronizationMessage();
     }
 
@@ -85,6 +123,10 @@ public class BasicSnake implements Gamemode {
 
         JSON_synchronizationMessage.put("scores", printScores());
 
+        if (!JSONObjectGameover.isEmpty()){
+            JSON_synchronizationMessage.put("gameover",JSONObjectGameover);
+        }
+        JSON_synchronizationMessage.put("timer",getTimer());
 
         String message = JSON_synchronizationMessage.toString();
         JSON_synchronizationMessage.clear();
@@ -130,9 +172,41 @@ public class BasicSnake implements Gamemode {
             }
         });
 
+
         scheduledForRemoval.forEach(snakes::remove);
+        doesGameEnd();
         scheduledForRemoval.clear();
 
+    }
+
+    private void doesGameEnd() {
+        if (timer<0){ //endif gameMaxTime is surpassed
+            endGame();
+        } else if (snakes.isEmpty()){ //Game ends when all snakes are dead
+            endGame();
+        }
+    }
+
+    private void endGame() {
+        gameover = true;
+        initialized = false;
+        JSONObjectGameover.put("winner", getWinner());
+    }
+
+    private String getWinner() {
+        String winner = "";
+        int maxPoints = Collections.max(scores.values());
+        boolean alreadyAWinner = false;
+        for (java.util.Map.Entry<Player, Integer> entry : scores.entrySet()) {  // Iterate through hashmap
+            if (entry.getValue()==maxPoints) {
+                if (alreadyAWinner){
+                    return "draw";
+                }
+                winner = entry.getKey().getName();
+                alreadyAWinner = true;
+            }
+        }
+        return winner; //should never be reached
     }
 
     private void jsonChangeMaterial(Position position, Material material) {
@@ -229,5 +303,15 @@ public class BasicSnake implements Gamemode {
         snakes.forEach(snake -> {
             raiseScore(snake, snake.length());
         });
+    }
+
+    private void updateTimer(){
+        long passedTime = System.currentTimeMillis()-gameStartTime;
+        timer = Math.round((gameMaxTime-passedTime)/1000f);
+    }
+
+    @Override
+    public int getTimer() {
+        return timer;
     }
 }
