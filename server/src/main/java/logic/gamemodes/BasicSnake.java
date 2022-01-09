@@ -58,6 +58,7 @@ public class BasicSnake implements Gamemode {
             spawnFood();
         }
 
+        updateTimer();
         return getSynchronizationMessage();
     }
 
@@ -68,7 +69,7 @@ public class BasicSnake implements Gamemode {
         JSON_synchronizationMessage.put("world", getWorld());
 
         //init GameTime
-        this.gameMaxTime = 60000*players.size(); //1 Minute per player
+        gameMaxTime = 60000*players.size(); //1 Minute per player
 
         // create snakes
         List<Position> spawnPoints = map.getSpawnPoints();
@@ -125,7 +126,7 @@ public class BasicSnake implements Gamemode {
         if (!JSONObjectGameover.isEmpty()){
             JSON_synchronizationMessage.put("gameover",JSONObjectGameover);
         }
-        JSON_synchronizationMessage.put("timer",updateTimer());
+        JSON_synchronizationMessage.put("timer",getTimer());
 
         String message = JSON_synchronizationMessage.toString();
         JSON_synchronizationMessage.clear();
@@ -179,19 +180,17 @@ public class BasicSnake implements Gamemode {
     }
 
     private void doesGameEnd() {
-        if ((System.currentTimeMillis()-gameStartTime)>gameMaxTime){ //endif gameMaxTime is surpassed
-            gameover = true;
-            initialized = false;
-            JSONObjectGameover.put("winner",getWinner());
-        } else if (snakes.size() == 1){ //set timer to 30s when only 1 is alive if the timer is above 30s
-            if (getTimer()>30){
-                gameMaxTime= (int) (System.currentTimeMillis()-gameStartTime+30);
-            }
+        if (timer<0){ //endif gameMaxTime is surpassed
+            endGame();
         } else if (snakes.isEmpty()){ //Game ends when all snakes are dead
-            gameover = true;
-            initialized = false;
-            JSONObjectGameover.put("winner",getWinner());
+            endGame();
         }
+    }
+
+    private void endGame() {
+        gameover = true;
+        initialized = false;
+        JSONObjectGameover.put("winner", getWinner());
     }
 
     private String getWinner() {
@@ -306,9 +305,8 @@ public class BasicSnake implements Gamemode {
         });
     }
 
-    private int updateTimer(){
-        timer = Math.round((gameMaxTime-(System.currentTimeMillis()-gameStartTime))/1000f);
-        return timer;
+    private void updateTimer(){
+        timer = gameMaxTime-Math.round(((System.currentTimeMillis()-gameStartTime))/1000f);
     }
 
     @Override

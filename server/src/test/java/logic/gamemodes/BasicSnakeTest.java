@@ -397,4 +397,33 @@ class BasicSnakeTest {
             assertEquals(expected[i], actual[i]);
         }
     }
+
+    @Test
+    void testGameEndingConditions() throws GameOverException, GameNotInitializedException {
+        String mapString = """
+                ##########
+                #        #
+                # s   @  #
+                #        #
+                ##########
+                """;
+        Map map = new Map(mapString);
+
+        List<Player> _players = new ArrayList<>();
+        Player player1 = new Player();
+        player1.setName("jakob");
+        _players.add(player1);
+        Gamemode gamemode = new BasicSnake(_players, map);
+        gamemode.init();
+
+        _players.forEach(player -> player.setInput('d'));
+
+        for (int i = 0; i < 6; i++) {
+            gamemode.gameLoop();
+            logger.info(gamemode);
+            logger.info(gamemode.getTimer());
+        }
+        assertEquals("{\"timer\":0,\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[],\"gameover\":{\"winner\":\"jakob\"}}",gamemode.gameLoop());
+
+    }
 }
