@@ -11,7 +11,7 @@ public class Snake {
     private static final Logger logger = LogManager.getLogger(Snake.class);
     private final Player player;
     private List<Position> positions;
-    private Direction direction = null;
+    private Direction direction = Direction.up;
 
     public Snake(Position spawn, int length, Player player) {
         this.player = player;
