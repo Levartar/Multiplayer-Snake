@@ -1,5 +1,6 @@
 package logic.gamemodes;
 
+import exceptions.GameNotInitializedException;
 import exceptions.GameOverException;
 import helpers.ResourceManager;
 import logic.Gamemode;
@@ -52,6 +53,7 @@ class BasicSnakeTest {
         _players.add(new Player());
 
         Gamemode gamemode = new BasicSnake(_players, map);
+        gamemode.init();
 
         String expected = """
                 #####
@@ -66,7 +68,7 @@ class BasicSnakeTest {
      * tests movement in all directions
      */
     @Test
-    void testMoveSnake() throws GameOverException {
+    void testMoveSnake() throws GameOverException, GameNotInitializedException {
         String mapString = """
                 #####
                 #   #
@@ -80,6 +82,7 @@ class BasicSnakeTest {
         _players.add(new Player());
 
         Gamemode gamemode = new BasicSnake(_players, map);
+        gamemode.init();
 
         String expected = """
                 #####
@@ -141,12 +144,13 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testBigMapSpawnsAndMove() throws IOException, GameOverException {
+    void testBigMapSpawnsAndMove() throws IOException, GameOverException, GameNotInitializedException {
         Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
 
         Map basicMap50x50 = new Map(basicMap50x50Path);
 
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
+        gamemode.init();
         players.forEach(player -> player.setInput('w'));
         for (int i = 0; i < 10; i++) {
             gamemode.gameLoop();
@@ -209,7 +213,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testSnakeCollidesWithWall() throws GameOverException {
+    void testSnakeCollidesWithWall() throws GameOverException, GameNotInitializedException {
         String mapString = """
                 #####
                 #   #
@@ -224,6 +228,7 @@ class BasicSnakeTest {
         _players.add(player);
 
         Gamemode gamemode = new BasicSnake(_players, map);
+        gamemode.init();
 
         String expected = """
                 #####
@@ -240,11 +245,12 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testSnakeCollidesWithItself() throws IOException, GameOverException {
+    void testSnakeCollidesWithItself() throws IOException, GameOverException, GameNotInitializedException {
         Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
 
         Map basicMap50x50 = new Map(basicMap50x50Path);
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
+        gamemode.init();
         players.forEach(player -> player.setInput('w'));
         gamemode.gameLoop();
         players.forEach(player -> player.setInput('a'));
@@ -260,7 +266,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testSnakeCollidesWithOtherSnake() throws GameOverException {
+    void testSnakeCollidesWithOtherSnake() throws GameOverException, GameNotInitializedException {
         String mapString = """
                 #########
                 #       #
@@ -274,6 +280,7 @@ class BasicSnakeTest {
         _players.add(new Player());
         _players.add(new Player());
         Gamemode gamemode = new BasicSnake(_players, map);
+        gamemode.init();
 
         String expected = """
                 #########
@@ -291,7 +298,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testSnakeCollidesWithApple() throws GameOverException {
+    void testSnakeCollidesWithApple() throws GameOverException, GameNotInitializedException {
         String mapString = """
                 ############
                 #          #
@@ -305,6 +312,7 @@ class BasicSnakeTest {
         Player player = new Player();
         _players.add(player);
         Gamemode gamemode = new BasicSnake(_players, map);
+        gamemode.init();
 
         player.setInput('d');
 
@@ -332,12 +340,13 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testBigMapSpawnsMoveRandomAndDie() throws IOException, GameOverException {
+    void testBigMapSpawnsMoveRandomAndDie() throws IOException, GameOverException, GameNotInitializedException {
         Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
 
         Map basicMap50x50 = new Map(basicMap50x50Path);
 
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
+        gamemode.init();
 
         for (int i = 0; i < 5; i++) {
             players.forEach(player -> player.setInput(getRandomInput()));
@@ -347,7 +356,7 @@ class BasicSnakeTest {
     }
 
     @Test
-    void testSynchronizationMessage() throws GameOverException {
+    void testSynchronizationMessage() throws GameOverException, GameNotInitializedException {
         String mapString = """
                 ##########
                 #        #
@@ -365,24 +374,26 @@ class BasicSnakeTest {
 
         _players.forEach(player -> player.setInput('d'));
 
-        String[] expected = new String[7];
-        String[] actual = new String[7];
-        actual[0] = gamemode.gameLoop();
-        expected[0] = "{\"timer\":" + gamemode.getTimer() + ",\"world\":{\"worldstring\":\"##########\\n#        #\\n#     @  #\\n#        #\\n##########\",\"width\":10,\"height\":5},\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        String[] expected = new String[8];
+        String[] actual = new String[8];
+        actual[0] = gamemode.init();
+        expected[0] = "{\"timer\":" + gamemode.getTimer() + ",\"world\":{\"worldstring\":\"##########\\n#        #\\n#     @  #\\n#        #\\n##########\",\"width\":10,\"height\":5},\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[1] = gamemode.gameLoop();
-        expected[1] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[1] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[2] = gamemode.gameLoop();
-        expected[2] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[2] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[3] = gamemode.gameLoop();
-        expected[3] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"replace\":[{\"mat\":\" \",\"pos\":{\"x\":6,\"y\":2}}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[3] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[4] = gamemode.gameLoop();
-        expected[4] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[4] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"replace\":[{\"mat\":\" \",\"pos\":{\"x\":6,\"y\":2}}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[5] = gamemode.gameLoop();
-        expected[5] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":8,\"y\":2},{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[5] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[6] = gamemode.gameLoop();
-        expected[6] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[],\"gameover\":{\"winner\":\"jakob\"}}";
+        expected[6] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":8,\"y\":2},{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2}],\"direction\":\"right\"}]}";
+        actual[7] = gamemode.gameLoop();
+        expected[7] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[],\"gameover\":{\"winner\":\"jakob\"}}";
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             assertEquals(expected[i], actual[i]);
         }
     }

@@ -1,5 +1,6 @@
 package networking;
 
+import exceptions.GameNotInitializedException;
 import exceptions.GameOverException;
 import helpers.ResourceManager;
 import logic.Gamemode;
@@ -105,6 +106,10 @@ public class Lobby {
                 // TODO: 03.01.2022 send highscores data to database
                 running = false;
                 executor.shutdown();
+            } catch (GameNotInitializedException e) {
+                log.warn("Tried to start gamemode that was not initialized");
+                log.info("initializing game...");
+                gamemode.init();
             }
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
