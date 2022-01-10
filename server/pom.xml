@@ -14,6 +14,7 @@
         <jetty.version>10.0.7</jetty.version>
         <jsr356.version>1.1</jsr356.version>
         <junit.version>5.8.1</junit.version>
+        <log4j.version>2.17.1</log4j.version>
     </properties>
 
     <dependencies>
@@ -36,6 +37,11 @@
             <artifactId>websocket-javax-server</artifactId>
             <version>${jetty.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-javax-client</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
 
         <!--JUnit-->
         <dependency>
@@ -45,6 +51,35 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20211205</version>
+        </dependency>
+
+        <!--Log4J2-->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
