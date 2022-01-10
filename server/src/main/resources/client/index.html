@@ -7,17 +7,37 @@
 <body>
     test content
     <script>
-        const wsUrl = "ws://localhost:80/join/12345/name/timo"
-        const ws = new WebSocket(wsUrl)
+        const url = "http://localhost:80"
+        const req = new Request(url + "/create", {method: 'GET'})
 
-        ws.onopen = () => {
-            console.log("websocket opened")
+        fetch(req).then(response => {
+            response.text().then(value => {
+                console.log("Joincode", value)
+                const joinCode = value
+
+                join(joinCode)
+            })
+        })
+
+        function join(joinCode){
+            const wsUrl = "ws://localhost:80/join/" + joinCode + "/name/timo"
+            const ws = new WebSocket(wsUrl)
+
+            ws.onopen = () => {
+                console.log("websocket opened")
+            }
+
+            ws.onclose = (e) => {
+                console.log(e)
+                console.log("websocket closed")
+            }
+
+            ws.onmessage =() =>{
+                console.log("message")
+            }
         }
 
-        ws.onclose = (e) => {
-            console.log(e)
-            console.log("websocket closed")
-        }
+
     </script>
 </body>
 </html>

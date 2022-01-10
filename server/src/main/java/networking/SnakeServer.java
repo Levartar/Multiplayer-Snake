@@ -1,5 +1,6 @@
 package networking;
 
+import networking.requests.CreateLobby;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Connector;
@@ -34,6 +35,10 @@ public class SnakeServer {
         ServletHolder defaultHolder = new ServletHolder("default", new DefaultServlet());
         defaultHolder.setInitParameter("resourceBase", "./src/main/resources/client/");
         contextHandler.addServlet(defaultHolder, "/*");
+
+        // get request on /create
+        ServletHolder getNameHolder = new ServletHolder(new CreateLobby());
+        contextHandler.addServlet(getNameHolder, "/create");
     }
 
     public void run() {
