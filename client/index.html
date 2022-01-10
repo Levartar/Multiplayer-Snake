@@ -177,6 +177,28 @@
             )
         }
 
+        //drop down menu that dinamically matches the length of entries sent from backend
+        function MapSelect(props) {
+            return(
+                <div id="mapSelector">
+                    <h2 id="mapSelectHeadline">Select Map</h2>
+                    <select name="maps" id="mapDropDown">
+                        {props.data.map((mapOptions, i) =>
+                            <option key={i}>{props.data[i].mapOption}</option>
+                        )}
+                    </select>
+                </div>
+            )
+
+        }
+
+        //dummy data as long as there is no data from backend
+        const testMaps = [
+            {mapOption: "coolMap"},
+            {mapOption: "awesomeMap"},
+            {mapOption: "42"}
+        ]
+
         class Lobby extends React.Component {
             componentDidMount() {
                 document.getElementById("buttonexitLobby").addEventListener("click", () => {
@@ -208,6 +230,7 @@
                                 <h2 id="sessionIDHeadline" className="noMargin">SessionID:</h2>
                                 <p id="sessionIDtext" className="noMargin">X15QW4B</p>
                             </div>
+                                <MapSelect data={testMaps}/>
                             <div id="playerTable">
                                 <List />
                             </div>
