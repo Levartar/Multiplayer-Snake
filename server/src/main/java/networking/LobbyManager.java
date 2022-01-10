@@ -1,5 +1,6 @@
 package networking;
 
+import exceptions.NoSuchLobbyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,7 +58,7 @@ public class LobbyManager {
                 return lobby;
             }
         }
-        throw new Exception("No matching Lobby found for joinCode: " + joinCode);
+        throw new NoSuchLobbyException("No matching Lobby found for joinCode: " + joinCode);
     }
 
     /**

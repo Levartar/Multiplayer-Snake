@@ -6,6 +6,8 @@ import exceptions.GameOverException;
 import java.util.Map;
 
 public interface Gamemode {
+    String BASIC_SNAKE = "basic_snake";
+
     /**
      *
      * @return String that contains the changes of this gameloop

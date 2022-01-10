@@ -37,8 +37,12 @@ public class SnakeServer {
         contextHandler.addServlet(defaultHolder, "/*");
 
         // get request on /create
-        ServletHolder getNameHolder = new ServletHolder(new CreateLobby());
-        contextHandler.addServlet(getNameHolder, "/create");
+        ServletHolder createServlet = new ServletHolder(new CreateLobby());
+        contextHandler.addServlet(createServlet, "/create");
+
+        // get request on /create
+        ServletHolder getGameInfoServlet = new ServletHolder(new GetGameInfo());
+        contextHandler.addServlet(getGameInfoServlet, "/game-info");
     }
 
     public void run() {

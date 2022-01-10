@@ -1,8 +1,6 @@
 package networking.requests;
 
 import networking.LobbyManager;
-import networking.Lobby;
-import networking.SnakeServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +15,8 @@ public class CreateLobby extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException , IOException {
-        log.info("Get Request on /create");
+        log.info(req);
+
         int lobbyJoinCode = LobbyManager.createLobby();
         try {
             resp.setStatus(HttpServletResponse.SC_OK);
