@@ -9,11 +9,20 @@
     <script>
         const url = "http://localhost:80"
         const req = new Request(url + "/create", {method: 'GET'})
-
+        let joinCode
         fetch(req).then(response => {
             response.text().then(value => {
                 console.log("Joincode", value)
-                const joinCode = value
+                joinCode = value
+
+
+                const game_info_request = new Request(url + "/game-info?code=" + joinCode, {method: 'GET'})
+
+                fetch(game_info_request).then(response => {
+                    response.text().then(value1 => {
+                        console.log("game-info: ", JSON.parse(value1))
+                    })
+                })
 
                 join(joinCode)
             })

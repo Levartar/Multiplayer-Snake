@@ -74,6 +74,10 @@ public class Lobby {
         }
     }
 
+    public Gamemode getGamemode(){
+        return gamemode;
+    }
+
     public void start() throws Exception {
         if (map == null) {
             createDefaultMap();
@@ -107,6 +111,10 @@ public class Lobby {
                 gamemode.init();
             }
         }, 0, 1000, TimeUnit.MILLISECONDS);
+    }
+
+    public boolean hasStarted(){
+        return running;
     }
 
     private void createDefaultMap() {
