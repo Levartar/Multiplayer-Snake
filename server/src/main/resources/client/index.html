@@ -7,17 +7,53 @@
 <body>
     test content
     <script>
-        const wsUrl = "ws://localhost:80/join/12345/name/timo"
-        const ws = new WebSocket(wsUrl)
+        const url = "http://localhost:80"
+        const req = new Request(url + "/create", {method: 'GET'})
+        let joinCode
+        fetch(req).then(response => {
+            response.text().then(value => {
+                console.log("Joincode", value)
+                joinCode = value
 
-        ws.onopen = () => {
-            console.log("websocket opened")
+
+                const game_info_request = new Request(url + "/game-info?code=" + joinCode,
+                    {method: 'GET'})
+
+                fetch(game_info_request).then(response => {
+                    response.text().then(value1 => {
+                        console.log("game-info: ", JSON.parse(value1))
+                    })
+                })
+
+                join(joinCode)
+
+                setTimeout(() => {
+                    const start_request = new Request(url + "/start?code=" + joinCode,
+                        {method: 'POST'})
+                    fetch(start_request)
+                }, 2000)
+            })
+        })
+
+        function join(joinCode){
+            const wsUrl = "ws://localhost:80/join/" + joinCode + "/name/timo"
+            const ws = new WebSocket(wsUrl)
+
+            ws.onopen = () => {
+                console.log("websocket opened")
+            }
+
+            ws.onclose = (e) => {
+                console.log(e)
+                console.log("websocket closed")
+            }
+
+            ws.onmessage = (message) =>{
+                console.log(JSON.parse(message.data))
+            }
         }
 
-        ws.onclose = (e) => {
-            console.log(e)
-            console.log("websocket closed")
-        }
+
     </script>
 </body>
 </html>
