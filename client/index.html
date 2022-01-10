@@ -135,10 +135,10 @@
         }
 
         let player = [
-            {name: "Tim", color: "red"},
-            {name: "Lukas", color: "green"},
-            {name: "Felix", color: "yellow"},
-            {name: "Timo", color: "blue"}
+            {name: "Tim", score: "420"},
+            {name: "Lukas", score: "1337"},
+            {name: "Felix", score: "69"},
+            {name: "Timo", score: "7"}
         ]
 
         function TablePlayer(props){
@@ -155,7 +155,7 @@
                         {props.data.map((player, i) =>
                             <tr key={i}>
                                 <td>{props.data[i].name}</td>
-                                <td>{props.data[i].color}</td>
+                                <td>{props.data[i].score}</td>
                             </tr>
                         )}
                         </tbody>
@@ -259,6 +259,19 @@
                         case 's':
                         case 'd':
                             ws.send(event.key)
+                            break
+                        case 'ArrowUp':
+                            ws.send('w')
+                            break
+                        case 'ArrowLeft':
+                            ws.send('a')
+                            break
+                        case 'ArrowDown':
+                            ws.send('s')
+                            break
+                        case 'ArrowRight':
+                            ws.send('d')
+                            break
                     }
                 })
             }
