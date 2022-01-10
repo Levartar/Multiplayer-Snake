@@ -2,6 +2,7 @@ package networking;
 
 import networking.requests.CreateLobby;
 import networking.requests.GetGameInfo;
+import networking.requests.StartLobby;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jetty.server.Connector;
@@ -45,8 +46,9 @@ public class SnakeServer {
         ServletHolder getGameInfoServlet = new ServletHolder(new GetGameInfo());
         contextHandler.addServlet(getGameInfoServlet, "/game-info");
 
-        //ServletHolder postGameStartServlet = new ServletHolder(new PostGameStart());
-        //contextHandler.addServlet(postGameStartServlet, "/start");
+        //post request on /start
+        ServletHolder postGameStartServlet = new ServletHolder(new StartLobby());
+        contextHandler.addServlet(postGameStartServlet, "/start");
     }
 
     public void run() {
