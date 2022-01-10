@@ -26,7 +26,13 @@ public class GetGameInfo extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info(req);
 
-        int joinCode = Integer.parseInt(req.getParameter("code"));
+        String parameter = req.getParameter("code");
+        if (parameter == null) {
+            log.warn("no 'code' parameter in " + req);
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        int joinCode = Integer.parseInt(parameter);
         Lobby lobby;
         JSONObject jsonMessage = new JSONObject();
         try {

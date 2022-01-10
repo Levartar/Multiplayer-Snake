@@ -16,7 +16,7 @@
                 joinCode = value
 
 
-                const game_info_request = new Request(url + "/game-info?code=" + joinCode, {method: 'GET'})
+                const game_info_request = new Request(url + "/game-info", {method: 'GET'})
 
                 fetch(game_info_request).then(response => {
                     response.text().then(value1 => {
