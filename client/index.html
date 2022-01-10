@@ -23,11 +23,12 @@
         function Input(props){
             return(
                 <div id={props.name.toLowerCase()}>
-                    <div id={props.name + "LabelDiv"}>
-                        <label htmlFor={"input" + props.name}>{props.text}</label>
+                    <div id={props.name + "LabelDiv"} className={props.className}>
+                        <label htmlFor={"input" + props.name} className={props.className}>{props.text}</label>
                     </div>
-                    <div id={props.name + "InputDiv"}>
-                        <input id={"input" + props.name} type={props.type} name={props.name} maxLength={props.maxLength}/>
+                    <div id={props.name + "InputDiv"} className={props.className}>
+                        <input id={"input" + props.name} className={props.className}
+                               type={props.type} name={props.name} maxLength={props.maxLength}/>
                     </div>
                 </div>
             )
@@ -59,7 +60,7 @@
                         <div id="newGameLabelDiv">
                             <label htmlFor="buttonNewGame">Create a game</label>
                         </div>
-                        <div id="emptySpaceDiv">
+                        <div className="flexed">
                             <br/>
                         </div>
                         <Button text={"play"} name={"newGame"}/>
@@ -106,7 +107,7 @@
             render() {
                 return(
                     <div>
-                        <Input name={"sessionId"} type={"text"} text={"Join a Session"} maxLength={"10"}/>
+                        <Input name={"sessionId"} class={"flexed"} type={"text"} text={"Join a Session"} maxLength={"10"}/>
                         <Button text={"join"} name={"sessionId"}/>
                     </div>
                 )
@@ -118,7 +119,7 @@
                 return (
                     <div className="frame">
                         <header>
-                            <img src="./assets/img.png" alt="Snake.IO banner image" />
+                            <img id="menuBanner" src="./assets/img.png" alt="Snake.IO banner image" />
                         </header>
                         <main>
                             <div>
@@ -235,7 +236,7 @@
                                 <List />
                             </div>
                         </div>
-                        <div id="startGameDIV">
+                        <div id="startGameDIV" className="flexed">
                             <Button name={"startGame"} text={"Start"}/>
                         </div>
                     </div>
@@ -413,7 +414,7 @@
                 // draw the world string
                 drawWorld(evt.world.length, cellSize)
 
-                // draw the
+                // draw the changed Elements
                 for (let i = 0; i < evt.replace.length; i++) {
                     let x = evt.replace.pos.x
                     let y = evt.replace.pos.y

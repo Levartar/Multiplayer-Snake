@@ -1,4 +1,3 @@
-/* for The main page */
 body{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 
@@ -19,12 +18,12 @@ input{
 h1,h2{
     font-weight: lighter;
 }
+h2{
+    font-size: 1.5em;
+    margin: 0.5em;
+}
 header{
     text-align: center;
-}
-img{
-    width: 30%;
-    height: 30%;
 }
 label{
     font-weight: bolder;
@@ -45,37 +44,6 @@ main{
     flex-direction: column;
     justify-content: space-evenly;
 }
-table {
-    border-collapse: collapse;
-    table-layout: auto;
-    width: 130%;
-    background: white;
-    text-align: left;
-    border-style: solid;
-    border-color: black;
-    border-width: thin;
-}
-th{
-    padding: 0.3rem;
-    background: lightgray;
-}
-td{
-    padding: 0.3rem;
-}
-li{
-    list-style-type: none;
-    margin: 0.4em;
-    padding: 0;
-}
-ul{
-    padding: 0;
-    font-size: 1.4em;
-    margin: 0.5em;
-}
-h2{
-    font-size: 1.5em;
-    margin: 0.5em;
-}
 label{
     font-size: 1.5rem;
     font-weight: lighter;
@@ -90,6 +58,12 @@ label{
     display: flex;
     justify-content: center;
 }
+
+/* main menu */
+#menuBanner{
+    width: 30%;
+    height: 30%;
+}
 #enterLobby{
     display: flex;
     justify-content: space-around;
@@ -99,40 +73,21 @@ label{
     text-align:center;
 }
 
-#newGameLabelDiv{
-    display: flex;
-    justify-content: center;
+/* Lobby */
+li{
+    list-style-type: none;
+    margin: 0.4em;
+    padding: 0;
 }
-#emptySpaceDiv{
-    display: flex;
-    justify-content: center;
+ul{
+    padding: 0;
+    font-size: 1.4em;
+    margin: 0.5em;
 }
-#newGameButtonDiv{
-    display: flex;
-    justify-content: center;
-}
-#sessionIdLabelDiv{
-    display: flex;
-    justify-content: center;
-}
-#sessionIdInputDiv{
-    display: flex;
-    justify-content: center;
-}
-#sessionIdButtonDiv{
-    display: flex;
-    justify-content: center;
-}
-/* for the Lobby */
 #lobby{
     display: flex;
     justify-content: space-around;
     margin-right: 0;
-}
-#playerTable{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
 }
 #sessionIDDIV{
     display: flex;
@@ -155,10 +110,8 @@ label{
 #lobbyHeadline{
     font-size: 3em;
 }
-#startGameDIV{
-    display: flex;
-    justify-content: center;
-}
+
+/* Player */
 #player0{
     color: #ff0000;
 }
@@ -171,8 +124,34 @@ label{
 #player3{
     color: #036c99ff;
 }
+
+/* map */
 #mapCanvas{
     background: white;
+}
+
+/* tables */
+table {
+    border-collapse: collapse;
+    table-layout: auto;
+    width: 130%;
+    background: white;
+    text-align: left;
+    border-style: solid;
+    border-color: black;
+    border-width: thin;
+}
+th{
+    padding: 0.3rem;
+    background: lightgray;
+}
+td{
+    padding: 0.3rem;
+}
+#playerTable{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 #gameScores{
     margin-left: 2em;
