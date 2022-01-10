@@ -46,7 +46,7 @@ verify:
   script:
     - cd server
     - 'mvn $MAVEN_CLI_OPTS verify'
-    - 'mvn surefire:test -X @{argLine} $DBUserName'
+    - 'mvn exec:java -Dexec.mainClass=SQLConnection.Main -Dexec.args="$DBUserName $DBUserPassword $Server_IP"'
   except:
     variables:
       - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
