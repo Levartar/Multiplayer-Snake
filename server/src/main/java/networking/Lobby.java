@@ -1,5 +1,6 @@
 package networking;
 
+import exceptions.GameNotInitializedException;
 import exceptions.GameOverException;
 import helpers.ResourceManager;
 import logic.Gamemode;
@@ -12,10 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class Lobby {
     private static final Logger log = LogManager.getLogger(Lobby.class);
@@ -64,6 +62,9 @@ public class Lobby {
     }
 
     public void setGamemode(String gamemode) {
+        if (map == null) {
+            createDefaultMap();
+        }
         switch (gamemode) {
             case "basic_snake" -> {
                 this.gamemode = new BasicSnake(players, map);
@@ -75,16 +76,11 @@ public class Lobby {
     }
 
     public void start() throws Exception {
+        if (map == null) {
+            createDefaultMap();
+        }
         if (gamemode == null) {
             throw new Exception("Cannot start game. No Gamemode was selected.");
-        }
-        if (map == null) {
-            try {
-                this.map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
-                log.info("Default Basic map created");
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
         }
         if (!isReadyToStart()) {
             throw new Exception("Not enough players or not every player is ready");
@@ -96,6 +92,7 @@ public class Lobby {
         executor.scheduleAtFixedRate(() -> {
             try {
                 String data = gamemode.gameLoop();//if doesn't send a string throw exception
+                log.trace("gameLoop data: " + data);
                 for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
                 }
@@ -105,13 +102,26 @@ public class Lobby {
                 // TODO: 03.01.2022 send highscores data to database
                 running = false;
                 executor.shutdown();
+            } catch (GameNotInitializedException e) {
+                log.warn("Tried to start gamemode that was not initialized");
+                log.info("initializing game...");
+                gamemode.init();
             }
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
+    private void createDefaultMap() {
+        try {
+            this.map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
+            log.info("Default Basic map created");
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
     public boolean isReadyToStart() {
         // TODO: 02.01.2022 check if all players are ready, Player needs a isReady() method
-        return false;
+        return true;
     }
 
     public List<Player> getPlayers() {

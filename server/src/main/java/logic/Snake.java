@@ -11,7 +11,7 @@ public class Snake {
     private static final Logger logger = LogManager.getLogger(Snake.class);
     private final Player player;
     private List<Position> positions;
-    private Direction direction = null;
+    private Direction direction = Direction.up;
 
     public Snake(Position spawn, int length, Player player) {
         this.player = player;
@@ -38,15 +38,19 @@ public class Snake {
             thisElement.set(priorElement);
         }
 
+        updateDirection();
+
+        // move head
+        Position head = positions.get(0);
+        head.add(direction);
+    }
+
+    private void updateDirection() {
         Direction newDirection = Direction.getDirection(player.getInput());
         // only change direction, if a correct input is set
         if (newDirection != null) {
             this.direction = newDirection;
         }
-
-        // move head
-        Position head = positions.get(0);
-        head.add(direction);
     }
 
     public String getName() {
@@ -62,6 +66,7 @@ public class Snake {
     }
 
     public Direction getDirection() {
+        updateDirection();
         return direction;
     }
 
