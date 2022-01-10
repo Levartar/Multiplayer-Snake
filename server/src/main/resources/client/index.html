@@ -16,7 +16,8 @@
                 joinCode = value
 
 
-                const game_info_request = new Request(url + "/game-info", {method: 'GET'})
+                const game_info_request = new Request(url + "/game-info?code=" + joinCode,
+                    {method: 'GET'})
 
                 fetch(game_info_request).then(response => {
                     response.text().then(value1 => {
@@ -25,6 +26,12 @@
                 })
 
                 join(joinCode)
+
+                setTimeout(() => {
+                    const start_request = new Request(url + "/start?code=" + joinCode,
+                        {method: 'POST'})
+                    fetch(start_request)
+                }, 2000)
             })
         })
 
@@ -41,8 +48,8 @@
                 console.log("websocket closed")
             }
 
-            ws.onmessage =() =>{
-                console.log("message")
+            ws.onmessage = (message) =>{
+                console.log(JSON.parse(message.data))
             }
         }
 

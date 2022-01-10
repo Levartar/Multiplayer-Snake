@@ -29,7 +29,7 @@ public class GetGameInfo extends HttpServlet {
         String parameter = req.getParameter("code");
         if (parameter == null) {
             log.warn("no 'code' parameter in " + req);
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "no 'code' parameter");
             return;
         }
         int joinCode = Integer.parseInt(parameter);
