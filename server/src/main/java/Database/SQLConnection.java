@@ -25,10 +25,10 @@ public class SQLConnection {
     private static String SSHPrivatKey;
 
     public static void setLoginDetails() {
-        DBUser = System.getenv("$DBUserName");
-        DBUserPW = System.getenv("$DBUserPassword");
-        DBIP = System.getenv("$Server_IP");
-        SSHPrivatKey = "$SSH_PRIVATE_KEY";
+        DBUser = System.getenv("DBUserName");
+        DBUserPW = System.getenv("DBUserPassword");
+        DBIP = System.getenv("Server_IP");
+        SSHPrivatKey = "SSH_PRIVATE_KEY";
     }
 
     public static void connectToServer(String dataBaseName) throws SQLException {
