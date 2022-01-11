@@ -73,8 +73,9 @@ public class Map {
             char[] tmp = splitStrings[i].toCharArray();
             for (int j = 0; j < tmp.length; j++) {
                 if (tmp[j] == 's'){
-                    map[j][getHeight() - i - 1] = Material.FREESPACE;
-                    spawnPoints.add(new Position(j,i));
+                    int y = getHeight() - i - 1;
+                    map[j][y] = Material.FREESPACE;
+                    spawnPoints.add(new Position(j,y));
                 } else {
                     map[j][getHeight() - i - 1] = Material.getMaterial(tmp[j]);
                 }
