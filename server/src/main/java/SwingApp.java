@@ -34,7 +34,7 @@ public class SwingApp extends JFrame implements KeyListener {
         sninit();
         countdown(3);
         while (!gameOver) {
-            Thread.sleep(1000);
+            Thread.sleep(400);
             update();
             render();
         }
@@ -52,7 +52,7 @@ public class SwingApp extends JFrame implements KeyListener {
         // line spacing
         textPane.selectAll();
         MutableAttributeSet set = new SimpleAttributeSet(textPane.getParagraphAttributes());
-        StyleConstants.setLineSpacing(set, -0.25f);
+        StyleConstants.setLineSpacing(set, -0.35f);
         textPane.setParagraphAttributes(set, false);
 
         textPane.addKeyListener(this);
@@ -68,7 +68,9 @@ public class SwingApp extends JFrame implements KeyListener {
                 #                                  #
                 #                                  #
                 #                                  #
+                #                                  #
                 #            s   @   s             #
+                #                                  #
                 #                                  #
                 #                                  #
                 #                                  #
