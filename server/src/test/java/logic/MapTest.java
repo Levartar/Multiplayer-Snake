@@ -148,10 +148,10 @@ class MapTest {
     @Test
     void testSpawnPoints() throws IOException {
         Map map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
-        assertTrue(map.getSpawnPoints().contains(new Position(35,35)));
-        assertTrue(map.getSpawnPoints().contains(new Position(35,15)));
-        assertTrue(map.getSpawnPoints().contains(new Position(15,35)));
-        assertTrue(map.getSpawnPoints().contains(new Position(15,15)));
+        assertTrue(map.getSpawnPoints().contains(new Position(35,36)));
+        assertTrue(map.getSpawnPoints().contains(new Position(35,16)));
+        assertTrue(map.getSpawnPoints().contains(new Position(15,36)));
+        assertTrue(map.getSpawnPoints().contains(new Position(15,16)));
     }
 
 }
