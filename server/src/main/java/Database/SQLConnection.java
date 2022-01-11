@@ -24,29 +24,23 @@ public class SQLConnection {
     private static String DBIP;
     private static String SSHPrivatKey;
 
+    public static void setLoginDetails() {
+        DBUser = System.getenv("$DBUserName");
+        DBUserPW = System.getenv("$DBUserPassword");
+        DBIP = System.getenv("$Server_IP");
+        SSHPrivatKey = "$SSH_PRIVATE_KEY";
+    }
 
     public static void connectToServer(String dataBaseName) throws SQLException {
+        setLoginDetails();
         connectSSH();
         connectToDataBase(dataBaseName);
         log.info("Successfully connected to Database: " + dataBaseName);
     }
 
-    public static void main(String[] args) {
-        DBUser = args[0];
-        DBUserPW = args[1];
-        DBIP = args[2];
-        SSHPrivatKey = "C:\\Users\\nikoh\\.ssh\\id_rsa";
-        System.out.println(DBUser + DBUserPW + DBIP + "Privat Key: " + SSHPrivatKey);
 
-        try {
-            ResultSet resultSet = executeMyQuery("Select * from highscores;", "testdb");
-            while (resultSet.next()) {
-                log.debug(resultSet.getString(1));
-            }
-        } catch (SQLException e) {
-            log.info(e);
-        }
-        closeConnections();
+    public static void main(String[] args) {
+
     }
 
     private static void connectSSH() {
@@ -126,6 +120,41 @@ public class SQLConnection {
         if (session != null && session.isConnected()) {
             log.info("Closing SSH Connection");
             session.disconnect();
+        }
+    }
+
+    public static boolean InsertSnakeHighscore(String name, int highscore) {
+        String statement = "INSERT IGNORE INTO `highscores` SET `id` = NULL," +
+                "`name` = '" + name + "'," +
+                "`highscore` = " + highscore + ";";
+        return InsertStatement(statement, "testdb");
+    }
+
+    public static boolean InsertStatement(String insert, String dataBaseName) {
+        try {
+            connectToServer(dataBaseName);
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate(insert);
+            log.info("Database connection success");
+            closeConnections();
+            return true;
+        } catch (SQLException e) {
+            log.error(e);
+            return false;
+        }
+    }
+    public static boolean deleteHighscore(String name, String dataBaseName){
+        String delete = "delete from `highscores` where `name` ='" + name + "';";
+        try {
+            connectToServer(dataBaseName);
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate(delete);
+            log.info("Database connection success");
+            closeConnections();
+            return true;
+        } catch (SQLException e) {
+            log.error(e);
+            return false;
         }
     }
 
