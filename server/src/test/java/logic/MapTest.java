@@ -18,17 +18,17 @@ class MapTest {
                 #   #
                 #  ##""";
         Map squareMap = new Map(testMap);
-        assertEquals('#', squareMap.getMaterialAt(new Position(0, 0)).getSymbol());
-        assertEquals('#', squareMap.getMaterialAt(new Position(1, 0)).getSymbol());
-        assertEquals('#', squareMap.getMaterialAt(new Position(2, 0)).getSymbol());
-        assertEquals('#', squareMap.getMaterialAt(new Position(3, 0)).getSymbol());
-        assertEquals('#', squareMap.getMaterialAt(new Position(4, 0)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(0, 4)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(1, 4)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(2, 4)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(3, 4)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(4, 4)).getSymbol());
 
-        assertEquals('#', squareMap.getMaterialAt(new Position(0, 1)).getSymbol());
-        assertEquals(' ', squareMap.getMaterialAt(new Position(1, 1)).getSymbol());
-        assertEquals('@', squareMap.getMaterialAt(new Position(2, 1)).getSymbol());
-        assertEquals(' ', squareMap.getMaterialAt(new Position(3, 1)).getSymbol());
-        assertEquals('#', squareMap.getMaterialAt(new Position(4, 1)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(0, 3)).getSymbol());
+        assertEquals(' ', squareMap.getMaterialAt(new Position(1, 3)).getSymbol());
+        assertEquals('@', squareMap.getMaterialAt(new Position(2, 3)).getSymbol());
+        assertEquals(' ', squareMap.getMaterialAt(new Position(3, 3)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(4, 3)).getSymbol());
 
         assertEquals('#', squareMap.getMaterialAt(new Position(0, 2)).getSymbol());
         assertEquals(' ', squareMap.getMaterialAt(new Position(1, 2)).getSymbol());
@@ -36,17 +36,17 @@ class MapTest {
         assertEquals(' ', squareMap.getMaterialAt(new Position(3, 2)).getSymbol());
         assertEquals('#', squareMap.getMaterialAt(new Position(4, 2)).getSymbol());
 
-        assertEquals('#', squareMap.getMaterialAt(new Position(0, 3)).getSymbol());
-        assertEquals(' ', squareMap.getMaterialAt(new Position(1, 3)).getSymbol());
-        assertEquals(' ', squareMap.getMaterialAt(new Position(2, 3)).getSymbol());
-        assertEquals(' ', squareMap.getMaterialAt(new Position(3, 3)).getSymbol());
-        assertEquals('#', squareMap.getMaterialAt(new Position(4, 3)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(0, 1)).getSymbol());
+        assertEquals(' ', squareMap.getMaterialAt(new Position(1, 1)).getSymbol());
+        assertEquals(' ', squareMap.getMaterialAt(new Position(2, 1)).getSymbol());
+        assertEquals(' ', squareMap.getMaterialAt(new Position(3, 1)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(4, 1)).getSymbol());
 
-        assertEquals('#', squareMap.getMaterialAt(new Position(0, 4)).getSymbol());
-        assertEquals(' ', squareMap.getMaterialAt(new Position(1, 4)).getSymbol());
-        assertEquals(' ', squareMap.getMaterialAt(new Position(2, 4)).getSymbol());
-        assertEquals('#', squareMap.getMaterialAt(new Position(3, 4)).getSymbol());
-        assertEquals('#', squareMap.getMaterialAt(new Position(4, 4)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(0, 0)).getSymbol());
+        assertEquals(' ', squareMap.getMaterialAt(new Position(1, 0)).getSymbol());
+        assertEquals(' ', squareMap.getMaterialAt(new Position(2, 0)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(3, 0)).getSymbol());
+        assertEquals('#', squareMap.getMaterialAt(new Position(4, 0)).getSymbol());
     }
 
     @Test
