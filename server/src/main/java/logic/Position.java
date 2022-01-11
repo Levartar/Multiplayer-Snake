@@ -30,8 +30,8 @@ public class Position {
 
     public void add(Direction direction) {
         switch (direction) {
-            case up -> this.add(0, -1);
-            case down -> this.add(0, 1);
+            case up -> this.add(0, 1);
+            case down -> this.add(0, -1);
             case left -> this.add(-1, 0);
             case right -> this.add(1, 0);
         }

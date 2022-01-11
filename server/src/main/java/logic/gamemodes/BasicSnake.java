@@ -255,6 +255,7 @@ public class BasicSnake implements Gamemode {
     public String toString() {
         // convert map string to list
         List<String> lines = map.toString().lines().collect(Collectors.toList());
+        Collections.reverse(lines);
 
         // add snakes
         snakes.forEach(snake -> {
@@ -279,6 +280,7 @@ public class BasicSnake implements Gamemode {
                 lines.set(y, line);
             });
         });
+        Collections.reverse(lines);
 
         StringBuilder result = new StringBuilder();
         for (String line :
