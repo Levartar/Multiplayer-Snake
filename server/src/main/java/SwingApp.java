@@ -73,7 +73,6 @@ public class SwingApp extends JFrame implements KeyListener {
                 #                                  #
                 #                                  #
                 #                                  #
-                #                                  #
                 ####################################""";
         Map map = new Map(mapString);
 
@@ -105,7 +104,7 @@ public class SwingApp extends JFrame implements KeyListener {
 
     private void render() {
         if (gameOver) textPane.setText("Game Over!");
-        else textPane.setText(TUTORIAL_TEXT + gamemode.toString());
+        else textPane.setText(TUTORIAL_TEXT + "time left: " + gamemode.getTimer() + " seconds\n" + gamemode.toString());
     }
 
     @Override
