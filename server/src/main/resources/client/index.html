@@ -1,23 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>test page</title>
+    <meta charset="utf-8">
+    <title>SnakeIO</title>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <script type="application/javascript" src="https://unpkg.com/react@16.0.0/umd/react.production.min.js"></script>
+    <script type="application/javascript" src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.production.min.js"></script>
+    <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <script type="javascript" src="./JS/canvas.js"></script>
 </head>
 <body>
-    test content
-    <script>
-        const wsUrl = "ws://localhost:80/join/12345/name/timo"
-        const ws = new WebSocket(wsUrl)
+    <div id="root"></div>
+    <script src="./JS/react.js" type="text/babel"></script>
+    <script src="./JS/websockets.js" type="text/babel"></script>
+    <script type="text/babel">
 
-        ws.onopen = () => {
-            console.log("websocket opened")
-        }
-
-        ws.onclose = (e) => {
-            console.log(e)
-            console.log("websocket closed")
-        }
     </script>
 </body>
+
 </html>
