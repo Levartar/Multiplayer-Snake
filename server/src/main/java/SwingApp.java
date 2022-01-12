@@ -34,14 +34,14 @@ public class SwingApp extends JFrame implements KeyListener {
         sninit();
         countdown(3);
         while (!gameOver) {
-            Thread.sleep(1000);
+            Thread.sleep(400);
             update();
             render();
         }
     }
 
     private void swinit() {
-        setBounds(0, 0, 1000, 1000);
+        setBounds(0, 0, 1000, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         textPane = new JTextPane();
         textPane.setBackground(Color.BLACK);
@@ -52,7 +52,7 @@ public class SwingApp extends JFrame implements KeyListener {
         // line spacing
         textPane.selectAll();
         MutableAttributeSet set = new SimpleAttributeSet(textPane.getParagraphAttributes());
-        StyleConstants.setLineSpacing(set, -0.25f);
+        StyleConstants.setLineSpacing(set, -0.35f);
         textPane.setParagraphAttributes(set, false);
 
         textPane.addKeyListener(this);
@@ -69,15 +69,7 @@ public class SwingApp extends JFrame implements KeyListener {
                 #                                  #
                 #                                  #
                 #                                  #
-                #                                  #
-                #                                  #
-                #                                  #
                 #            s   @   s             #
-                #                                  #
-                #                                  #
-                #                                  #
-                #                                  #
-                #                                  #
                 #                                  #
                 #                                  #
                 #                                  #
@@ -112,7 +104,7 @@ public class SwingApp extends JFrame implements KeyListener {
 
     private void render() {
         if (gameOver) textPane.setText("Game Over!");
-        else textPane.setText(TUTORIAL_TEXT + gamemode.toString());
+        else textPane.setText(TUTORIAL_TEXT + "time left: " + gamemode.getTimer() + " seconds\n" + gamemode.toString());
     }
 
     @Override
