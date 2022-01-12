@@ -291,6 +291,7 @@ public class BasicSnake implements Gamemode {
             }
             result.append("\n");
         }
+        result.deleteCharAt(result.length() - 1);
 
 
 //        for (String line :
