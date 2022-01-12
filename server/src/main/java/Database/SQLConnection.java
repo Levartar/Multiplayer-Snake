@@ -28,10 +28,11 @@ public class SQLConnection {
         DBUser = System.getenv("DBUserName");
         DBUserPW = System.getenv("DBUserPassword");
         DBIP = System.getenv("Server_IP");
-        SSHPrivatKey = "SSH_PRIVATE_KEY";
+        SSHPrivatKey = System.getenv("SSH_PRIVATE_KEY");
+        log.info(SSHPrivatKey);
     }
 
-    public static void connectToServer(String dataBaseName) throws SQLException {
+    public static void connectToServer(String dataBaseName) {
         setLoginDetails();
         connectSSH();
         connectToDataBase(dataBaseName);
@@ -41,9 +42,28 @@ public class SQLConnection {
 
     public static void main(String[] args) {
 
+        String name = "Jens";
+        int highscore = 99;
+
+      //  SQLConnection.InsertSnakeHighscore(name,highscore);
+
+
+      //  String name = "Niko";
+
+        try {
+            ResultSet resultSet = SQLConnection.executeMyQuery("Select highscore from highscores where Name = '" + name + "';", "testdb");
+            while (resultSet.next()) {
+                System.out.println(resultSet.getString(1));
+            }
+        } catch (SQLException e) {
+            log.info(e);
+        }
+        SQLConnection.closeConnections();
+
     }
 
     private static void connectSSH() {
+
         String sshHost = DBIP;
         String sshuser = "root";
 

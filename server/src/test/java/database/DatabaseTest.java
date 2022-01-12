@@ -21,18 +21,18 @@ public class DatabaseTest {
         assertEquals(highscore, Integer.valueOf(receiveData()));
     }
 
-    @Test
-    void deleteDatatest(){
-        deleteData();
-        assertFalse(deleteData());
-    }
+   // @Test
+   // void deleteDatatest(){
+   //     deleteData();
+   //     assertFalse(deleteData());
+   // }
 
-    @Test
-    void failedInsert(){
-        name = "IammuchlongerthanonlysixtywordsbecauseihavetocreateanBIGError!";
-        assertFalse(sendData());
+  // @Test
+  // void failedInsert(){
+  //     name = "IammuchlongerthanonlysixtywordsbecauseihavetocreateanBIGError!";
+  //     assertFalse(sendData());
 
-    }
+  // }
 
 
 
