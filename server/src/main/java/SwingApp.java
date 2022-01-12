@@ -82,7 +82,7 @@ public class SwingApp extends JFrame implements KeyListener {
         players.add(player1);
         players.add(player2);
 
-        gamemode = new BasicSnake(players, map);
+        gamemode = new BasicSnake(players, map,0);
         gamemode.init();
     }
 

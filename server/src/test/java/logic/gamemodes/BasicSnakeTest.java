@@ -233,7 +233,7 @@ class BasicSnakeTest {
         String expected = """
                 #####
                 #   #
-                #   #
+                # @@#
                 #   #
                 #####""";
 
@@ -285,7 +285,7 @@ class BasicSnakeTest {
         String expected = """
                 #########
                 #       #
-                #   ooH #
+                # @@ooH #
                 #       #
                 #########""";
 
@@ -370,7 +370,7 @@ class BasicSnakeTest {
         Player player1 = new Player();
         player1.setName("jakob");
         _players.add(player1);
-        Gamemode gamemode = new BasicSnake(_players, map);
+        Gamemode gamemode = new BasicSnake(_players, map,0);
 
         _players.forEach(player -> player.setInput('d'));
 
@@ -424,7 +424,7 @@ class BasicSnakeTest {
         String endString = """
                 ##########
                 #        #
-                #        #
+                #   @@@@@#
                 #        #
                 ##########""";
         assertEquals(endString,gamemode.toString());
@@ -491,6 +491,31 @@ class BasicSnakeTest {
             fail(e.getMessage());
         } catch (GameOverException e) {
 
+        }
+    }
+
+    @Test
+    void testCountDown() throws GameOverException, GameNotInitializedException, InterruptedException {
+        String mapString = """
+                ##########
+                #        #
+                # s   @  #
+                #        #
+                ##########
+                """;
+        Map map = new Map(mapString);
+
+        List<Player> _players = new ArrayList<>();
+        Player player1 = new Player();
+        player1.setName("jakob");
+        _players.add(player1);
+        Gamemode gamemode = new BasicSnake(_players, map,5);
+        _players.forEach(player -> player.setInput('d'));
+        gamemode.init();
+
+        for (int i = 0; i < 8; i++) {
+            logger.info(gamemode.gameLoop());
+            Thread.sleep(1000);
         }
     }
 }
