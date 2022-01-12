@@ -27,6 +27,8 @@ public class Lobby {
 
     public Lobby(int joinCode) {
         this.joinCode = joinCode;
+        createDefaultMap();
+        gamemode = new BasicSnake(players, map);
     }
 
     public int getJoinCode() {
@@ -62,17 +64,18 @@ public class Lobby {
     }
 
     public void setGamemode(String gamemode) {
-        if (map == null) {
-            createDefaultMap();
-        }
         switch (gamemode) {
-            case "basic_snake" -> {
+            case Gamemode.BASIC_SNAKE -> {
                 this.gamemode = new BasicSnake(players, map);
                 log.info("Gamemode " + this.gamemode.getClass().getName()
                         + " set for lobby with code " + joinCode);
             }
-            default -> log.error("Wrong String input for Gamemode");
+            default -> log.error("No such gamemode: " + gamemode);
         }
+    }
+
+    public Gamemode getGamemode(){
+        return gamemode;
     }
 
     public void start() throws Exception {
@@ -110,6 +113,10 @@ public class Lobby {
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
+    public boolean hasStarted(){
+        return running;
+    }
+
     private void createDefaultMap() {
         try {
             this.map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
@@ -131,5 +138,14 @@ public class Lobby {
     public void setMap(Map map) {
         this.map = map;
         log.debug("Changed Map to: " + map + " for lobby " + joinCode);
+    }
+
+    @Override
+    public String toString() {
+        return "Lobby{" +
+                "joinCode=" + joinCode +
+                ", running=" + running +
+                ", gamemode=" + gamemode.getClass().getName() +
+                '}';
     }
 }

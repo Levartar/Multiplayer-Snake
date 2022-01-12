@@ -1,5 +1,6 @@
 package networking;
 
+import exceptions.NoSuchLobbyException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,13 +52,13 @@ public class LobbyManager {
      * @return lobby with the joinCode
      * @throws Exception if no lobby with the provided joinCode exists
      */
-    public static Lobby getLobby(int joinCode) throws Exception {
+    public static Lobby getLobby(int joinCode) throws NoSuchLobbyException {
         for (Lobby lobby : lobbies) {
             if (lobby.getJoinCode() == joinCode) {
                 return lobby;
             }
         }
-        throw new Exception("No matching Lobby found for joinCode: " + joinCode);
+        throw new NoSuchLobbyException("No matching Lobby found for joinCode: " + joinCode);
     }
 
     /**
