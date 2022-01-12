@@ -15,7 +15,7 @@
 # * Deploy built artifacts from master branch only.  
 
 
-stages: 
+stages:
   - testServer
   - build
 
@@ -31,10 +31,12 @@ variables:
 
 
 # This template uses jdk8 for verifying and deploying images
-image: maven:3.8-openjdk-17
+
+  image: maven:3.8-openjdk-17
 
 setup:
-
+  tags:
+    - Database
   stage: build
   script:
     - cd server
@@ -46,6 +48,7 @@ cache:
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
 verify:
+
   stage: testServer
   script:
     - cd server
