@@ -13,7 +13,20 @@
 # * Caches downloaded dependencies and plugins between invocation.
 # * Verify but don't deploy merge requests.
 # * Deploy built artifacts from master branch only.
+services:
+  - mysql:8
+variables:
+  MYSQL_DATABASE: se3db
+  MYSQL_ROOT_PASSWORD: $DBRootPassword
+  MYSQL_USER: $DBUserName
+  MYSQL_PASSWORD: $DBUserPassword 
+connect:
+  image: mysql
+  script:
+  - echo "SELECT 'OK';" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql "$MYSQL_DATABASE" --user=$DBUserName --password=$DBUserPassword
 
+
+  
 stages: 
   - testServer
   - build
@@ -46,7 +59,6 @@ verify:
   script:
     - cd server
     - 'mvn $MAVEN_CLI_OPTS verify'
-    - 'mvn exec:java -Dexec.mainClass=src/main/java/Database/SQLConnection.Main -Dexec.args="$DBUserName $DBUserPassword $Server_IP"'
   except:
     variables:
       - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
