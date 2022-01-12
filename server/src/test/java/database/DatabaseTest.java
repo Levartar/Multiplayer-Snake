@@ -9,17 +9,17 @@ import Database.SQLConnection;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DatabaseTest {
-    private static final Logger log = LogManager.getLogger(SQLConnection.class);
-    String name = "Jens";
-    int highscore = 2048;
-    @Test
-    void postDatatest() {
-        assertTrue(sendData());
-    }
-    @Test
-    void receiveDatatest() {
-        assertEquals(highscore, Integer.valueOf(receiveData()));
-    }
+ //  private static final Logger log = LogManager.getLogger(SQLConnection.class);
+ //  String name = "Jens";
+ //  int highscore = 2048;
+ //  @Test
+ //  void postDatatest() {
+ //      assertTrue(sendData());
+ //  }
+ //  @Test
+ //  void receiveDatatest() {
+ //      assertEquals(highscore, Integer.valueOf(receiveData()));
+ //  }
 
    // @Test
    // void deleteDatatest(){
@@ -38,27 +38,27 @@ public class DatabaseTest {
 
 
 
-    public String receiveData(){
-        String returnString = "";
-        try {
-            ResultSet resultSet = SQLConnection.executeMyQuery("Select highscore from highscores where Name = '" + name + "';", "testdb");
-            while (resultSet.next()) {
-                returnString = resultSet.getString(1);
-            }
-        } catch (SQLException e) {
-            log.info(e);
-        }
-        SQLConnection.closeConnections();
-        return returnString;
-    }
-    public boolean sendData(){
+ //  public String receiveData(){
+ //      String returnString = "";
+ //      try {
+ //          ResultSet resultSet = SQLConnection.executeMyQuery("Select highscore from highscores where Name = '" + name + "';", "testdb");
+ //          while (resultSet.next()) {
+ //              returnString = resultSet.getString(1);
+ //          }
+ //      } catch (SQLException e) {
+ //          log.info(e);
+ //      }
+ //      SQLConnection.closeConnections();
+ //      return returnString;
+ //  }
+ //  public boolean sendData(){
 
-        return (SQLConnection.InsertSnakeHighscore(name,highscore));
-    }
+ //      return (SQLConnection.InsertSnakeHighscore(name,highscore));
+ //  }
 
-    public boolean deleteData(){
-        return (SQLConnection.deleteHighscore(name, "testdb"));
-    }
+ //  public boolean deleteData(){
+ //      return (SQLConnection.deleteHighscore(name, "testdb"));
+ //  }
 
 
 }
