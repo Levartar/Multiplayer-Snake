@@ -39,7 +39,13 @@ public class Map {
     }
 
     public Material[][] getMap() { //maybe useless
-        return map;
+        Material[][] output = new Material[getWidth()][getHeight()];
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                output[i][j] = map[i][j];
+            }
+        }
+        return output;
     }
 
     public Material getMaterialAt(Position pos) {

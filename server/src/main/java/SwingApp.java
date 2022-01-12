@@ -67,12 +67,12 @@ public class SwingApp extends JFrame implements KeyListener {
                 #                                  #
                 #                                  #
                 #                                  #
+                #        @                         #
                 #                                  #
                 #                                  #
                 #                                  #
                 #                                  #
-                #                                  #
-                #            s   @   s             #
+                #            s       s             #
                 #                                  #
                 #                                  #
                 #                                  #
