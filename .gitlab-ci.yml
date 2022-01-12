@@ -35,8 +35,7 @@ variables:
 connect:
   image: mysql
   script:
-  - echo "SELECT 'OK';" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql "$MYSQL_DATABASE" --user=$DBUserName --password=$DBUserPassword
-
+  - echo "SELECT 'OK';" | mysql --user=root --password="$MYSQL_ROOT_PASSWORD" --host=mysql "$MYSQL_DATABASE"
 
 
 # This template uses jdk8 for verifying and deploying images
