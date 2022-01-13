@@ -1,5 +1,7 @@
 package logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -8,6 +10,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SnakeTest {
+
+    private static final Logger logger = LogManager.getLogger(SnakeTest.class);
 
     @Test
     void getPositions() {
@@ -116,5 +120,16 @@ class SnakeTest {
             expected.add(new Position(1, 1));
         }
         assertEquals(expected, snake.getPositions());
+    }
+
+    @Test
+    void tryWrongInputs(){
+        Player player = new Player();
+        Snake snake = new Snake(new Position(1, 1), 4, player);
+
+        snake.move();
+        player.setInput('s');
+        snake.move();
+        assertEquals("[x:1,y:-1, x:1,y:0, x:1,y:1, x:1,y:1]",snake.getPositions().toString());
     }
 }

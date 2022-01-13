@@ -12,6 +12,7 @@ public class Snake {
     private final Player player;
     private List<Position> positions;
     private Direction direction = Direction.up;
+    private Direction lastDirection= Direction.up;
 
     public Snake(Position spawn, int length, Player player) {
         this.player = player;
@@ -41,14 +42,28 @@ public class Snake {
         updateDirection();
 
         // move head
-        Position head = positions.get(0);
-        head.add(direction);
+        positions.get(0).add(direction);
     }
 
     private void updateDirection() {
         Direction newDirection = Direction.getDirection(player.getInput());
         // only change direction, if a correct input is set
         if (newDirection != null) {
+        switch (newDirection) {
+            case up -> {
+                if (lastDirection == Direction.down) newDirection = Direction.down;
+            }
+            case left -> {
+                if (lastDirection == Direction.right) newDirection = Direction.right;
+            }
+            case down -> {
+                if (lastDirection == Direction.up)newDirection = Direction.up;
+            }
+            case right -> {
+                if (lastDirection == Direction.left) newDirection = Direction.left;
+            }
+        }
+            lastDirection = this.direction;
             this.direction = newDirection;
         }
     }
