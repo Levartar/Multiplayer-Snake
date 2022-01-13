@@ -34,7 +34,7 @@ setup:
   stage: build
   script:
     - cd server
-    - ping -c 4 193.196.53.28
+   
 # Cache downloaded dependencies and plugins between builds.
 # To keep cache across branches add 'key: "$CI_JOB_NAME"'
 cache:
@@ -47,6 +47,7 @@ verify:
   stage: testServer
   script:
     - cd server
+     - ping -c 4 193.196.53.28
     - 'mvn $MAVEN_CLI_OPTS verify'
   except:
     variables:
