@@ -1,11 +1,12 @@
-function websockets(url){
-    const ws = url
+function websockets(name, sessionID){
+    const ws = new WebSocket("ws://localhost:80/join/" + sessionID + "/name/" + name)
     ws.onopen = function () {
         //render the lobby when a player connected over the websocket
         ReactDOM.render(
             <Lobby />,
             document.getElementById('root')
         );
+        document.getElementById("sessionIDtext").innerText = sessionID
     }
     ws.onmessage = function (evt) {
         // finding out width + height of the canvas

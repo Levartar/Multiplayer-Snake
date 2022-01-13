@@ -26,20 +26,28 @@ class Create_session extends React.Component{
     componentDidMount() {
         document.getElementById("buttonnewGame").addEventListener("click", () => {
             //create a new lobby
-            const url = "http://localhost:80/create"
-            const request = new Request(url, {
-                    method: 'GET'
-                }
-            )
+            if(!nameCheck()){
+                const url = "http://localhost:80/create"
+                const request = new Request(url, {
+                        method: 'GET'
+                    }
+                )
 
-            fetch(request)
-                .then(response => {
-                    //connect the player to the lobby
-                    sessionID = response.toString()
-                    //console.log(response)
-                    websockets("wss://localhost:80/join/" + sessionID + "/name/" + name)
-                })
-                .catch(err => console.log(err.message))
+                fetch(request)
+                    .then(response => {
+                        response.text().then(value => {
+                            //connect the player to the lobby
+                            sessionID = value
+                            // values of the input fields
+                            const name = document.getElementById("inputName").value
+                            websockets(name, sessionID)
+                        })
+                    })
+                    .catch(err => console.log(err.message))
+            }else {
+                alert("Enter a name!!!")
+            }
+
         })
     }
 
@@ -59,45 +67,45 @@ class Create_session extends React.Component{
 class Join_session extends React.Component{
     componentDidMount() {
         document.getElementById("buttonsessionId").addEventListener("click", () => {
-            //connect to lobby with sessionID
-            const url = "http://localhost:80/game-info?code=" + sessionID
-            const request = new Request(url, {
-                    method: 'GET'
-                }
-            )
+            if(!nameCheck()){
+                //connect to lobby with sessionID
+                sessionID = document.getElementById("inputsessionId").value
 
-            //boolean if lobby with this sessionID is open
-            let isValideId = false
-            //boolean if there is space for the player to join
-            let isFull = true
-            //boolean if the game has already started
-            let hasStarted
-
-            fetch(request)
-                .then(response => {
-                    response.json()
-                })
-                .then(obj => {
-                    //look if the lobby with the sessionID is running if yes open ws
-                    isValideId = obj.exists
-                    isFull = obj.isFull
-                    hasStarted = obj.hasStared
-                })
-                .catch(err => console.log(err.message))
-
-            //check if player can connect to lobby
-            if(isValideId){
-                if(!isFull){
-                    if(!hasStarted){
-                        websockets("wss://localhost:80/join/" + sessionID + "/name/" + name)
-                    }else {
-                        alert("the game has already Started. please Wait until it has finished or join another lobby")
+                const url = "http://localhost:80/game-info?code=" + sessionID
+                const request = new Request(url, {
+                        method: 'GET'
                     }
-                }else {
-                    alert("The lobby with SessionID " + sessionID + " already has no free slots for new players to join")
-                }
-            }else{
-                alert("No lobby with SessionID " + sessionID + " is currently open")
+                )
+
+                fetch(request)
+                    .then(response => {
+                        response.json().then(obj => {
+                            //look if the lobby with the sessionID is running if yes open ws
+                            console.log(obj)
+                            isValideId = obj.exists
+                            isFull = obj.playerNames.length > 3;
+                            hasStarted = obj.hasStarted
+
+                            //check if player can connect to lobby
+                            if(isValideId){
+                                if(!isFull){
+                                    if(!hasStarted){
+                                        const name = document.getElementById("inputName").value
+                                        websockets(name, sessionID)
+                                    }else {
+                                        alert("the game has already Started. please Wait until it has finished or join another lobby")
+                                    }
+                                }else {
+                                    alert("The lobby with SessionID " + sessionID + " already has no free slots for new players to join")
+                                }
+                            }else{
+                                alert("No lobby with SessionID " + sessionID + " is currently open")
+                            }
+                        })
+                    })
+                    .catch(err => console.log(err.message))
+            }else {
+                alert("Enter a name!!!")
             }
         })
     }
@@ -266,7 +274,7 @@ class Lobby extends React.Component {
                 <div id="lobby" className="noMargin">
                     <div id="sessionIDDIV">
                         <h2 id="sessionIDHeadline" className="noMargin">SessionID:</h2>
-                        <p id="sessionIDtext" className="noMargin">X15QW4B</p>
+                        <p id="sessionIDtext" className="noMargin"></p>
                     </div>
                     <MapSelect data={testMaps}/>
                     <div id="playerTable">
@@ -341,6 +349,14 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-// values of the input fields
-let sessionID = document.getElementById("inputSessionId").value
-const name = document.getElementById("inputName").value
+let sessionID
+//boolean if lobby with this sessionID is open
+let isValideId
+//boolean if there is space for the player to join
+let isFull
+//boolean if the game has already started
+let hasStarted
+
+function nameCheck(){
+    return document.getElementById("inputName").value === ""
+}
