@@ -69,3 +69,4 @@ verifyDatabase:
 verifyFrontend:
   stage: frontend
   script:
+    - cd server
