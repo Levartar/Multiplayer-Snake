@@ -52,6 +52,20 @@ public class Snake {
         Direction newDirection = Direction.getDirection(player.getInput());
         // only change direction, if a correct input is set
         if (newDirection != null) {
+        switch (newDirection) {
+            case up -> {
+                if (this.direction == Direction.down) newDirection = Direction.down;
+            }
+            case left -> {
+                if (this.direction == Direction.right) newDirection = Direction.right;
+            }
+            case down -> {
+                if (this.direction == Direction.up)newDirection = Direction.up;
+            }
+            case right -> {
+                if (this.direction == Direction.left) newDirection = Direction.left;
+            }
+        }
             this.direction = newDirection;
         }
     }

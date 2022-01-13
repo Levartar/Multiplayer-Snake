@@ -15,7 +15,11 @@ import java.util.stream.Collectors;
 
 public class BasicSnake implements Gamemode {
 
+<<<<<<< server/src/main/java/logic/gamemodes/BasicSnake.java
     private static final Logger log = LogManager.getLogger(BasicSnake.class);
+=======
+    private static final Logger logger = LogManager.getLogger(BasicSnake.class);
+>>>>>>> server/src/main/java/logic/gamemodes/BasicSnake.java
 
     private final Map map;
     private final List<Snake> snakes;
@@ -26,6 +30,8 @@ public class BasicSnake implements Gamemode {
     private long gameStartTime;
     private int gameMaxTime;
     private int timer;
+    private int countDown;
+    private long maxCountdown;
     private final List<Snake> scheduledForRemoval = new ArrayList<>();
     private final JSONArray JSON_replace = new JSONArray();
     private final JSONObject JSON_synchronizationMessage = new JSONObject();
@@ -35,9 +41,17 @@ public class BasicSnake implements Gamemode {
     private final HashMap<Player, Integer> scores = new HashMap<>();
     private final List<Player> players;
 
+    public BasicSnake(List<Player> players, Map map, int countDown) {
+        this.players = players;
+        this.map = map;
+        this.maxCountdown = countDown*1000;
+        snakes = new ArrayList<>();
+    }
+
     public BasicSnake(List<Player> players, Map map) {
         this.players = players;
         this.map = map;
+        this.countDown = 0;
         snakes = new ArrayList<>();
         log.info("BasicSnake created\n"+this);
     }
@@ -53,16 +67,19 @@ public class BasicSnake implements Gamemode {
     public String gameLoop() throws GameOverException, GameNotInitializedException {
         if (gameover) throw new GameOverException();
         if (!initialized) throw new GameNotInitializedException();
+        if (countDown>0){
+            sendCountDown();
+        } else {
 
-        snakes.forEach(Snake::move);
-        checkCollision();
-        synchronizeScore();
+            snakes.forEach(Snake::move);
+            checkCollision();
+            synchronizeScore();
 
-        loopCount++;
-        if (loopCount % 20 == 0) {
-            spawnFood();
+            loopCount++;
+            if (loopCount % 20 == 0) {
+                spawnFood();
+            }
         }
-
         updateTimer();
         log.debug("\nGamemode:\n"+this+"\nplayers:\n"+players.toString()+"\nscores:\n"+scores.toString()+"\nTimer:\n"+timer);
         return getSynchronizationMessage();
@@ -76,8 +93,12 @@ public class BasicSnake implements Gamemode {
         JSON_synchronizationMessage.put("world", getWorld());
 
         //init GameTime
-        gameMaxTime = 60000 *players.size(); //1 Minute per player
+<<<<<<< server/src/main/java/logic/gamemodes/BasicSnake.java
+        (int) (60000*players.size()+maxCountdown); //1 Minute per player + CountDown in ms
         log.debug("set GameTime to:"+gameMaxTime/1000f);
+=======
+        gameMaxTime = (int) (60000*players.size()+maxCountdown); //1 Minute per player + CountDown in ms
+>>>>>>> server/src/main/java/logic/gamemodes/BasicSnake.java
 
         // create snakes
         List<Position> spawnPoints = map.getSpawnPoints();
@@ -97,6 +118,10 @@ public class BasicSnake implements Gamemode {
         initialized = true;
 
         return getSynchronizationMessage();
+    }
+
+    private void sendCountDown() {
+        JSON_synchronizationMessage.put("countdown",countDown);
     }
 
     @Override
@@ -181,10 +206,24 @@ public class BasicSnake implements Gamemode {
             }
         });
 
+<<<<<<< server/src/main/java/logic/gamemodes/BasicSnake.java
+        scheduledForRemoval.forEach(snake -> snakeToApples(snake));
         scheduledForRemoval.forEach(snake -> log.info("snake "+snake.getName()+" died"));
+=======
+        scheduledForRemoval.forEach(snake -> snakeToApples(snake));
+>>>>>>> server/src/main/java/logic/gamemodes/BasicSnake.java
         scheduledForRemoval.forEach(snakes::remove);
         doesGameEnd();
         scheduledForRemoval.clear();
+
+    }
+
+    private void snakeToApples(Snake snake) {
+        List newApples = snake.getPositions();
+        newApples.remove(0);
+        newApples.forEach(position -> {
+            map.changeMaterial((Position) position, Material.APPLE);
+        });
 
     }
 
@@ -263,8 +302,7 @@ public class BasicSnake implements Gamemode {
 
     @Override
     public String toString() {
-        // convert map string to list
-        List<String> lines = map.toString().lines().collect(Collectors.toList());
+        Material[][] tmp = map.getMap();
 
         // add snakes
         snakes.forEach(snake -> {
@@ -272,28 +310,24 @@ public class BasicSnake implements Gamemode {
             snake.getPositions().forEach(position -> {
                 int x = position.getX();
                 int y = position.getY();
-                String line = lines.get(y);
 
-                char insert;
                 // if the current position is the head -> write H
                 if (position == head) {
-                    insert = 'H';
+                    tmp[x][y] = Material.SNAKEHEAD;
                     // if the current position is at the position of the head -> don't override the head symbol
                 } else if (position.equals(head)) {
                     return;
                 } else {
-                    insert = Material.SNAKE.getSymbol();
+                    tmp[x][y] = Material.SNAKE;
                 }
-
-                line = line.substring(0, x) + insert + line.substring(x + 1);
-                lines.set(y, line);
             });
         });
-
         StringBuilder result = new StringBuilder();
-        for (String line :
-                lines) {
-            result.append(line).append('\n');
+        for (int y = 0; y < tmp[0].length; y++) {
+            for (int x = 0; x < tmp.length; x++) {
+                result.append(tmp[x][y].toString());
+            }
+            result.append("\n");
         }
         result.deleteCharAt(result.length() - 1);
         return result.toString();
@@ -319,7 +353,11 @@ public class BasicSnake implements Gamemode {
     private void updateTimer(){
         long passedTime = System.currentTimeMillis()-gameStartTime;
         timer = Math.round((gameMaxTime-passedTime)/1000f);
+<<<<<<< server/src/main/java/logic/gamemodes/BasicSnake.java
+        countDown = Math.round((maxCountdown-passedTime)/1000f);
         log.trace("Timer: "+timer);
+=======
+>>>>>>> server/src/main/java/logic/gamemodes/BasicSnake.java
     }
 
     @Override

@@ -12,6 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class SnakeTest {
     private static final Logger log = LogManager.getLogger(SnakeTest.class);
 
+    private static final Logger logger = LogManager.getLogger(SnakeTest.class);
+
     @Test
     void getPositions() {
         int length = 5;
@@ -81,23 +83,24 @@ class SnakeTest {
     @Test
     void complexMoveSnake(){
         List<Position> testPositions = new ArrayList<>();
-        testPositions.add(new Position(3,-1));
-        testPositions.add(new Position(3,0));
-        testPositions.add(new Position(2,0));
-        testPositions.add(new Position(2,1));
+        testPositions.add(new Position(4,2));
+        testPositions.add(new Position(4,1));
+        testPositions.add(new Position(3,1));
+        testPositions.add(new Position(3,2));
 
         Player testPlayer = new Player();
 
-        Snake testSnake = new Snake(new Position(1,1), 4, testPlayer);
+        Snake testSnake = new Snake(new Position(2,2), 4, testPlayer);
 
+        // head = (2, 2)
         testPlayer.setInput('d');
-        testSnake.move();
+        testSnake.move(); // head = (3, 2)
         testPlayer.setInput('w');
-        testSnake.move();
+        testSnake.move(); // head = (3, 1)
         testPlayer.setInput('d');
-        testSnake.move();
-        testPlayer.setInput('w');
-        testSnake.move();
+        testSnake.move(); // head = (4, 1)
+        testPlayer.setInput('s');
+        testSnake.move(); // head = (4, 2)
 
         assertEquals(testPositions, testSnake.getPositions());
         log.info("Test "+"complexMoveSnake" +" passed");
@@ -123,5 +126,16 @@ class SnakeTest {
         }
         assertEquals(expected, snake.getPositions());
         log.info("Test "+"grow" +" passed");
+    }
+
+    @Test
+    void tryWrongInputs(){
+        Player player = new Player();
+        Snake snake = new Snake(new Position(1, 1), 4, player);
+
+        snake.move();
+        player.setInput('s');
+        snake.move();
+        assertEquals("[x:1,y:-1, x:1,y:0, x:1,y:1, x:1,y:1]",snake.getPositions().toString());
     }
 }
