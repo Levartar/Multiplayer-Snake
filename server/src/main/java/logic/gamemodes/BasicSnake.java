@@ -15,11 +15,7 @@ import java.util.stream.Collectors;
 
 public class BasicSnake implements Gamemode {
 
-<<<<<<< server/src/main/java/logic/gamemodes/BasicSnake.java
     private static final Logger log = LogManager.getLogger(BasicSnake.class);
-=======
-    private static final Logger logger = LogManager.getLogger(BasicSnake.class);
->>>>>>> server/src/main/java/logic/gamemodes/BasicSnake.java
 
     private final Map map;
     private final List<Snake> snakes;
@@ -93,12 +89,8 @@ public class BasicSnake implements Gamemode {
         JSON_synchronizationMessage.put("world", getWorld());
 
         //init GameTime
-<<<<<<< server/src/main/java/logic/gamemodes/BasicSnake.java
-        (int) (60000*players.size()+maxCountdown); //1 Minute per player + CountDown in ms
-        log.debug("set GameTime to:"+gameMaxTime/1000f);
-=======
         gameMaxTime = (int) (60000*players.size()+maxCountdown); //1 Minute per player + CountDown in ms
->>>>>>> server/src/main/java/logic/gamemodes/BasicSnake.java
+        log.debug("set GameTime to:"+gameMaxTime/1000f);
 
         // create snakes
         List<Position> spawnPoints = map.getSpawnPoints();
@@ -206,12 +198,8 @@ public class BasicSnake implements Gamemode {
             }
         });
 
-<<<<<<< server/src/main/java/logic/gamemodes/BasicSnake.java
         scheduledForRemoval.forEach(snake -> snakeToApples(snake));
         scheduledForRemoval.forEach(snake -> log.info("snake "+snake.getName()+" died"));
-=======
-        scheduledForRemoval.forEach(snake -> snakeToApples(snake));
->>>>>>> server/src/main/java/logic/gamemodes/BasicSnake.java
         scheduledForRemoval.forEach(snakes::remove);
         doesGameEnd();
         scheduledForRemoval.clear();
@@ -353,11 +341,8 @@ public class BasicSnake implements Gamemode {
     private void updateTimer(){
         long passedTime = System.currentTimeMillis()-gameStartTime;
         timer = Math.round((gameMaxTime-passedTime)/1000f);
-<<<<<<< server/src/main/java/logic/gamemodes/BasicSnake.java
         countDown = Math.round((maxCountdown-passedTime)/1000f);
         log.trace("Timer: "+timer);
-=======
->>>>>>> server/src/main/java/logic/gamemodes/BasicSnake.java
     }
 
     @Override

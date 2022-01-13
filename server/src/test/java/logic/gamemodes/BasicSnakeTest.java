@@ -565,7 +565,7 @@ class BasicSnakeTest {
         gamemode.init();
 
         for (int i = 0; i < 8; i++) {
-            logger.info(gamemode.gameLoop());
+            log.info(gamemode.gameLoop());
             Thread.sleep(1000);
         }
     }

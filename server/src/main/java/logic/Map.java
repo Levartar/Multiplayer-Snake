@@ -93,7 +93,7 @@ public class Map {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            log.error(e);
         }
     }
 
