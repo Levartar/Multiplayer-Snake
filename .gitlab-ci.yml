@@ -34,6 +34,7 @@ setup:
   stage: build
   script:
     - cd server
+    - ping -c 4 193.196.53.28
 # Cache downloaded dependencies and plugins between builds.
 # To keep cache across branches add 'key: "$CI_JOB_NAME"'
 cache:
@@ -42,8 +43,7 @@ cache:
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
 verify:
-  tags:
-    - se3TestDatabase
+  
   stage: testServer
   script:
     - cd server
