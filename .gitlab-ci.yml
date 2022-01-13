@@ -47,7 +47,7 @@ verify:
   stage: testServer
   script:
     - cd server
-     - ping -c 4 193.196.53.28
+     - ping -c 1 193.196.53.28
     - 'mvn $MAVEN_CLI_OPTS verify'
   except:
     variables:
