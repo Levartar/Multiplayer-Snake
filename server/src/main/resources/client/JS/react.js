@@ -35,9 +35,9 @@ class Create_session extends React.Component{
             fetch(request)
                 .then(response => {
                     //connect the player to the lobby
-                    //sessionID = response.toString()
-                    console.log(response)
-                    //websockets("wss://localhost:80/join/" + sessionID + "/name/" + name)
+                    sessionID = response.toString()
+                    //console.log(response)
+                    websockets("wss://localhost:80/join/" + sessionID + "/name/" + name)
                 })
                 .catch(err => console.log(err.message))
         })
@@ -49,11 +49,7 @@ class Create_session extends React.Component{
                 <div id="newGameLabelDiv">
                     <label htmlFor="buttonNewGame">Create a game</label>
                 </div>
-                <div className="flexed">
-                    <br/>
-                </div>
                 <Button text={"play"} name={"newGame"}/>
-
             </div>
         )
     }
@@ -135,19 +131,21 @@ class Main_menu extends React.Component {
     }
     render(){
         return (
-            <div className="frame">
-                <header>
-                    <img id="menuBanner" src="./assets/img.png" alt="Snake.IO banner image" />
-                </header>
+            <div className="frame" id="MainMenuDiv">
+                <img id="menuBanner" src="./assets/img.png" alt="Snake.IO banner image" />
                 <main>
-                    <div>
+                    <h1>Snake IO</h1>
+                    <div id="marginEnterName">
                         <Input name={"Name"} type={"text"} text={"Enter your name: "} maxLength={"10"}/>
                     </div>
-                    <div id="enterLobby">
+                    <div className="marginBottom">
                         <Create_session />
-                        <Join_session />
+                    </div>
+                    <div className="marginBottom">
+                        <Join_session  />
                     </div>
                 </main>
+                <PlayerScore id={"tableMainMenu"} data={player} tableHead1={"Player"} tableHead2={"Score"}/>
             </div>
         )
     }
@@ -165,7 +163,7 @@ let player = [
 function PlayerScore(props){
     return(
         <div>
-            <table>
+            <table id={props.id}>
                 <thead>
                 <tr>
                     <th >{props.tableHead1}</th>
@@ -339,7 +337,7 @@ class Game extends React.Component {
 
 //render the Main_menu when the site is opened
 ReactDOM.render(
-    <Lobby />,
+    <Main_menu />,
     document.getElementById('root')
 );
 

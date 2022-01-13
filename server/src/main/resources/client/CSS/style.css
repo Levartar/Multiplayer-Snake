@@ -22,6 +22,10 @@ h2{
     font-size: 1.5em;
     margin: 0.5em;
 }
+h1{
+    text-align: center;
+    margin: 0px;
+}
 header{
     text-align: center;
 }
@@ -31,18 +35,12 @@ label{
 }
 button{
     padding: .75em 1.25em;
-    margin: 1em;
     border-radius: 10em;
     background-color: rgb(255, 159, 80);
     color: white;
     font-size: 1em;
     letter-spacing: .15em;
     width: 8em;
-}
-main{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
 }
 label{
     font-size: 1.5rem;
@@ -51,6 +49,9 @@ label{
 .noMargin{
     margin: 0;
 }
+.marginBottom{
+    margin-bottom: 3em;
+}
 .frame{
     margin: 10%;
 }
@@ -58,10 +59,16 @@ label{
     display: flex;
     justify-content: center;
 }
+#newGameButtonDiv, #sessionIdButtonDiv, #sessionIdInputDiv{
+    text-align: center;
+}
 
 /* main menu */
 main{
-    margin: 4%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 input{
     margin-top: 1.5em;
@@ -78,8 +85,19 @@ input{
     justify-content: space-around;
     margin-top: 4%;
 }
-#name{
+#name, #sessionId{
     text-align:center;
+}
+#MainMenuDiv{
+    display: flex;
+    justify-content: space-around;
+}
+#sessionIdInputDiv{
+    margin-bottom: 1em;
+}
+#marginEnterName{
+    margin-bottom: 4em;
+    margin-top: 3.5em;
 }
 
 /* Lobby */
