@@ -41,7 +41,9 @@ cache:
     - .m2/repository
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-verify:
+verifyjob:
+  tags:
+    - se3TestDatabase
   stage: testServer
   script:
     - cd server
