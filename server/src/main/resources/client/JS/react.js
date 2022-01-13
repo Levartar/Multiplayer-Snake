@@ -113,7 +113,7 @@ class Join_session extends React.Component{
     render() {
         return(
             <div>
-                <Input name={"sessionId"} class={"flexed"} type={"text"} text={"Join a Session"} maxLength={"10"}/>
+                <Input name={"sessionId"} class={"flexed"} placeholder={"sessionID"} type={"text"} text={"Join a Session"} maxLength={"10"}/>
                 <Button text={"join"} name={"sessionId"}/>
             </div>
         )
@@ -144,12 +144,12 @@ class Main_menu extends React.Component {
                 <main>
                     <h1>Snake IO</h1>
                     <div id="marginEnterName">
-                        <Input name={"Name"} type={"text"} text={"Enter your name: "} maxLength={"10"}/>
+                        <Input name={"Name"} type={"text"} placeholder={"name"} text={"Enter your name: "} maxLength={"10"}/>
                     </div>
                     <div className="marginBottom">
                         <Create_session />
                     </div>
-                    <div className="marginBottom">
+                    <div>
                         <Join_session  />
                     </div>
                 </main>
@@ -345,7 +345,7 @@ class Game extends React.Component {
 
 //render the Main_menu when the site is opened
 ReactDOM.render(
-    <Main_menu />,
+    <Lobby />,
     document.getElementById('root')
 );
 

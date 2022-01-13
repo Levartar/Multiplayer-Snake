@@ -22,6 +22,12 @@ h2{
     font-size: 1.5em;
     margin: 0.5em;
 }
+h1{
+    text-align: center;
+    margin: 0px;
+    font-size: 3em;
+    line-height: 0.8em;
+}
 header{
     text-align: center;
 }
@@ -30,14 +36,19 @@ label{
     margin-bottom: 0.5em;
 }
 button{
-    padding: .75em 1.25em;
-    margin: 1em;
+    padding: .5em;
     border-radius: 10em;
     background-color: rgb(255, 159, 80);
     color: white;
-    font-size: 1em;
+    font-size: 1.2em;
     letter-spacing: .15em;
     width: 8em;
+    border: none;
+    box-shadow: 0 0 0.5em #6c6c6c;
+}
+button:active{
+    background-color: rgb(218 136 69);
+    transform: translateY(0.2em);
 }
 main{
     display: flex;
@@ -64,10 +75,19 @@ main{
     margin: 4%;
 }
 input{
-    margin-top: 1.5em;
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding: .25em;
+    font-size: large;
+    width: 10em;
+    border-radius: .3em;
+    text-align: center;
+}
+.centered{
+    text-align: center;
 }
 #newGameLabelDiv{
-    margin-bottom: 1.5em;
+    margin-bottom: 3.5em;
 }
 #menuBanner{
     width: 20%;
@@ -102,6 +122,12 @@ ul{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    text-align: center;
+    width: 12em;
+}
+#playerTable{
+    width: 12em;
+    align-items: center;
 }
 #mapSelector{
     display: flex;
@@ -115,6 +141,7 @@ ul{
 #lobbyHeadlineDIV{
     display: flex;
     justify-content: center;
+    padding: 0.8em;
 }
 #lobbyHeadline{
     font-size: 3em;
@@ -122,6 +149,9 @@ ul{
 #lobbyHeadlineDIV, #lobby, #startGameDIV{
     margin-left: 4%;
     margin-right: 4%;
+}
+#buttonexitLobby, #buttonexitGame{
+    width: 5.5em;
 }
 
 /* Player */
@@ -141,6 +171,13 @@ ul{
 /* map */
 #mapCanvas{
     background: white;
+}
+#drawGrid{
+    margin-right: 2em;
+    margin-top: 2em;
+}
+#drawWorld{
+    margin-top: 2em;
 }
 
 /* tables */
