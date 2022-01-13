@@ -58,7 +58,7 @@ verifyNetworking:
   stage: networking
   script: 
     - cd server
-    - 'mvn -Dtest=networking test'
+    - 'mvn -Dtest=SnakeServerTest test'
 
 
 verifyDatabase:
