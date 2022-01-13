@@ -283,8 +283,7 @@ public class BasicSnake implements Gamemode {
 
     @Override
     public String toString() {
-        // convert map string to list
-        List<String> lines = map.toString().lines().collect(Collectors.toList());
+        Material[][] tmp = map.getMap();
 
         // add snakes
         snakes.forEach(snake -> {
@@ -292,28 +291,24 @@ public class BasicSnake implements Gamemode {
             snake.getPositions().forEach(position -> {
                 int x = position.getX();
                 int y = position.getY();
-                String line = lines.get(y);
 
-                char insert;
                 // if the current position is the head -> write H
                 if (position == head) {
-                    insert = 'H';
+                    tmp[x][y] = Material.SNAKEHEAD;
                     // if the current position is at the position of the head -> don't override the head symbol
                 } else if (position.equals(head)) {
                     return;
                 } else {
-                    insert = Material.SNAKE.getSymbol();
+                    tmp[x][y] = Material.SNAKE;
                 }
-
-                line = line.substring(0, x) + insert + line.substring(x + 1);
-                lines.set(y, line);
             });
         });
-
         StringBuilder result = new StringBuilder();
-        for (String line :
-                lines) {
-            result.append(line).append('\n');
+        for (int y = 0; y < tmp[0].length; y++) {
+            for (int x = 0; x < tmp.length; x++) {
+                result.append(tmp[x][y].toString());
+            }
+            result.append("\n");
         }
         result.deleteCharAt(result.length() - 1);
         return result.toString();

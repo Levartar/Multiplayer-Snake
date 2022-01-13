@@ -144,6 +144,36 @@ class BasicSnakeTest {
     }
 
     @Test
+    void testSpawnAndMove() throws GameOverException, GameNotInitializedException {
+        Map map = new Map("""
+                #####
+                #   #
+                #  s#
+                #   #
+                #   #
+                #   #
+                #   #
+                #####""");
+        Player player = new Player();
+        List<Player> players = new ArrayList<>(1);
+        players.add(player);
+        player.setInput('w');
+        Gamemode gamemode = new BasicSnake(players, map);
+
+        gamemode.init();
+        String expected = """
+                #####
+                #   #
+                #  H#
+                #   #
+                #   #
+                #   #
+                #   #
+                #####""";
+        assertEquals(expected, gamemode.toString());
+    }
+
+    @Test
     void testBigMapSpawnsAndMove() throws IOException, GameOverException, GameNotInitializedException {
         Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
 

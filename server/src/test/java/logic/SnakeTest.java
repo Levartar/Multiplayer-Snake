@@ -79,23 +79,24 @@ class SnakeTest {
     @Test
     void complexMoveSnake(){
         List<Position> testPositions = new ArrayList<>();
-        testPositions.add(new Position(3,-1));
-        testPositions.add(new Position(3,0));
-        testPositions.add(new Position(2,0));
-        testPositions.add(new Position(2,1));
+        testPositions.add(new Position(4,2));
+        testPositions.add(new Position(4,1));
+        testPositions.add(new Position(3,1));
+        testPositions.add(new Position(3,2));
 
         Player testPlayer = new Player();
 
-        Snake testSnake = new Snake(new Position(1,1), 4, testPlayer);
+        Snake testSnake = new Snake(new Position(2,2), 4, testPlayer);
 
+        // head = (2, 2)
         testPlayer.setInput('d');
-        testSnake.move();
+        testSnake.move(); // head = (3, 2)
         testPlayer.setInput('w');
-        testSnake.move();
+        testSnake.move(); // head = (3, 1)
         testPlayer.setInput('d');
-        testSnake.move();
-        testPlayer.setInput('w');
-        testSnake.move();
+        testSnake.move(); // head = (4, 1)
+        testPlayer.setInput('s');
+        testSnake.move(); // head = (4, 2)
 
         assertEquals(testPositions, testSnake.getPositions());
     }

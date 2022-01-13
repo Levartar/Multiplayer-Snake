@@ -4,6 +4,7 @@ public enum Material {
     WALL('#'),
     FREESPACE(' '),
     APPLE('@'),
+    SNAKEHEAD('H'),
     SNAKE('o'),
     SPAWN('s');
 
