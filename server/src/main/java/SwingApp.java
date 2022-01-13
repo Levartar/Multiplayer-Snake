@@ -34,7 +34,7 @@ public class SwingApp extends JFrame implements KeyListener {
         sninit();
         countdown(3);
         while (!gameOver) {
-            Thread.sleep(1000);
+            Thread.sleep(500);
             update();
             render();
         }
@@ -67,12 +67,12 @@ public class SwingApp extends JFrame implements KeyListener {
                 #                                  #
                 #                                  #
                 #                                  #
-                #        @                         #
+                #                                  #
+                #          @                 s     #
                 #                                  #
                 #                                  #
                 #                                  #
-                #                                  #
-                #            s       s             #
+                #            s   @   s             #
                 #                                  #
                 #                                  #
                 #                                  #

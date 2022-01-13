@@ -30,11 +30,11 @@ class PositionTest {
             assertEquals(expected, actual);
 
             actual.add(Direction.down);
-            expected = new Position(2, 0);
+            expected = new Position(2, 2);
             assertEquals(expected, actual);
 
             actual.add(Direction.left);
-            expected = new Position(1, 0);
+            expected = new Position(1, 2);
             assertEquals(expected, actual);
 
             actual.add(Direction.up);
