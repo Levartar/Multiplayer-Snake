@@ -1,6 +1,8 @@
 package logic;
 
 import helpers.ResourceManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -8,6 +10,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MapTest {
+    private static final Logger log = LogManager.getLogger(MapTest.class);
 
     @Test
     void getMaterialAt() {
@@ -60,10 +63,11 @@ class MapTest {
                 #####""";
         Map squareMap = new Map(testMap);
         assertEquals(squareMap.toString(), testMap);
+        log.info("Test "+"loadMap" +" passed");
     }
 
     @Test
-    void get() {
+    void getMap() {
         String testMap = """
                 #####
                 #   #
@@ -75,6 +79,7 @@ class MapTest {
         assertEquals(Material.FREESPACE, squareMap.getMaterialAt(new Position(1, 1)));
         assertEquals(Material.APPLE, squareMap.getMaterialAt(new Position(2, 2)));
         assertEquals(Material.WALL, squareMap.getMaterialAt(new Position(4, 3)));
+        log.info("Test "+"getMap" +" passed");
     }
 
     @Test
@@ -92,6 +97,7 @@ class MapTest {
                 #####""";
         Map squareMap = new Map(testMap);
         assertEquals(squareMap.toString(),testMap);
+        log.info("Test "+"testToString" +" passed");
     }
 
     @Test
@@ -111,6 +117,7 @@ class MapTest {
                 #   #
                 #####""";
         assertEquals(squareMap.toString(),testMap);
+        log.info("Test "+"testToStringUpdate" +" passed");
     }
 
     @Test
@@ -131,6 +138,7 @@ class MapTest {
                 # @ #
                 @####""";
         assertEquals(squareMap.toString(),testMap);
+        log.info("Test "+"testToStringUpdate2" +" passed");
     }
 
     @Test
@@ -142,6 +150,7 @@ class MapTest {
                 #   #
                 #####""";
         Map map = new Map(mapString);
+        log.info("Test "+"testMapConstructor" +" passed");
     }
 
     @Test
@@ -151,6 +160,7 @@ class MapTest {
         assertTrue(map.getSpawnPoints().contains(new Position(35,15)));
         assertTrue(map.getSpawnPoints().contains(new Position(15,35)));
         assertTrue(map.getSpawnPoints().contains(new Position(15,15)));
+        log.info("Test "+"testSpawnPoints" +" passed");
     }
 
 }

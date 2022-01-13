@@ -8,7 +8,8 @@ import java.util.List;
 
 public class Snake {
 
-    private static final Logger logger = LogManager.getLogger(Snake.class);
+    private static final Logger log = LogManager.getLogger(Snake.class);
+
     private final Player player;
     private List<Position> positions;
     private Direction direction = Direction.up;
@@ -16,6 +17,7 @@ public class Snake {
     public Snake(Position spawn, int length, Player player) {
         this.player = player;
         createSnakeOnSpawn(spawn, length);
+        log.debug("snake \""+ player.getName() + "\" created");
     }
 
     private void createSnakeOnSpawn(Position spawn, int length) {
@@ -41,7 +43,9 @@ public class Snake {
         updateDirection();
 
         // move head
-        positions.get(0).add(direction);
+        Position head = positions.get(0);
+        head.add(direction);
+        log.trace("snake \""+ player.getName() + "\" moved to "+ head);
     }
 
     private void updateDirection() {
@@ -88,6 +92,7 @@ public class Snake {
         for (int i = 0; i < count; i++) {
             positions.add(new Position(lastPosition));
         }
+        log.trace("snake \""+ player.getName() + "\" grew by "+ count );
     }
 
     public int length() {

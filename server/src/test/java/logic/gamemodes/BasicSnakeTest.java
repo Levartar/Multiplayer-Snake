@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BasicSnakeTest {
 
-    private static final Logger logger = LogManager.getLogger(BasicSnakeTest.class);
+    private static final Logger log = LogManager.getLogger(BasicSnakeTest.class);
 
     List<Player> players = new ArrayList<>();
     String[] names = {"alpha", "beta", "gamma", "delta"};
@@ -62,6 +62,7 @@ class BasicSnakeTest {
                 #   #
                 #####""";
         Assertions.assertEquals(expected, gamemode.toString());
+        log.info("Test "+"testToString" +" passed");
     }
 
     /**
@@ -91,6 +92,7 @@ class BasicSnakeTest {
                 #   #
                 #####""";
         Assertions.assertEquals(expected, gamemode.toString());
+        log.debug("\n"+gamemode.toString());
 
         _players.get(0).setInput('w');
         gamemode.gameLoop();
@@ -101,6 +103,7 @@ class BasicSnakeTest {
                 #   #
                 #####""";
         Assertions.assertEquals(expected, gamemode.toString());
+        log.debug("\n"+gamemode.toString());
 
         _players.get(0).setInput('a');
         gamemode.gameLoop();
@@ -111,6 +114,7 @@ class BasicSnakeTest {
                 #   #
                 #####""";
         Assertions.assertEquals(expected, gamemode.toString());
+        log.debug("\n"+gamemode.toString());
 
         _players.get(0).setInput('s');
         gamemode.gameLoop();
@@ -121,6 +125,7 @@ class BasicSnakeTest {
                 #   #
                 #####""";
         Assertions.assertEquals(expected, gamemode.toString());
+        log.debug("\n"+gamemode.toString());
 
         _players.get(0).setInput('s');
         gamemode.gameLoop();
@@ -131,6 +136,7 @@ class BasicSnakeTest {
                 #H  #
                 #####""";
         Assertions.assertEquals(expected, gamemode.toString());
+        log.debug("\n"+gamemode.toString());
 
         _players.get(0).setInput('d');
         gamemode.gameLoop();
@@ -141,6 +147,8 @@ class BasicSnakeTest {
                 #oH #
                 #####""";
         Assertions.assertEquals(expected, gamemode.toString());
+        log.debug("\n"+gamemode.toString());
+        log.info("Test "+"testMoveSnake" +" passed");
     }
 
     @Test
@@ -240,6 +248,7 @@ class BasicSnakeTest {
                 ####################################################""";
 
         assertEquals(expected, gamemode.toString());
+        log.info("Test "+"testBigMapSpawnsAndMove" +" passed");
     }
 
     @Test
@@ -252,6 +261,7 @@ class BasicSnakeTest {
                 #####
                 """;
         Map map = new Map(mapString);
+
 
         List<Player> _players = new ArrayList<>();
         Player player = new Player();
@@ -272,6 +282,7 @@ class BasicSnakeTest {
         Assertions.assertNotEquals(expected, gamemode.toString());
         gamemode.gameLoop();
         Assertions.assertEquals(expected, gamemode.toString());
+        log.info("Test "+"testSnakeCollidesWithWall" +" passed");
     }
 
     @Test
@@ -289,10 +300,9 @@ class BasicSnakeTest {
         gamemode.gameLoop();
         players.forEach(player -> player.setInput('d'));
         gamemode.gameLoop();
-        logger.info("\n" + gamemode);
-        logger.info("\n" + basicMap50x50);
 
         assertEquals(basicMap50x50.toString(), gamemode.toString());
+        log.info("Test "+"testSnakeCollidesWithItself" +" passed");
     }
 
     @Test
@@ -325,6 +335,8 @@ class BasicSnakeTest {
         assertNotEquals(expected, gamemode.toString());
         gamemode.gameLoop();
         assertEquals(expected, gamemode.toString());
+
+        log.info("Test "+"testSnakeCollidesWithOtherSnake" +" passed");
     }
 
     @Test
@@ -355,6 +367,7 @@ class BasicSnakeTest {
 
         for (int i = 0; i < 6; i++) {
             gamemode.gameLoop();
+            log.debug("\n"+gamemode.toString());
         }
         assertEquals(expected, gamemode.toString());
 
@@ -366,7 +379,8 @@ class BasicSnakeTest {
                 ############""";
         gamemode.gameLoop();
         assertEquals(expected, gamemode.toString());
-
+        log.debug("\n"+gamemode.toString());
+        log.info("Test "+"testSnakeCollidesWithApple" +" passed");
     }
 
     @Test
@@ -378,11 +392,15 @@ class BasicSnakeTest {
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
         gamemode.init();
 
-        for (int i = 0; i < 5; i++) {
-            players.forEach(player -> player.setInput(getRandomInput()));
-            gamemode.gameLoop();
+        try{
+            for (int i = 0; i < 5; i++) {
+                players.forEach(player -> player.setInput(getRandomInput()));
+                gamemode.gameLoop();
+            }
+        }catch (Exception e){
+
         }
-        logger.info("\n" + gamemode);
+        log.info("Test "+"testBigMapSpawnsMoveRandomAndDie" +" passed");
     }
 
     @Test
@@ -426,6 +444,7 @@ class BasicSnakeTest {
         for (int i = 0; i < 8; i++) {
             assertEquals(expected[i], actual[i]);
         }
+        log.info("Test "+"testSynchronizationMessage" +" passed");
     }
 
     @Test
@@ -450,6 +469,7 @@ class BasicSnakeTest {
 
         for (int i = 0; i < 7; i++) {
             gamemode.gameLoop();
+            log.debug("\n"+gamemode);
         }
         String endString = """
                 ##########
@@ -458,7 +478,7 @@ class BasicSnakeTest {
                 #        #
                 ##########""";
         assertEquals(endString,gamemode.toString());
-
+        log.info("Test "+"testGameEndingConditions" +" passed");
     }
 
     @Test
@@ -487,9 +507,10 @@ class BasicSnakeTest {
             gamemode.gameLoop();
             Thread.sleep(1000);
             assertEquals(60-i,gamemode.getTimer());
+            log.debug("Timer: "+gamemode.getTimer());
         }
 
-
+        log.info("Test "+"testTimer" +" passed");
     }
 
     @Test
@@ -520,7 +541,7 @@ class BasicSnakeTest {
         } catch (GameNotInitializedException e) {
             fail(e.getMessage());
         } catch (GameOverException e) {
-
+            log.info("Test "+"testGameOverException" +" passed");
         }
     }
 
@@ -544,7 +565,7 @@ class BasicSnakeTest {
         gamemode.init();
 
         for (int i = 0; i < 8; i++) {
-            logger.info(gamemode.gameLoop());
+            log.info(gamemode.gameLoop());
             Thread.sleep(1000);
         }
     }

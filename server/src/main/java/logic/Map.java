@@ -11,7 +11,8 @@ import java.util.*;
 
 public class Map {
 
-    private static final Logger logger = LogManager.getLogger(Map.class);
+    private static final Logger log = LogManager.getLogger(Map.class);
+
     private Material[][] map;
     private List<Position> spawnPoints = new ArrayList<>();
     private String mapString;
@@ -22,24 +23,28 @@ public class Map {
         this.mapString = mapString;
         parseMapString(mapString);
         updateMapString();
-        generateRandomSortedSpawns();
+        shuffleSpawnPoints();
+        log.debug("Map created: \n" +mapString);
     }
 
     public Map(Path mapPath) throws IOException {
         this.mapString = Files.readString(mapPath, StandardCharsets.UTF_8);
         parseMapString(mapString);
         updateMapString();
-        generateRandomSortedSpawns();
+        shuffleSpawnPoints();
+        log.debug("Map from "+mapPath+" created: \n" +mapString);
     }
 
     public void changeMaterial(Position pos, Material material) {
         map[pos.getX()][pos.getY()] = material;
         updateMapString();
+        log.debug("Material changed:"+ pos+" -> "+ material );
     }
 
     public void changeMaterial(int x, int y, Material material) {
         map[x][y] = material;
         updateMapString();
+        log.debug("Material changed:"+ "x:" + x + "," + "y:" + y+" -> "+ material );
     }
 
     public Material[][] getMap() { //maybe useless
@@ -60,7 +65,7 @@ public class Map {
         return map[x][y];
     }
 
-    private void generateRandomSortedSpawns() {
+    private void shuffleSpawnPoints() {
         Collections.shuffle(spawnPoints);
     }
 
@@ -88,7 +93,7 @@ public class Map {
                 }
             }
         } catch (Exception e) {
-            logger.error(e);
+            log.error(e);
         }
     }
 
@@ -96,7 +101,6 @@ public class Map {
     private String parseString(String str) {
         return str.replace("\r","");
     }
-
 
     @Override
     public String toString() {
