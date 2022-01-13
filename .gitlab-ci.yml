@@ -59,7 +59,7 @@ verifyNetworking:
   stage: networking
   script: 
     - cd server
-    - mvn test
+    - mvn -Dtest=Sample test
 
 verifyDatabase:
   stage: database
