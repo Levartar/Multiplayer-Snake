@@ -45,6 +45,13 @@ cache:
     - .m2/repository
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
+
+verifyNetworking:
+  stage: networking
+  script: 
+    - cd server
+    - mvn surefire:test -Dtest=sample
+
 verifyLogic:
   stage: logic 
   script:
@@ -53,12 +60,6 @@ verifyLogic:
   except:
     variables:
       - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-verifyNetworking:
-  stage: networking
-  script: 
-    - cd server
-    - 'mvn -Dtest=SnakeServerTest test'
 
 
 verifyDatabase:
