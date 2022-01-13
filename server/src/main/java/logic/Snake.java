@@ -12,7 +12,6 @@ public class Snake {
     private final Player player;
     private List<Position> positions;
     private Direction direction = Direction.up;
-    private Direction lastDirection= Direction.up;
 
     public Snake(Position spawn, int length, Player player) {
         this.player = player;
@@ -51,19 +50,18 @@ public class Snake {
         if (newDirection != null) {
         switch (newDirection) {
             case up -> {
-                if (lastDirection == Direction.down) newDirection = Direction.down;
+                if (this.direction == Direction.down) newDirection = Direction.down;
             }
             case left -> {
-                if (lastDirection == Direction.right) newDirection = Direction.right;
+                if (this.direction == Direction.right) newDirection = Direction.right;
             }
             case down -> {
-                if (lastDirection == Direction.up)newDirection = Direction.up;
+                if (this.direction == Direction.up)newDirection = Direction.up;
             }
             case right -> {
-                if (lastDirection == Direction.left) newDirection = Direction.left;
+                if (this.direction == Direction.left) newDirection = Direction.left;
             }
         }
-            lastDirection = this.direction;
             this.direction = newDirection;
         }
     }
