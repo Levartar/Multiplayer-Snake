@@ -41,7 +41,7 @@ public class SwingApp extends JFrame implements KeyListener {
     }
 
     private void swinit() {
-        setBounds(0, 0, 1000, 600);
+        setBounds(0, 0, 1000, 650);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         textPane = new JTextPane();
         textPane.setBackground(Color.BLACK);
