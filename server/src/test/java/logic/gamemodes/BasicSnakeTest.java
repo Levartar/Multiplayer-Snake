@@ -270,8 +270,6 @@ class BasicSnakeTest {
         gamemode.gameLoop();
         players.forEach(player -> player.setInput('d'));
         gamemode.gameLoop();
-        log.info("\n" + gamemode);
-        log.info("\n" + basicMap50x50);
 
         assertEquals(basicMap50x50.toString(), gamemode.toString());
         log.info("Test "+"testSnakeCollidesWithItself" +" passed");

@@ -39,10 +39,7 @@ public class BasicSnake implements Gamemode {
         this.players = players;
         this.map = map;
         snakes = new ArrayList<>();
-        log.info("BasicSnake created\n"
-                +"players:");
-        players.forEach(player -> log.info(player.getName()));
-        log.info("map:\n"+map);
+        log.info("BasicSnake created\n"+this);
     }
 
     private JSONObject getWorld() {
