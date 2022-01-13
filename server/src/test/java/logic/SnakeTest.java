@@ -1,5 +1,7 @@
 package logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SnakeTest {
+    private static final Logger log = LogManager.getLogger(SnakeTest.class);
 
     @Test
     void getPositions() {
@@ -28,6 +31,7 @@ class SnakeTest {
         for (int i = 0; i < snake.getPositions().size() - 1; i++) {
             assertNotSame(snake.getPositions().get(i), snake.getPositions().get(i + 1));
         }
+        log.info("Test "+"getPositions" +" passed");
     }
 
     @Test
@@ -47,6 +51,7 @@ class SnakeTest {
         for (int i = 0; i < testSnake.getPositions().size() - 1; i++) {
             assertNotSame(testSnake.getPositions().get(i), testSnake.getPositions().get(i + 1));
         }
+        log.info("Test "+"moveHead" +" passed");
     }
 
     @Test
@@ -70,6 +75,7 @@ class SnakeTest {
         for (int i = 0; i < testSnake.getPositions().size() - 1; i++) {
             assertNotSame(testSnake.getPositions().get(i), testSnake.getPositions().get(i + 1));
         }
+        log.info("Test "+"moveSnake" +" passed");
     }
 
     @Test
@@ -94,6 +100,7 @@ class SnakeTest {
         testSnake.move();
 
         assertEquals(testPositions, testSnake.getPositions());
+        log.info("Test "+"complexMoveSnake" +" passed");
     }
 
     @Test
@@ -115,5 +122,6 @@ class SnakeTest {
             expected.add(new Position(1, 1));
         }
         assertEquals(expected, snake.getPositions());
+        log.info("Test "+"grow" +" passed");
     }
 }

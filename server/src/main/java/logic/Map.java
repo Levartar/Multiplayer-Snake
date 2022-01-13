@@ -1,5 +1,8 @@
 package logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -7,6 +10,8 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class Map {
+
+    private static final Logger log = LogManager.getLogger(Map.class);
 
     private Material[][] map;
     private List<Position> spawnPoints = new ArrayList<>();
@@ -18,24 +23,28 @@ public class Map {
         this.mapString = mapString;
         parseMapString(mapString);
         updateMapString();
-        generateRandomSortedSpawns();
+        shuffleSpawnPoints();
+        log.debug("Map created: \n" +mapString);
     }
 
     public Map(Path mapPath) throws IOException {
         this.mapString = Files.readString(mapPath, StandardCharsets.UTF_8);
         parseMapString(mapString);
         updateMapString();
-        generateRandomSortedSpawns();
+        shuffleSpawnPoints();
+        log.debug("Map from "+mapPath+" created: \n" +mapString);
     }
 
     public void changeMaterial(Position pos, Material material) {
         map[pos.getX()][pos.getY()] = material;
         updateMapString();
+        log.debug("Material changed:"+ pos+" -> "+ material );
     }
 
     public void changeMaterial(int x, int y, Material material) {
         map[x][y] = material;
         updateMapString();
+        log.debug("Material changed:"+ "x:" + x + "," + "y:" + y+" -> "+ material );
     }
 
     public Material[][] getMap() { //maybe useless
@@ -50,16 +59,7 @@ public class Map {
         return map[x][y];
     }
 
-    private void generateRandomSortedSpawns() {
-//        Position spawnUpLeft = new Position(spawnDistanceX,getHeight() - spawnDistanceY);
-//        Position spawnUpRight = new Position(getWidth() - spawnDistanceX,getHeight() - spawnDistanceY);
-//        Position spawnDownLeft = new Position(spawnDistanceX,spawnDistanceY);
-//        Position spawnDownRight = new Position(getWidth() - spawnDistanceX,spawnDistanceY);
-//
-//        spawnPoints.add(spawnUpLeft);
-//        spawnPoints.add(spawnUpRight);
-//        spawnPoints.add(spawnDownLeft);
-//        spawnPoints.add(spawnDownRight);
+    private void shuffleSpawnPoints() {
         Collections.shuffle(spawnPoints);
     }
 
@@ -86,17 +86,6 @@ public class Map {
     private String parseString(String str) {
         return str.replace("\r","");
     }
-
-    //public Position getSpawn() {
-    //    Position newSpawn = spawnPoints.get(0);
-    //    while (spawnPoints.contains(newSpawn)/*&&Positions.get(newSpawn)!=Material.WALL*/){
-    //        Random rand = new Random();
-    //        //10 is max steps. Could lead to Map out of bounds Problems
-    //        newSpawn = new Position(spawnPoints.get(0).x+rand.nextInt(10)*spawnPointWidth,spawnPoints.get(0).y+rand.nextInt(10)*spawnPointHeight);
-    //    }
-    //    spawnPoints.add(newSpawn);
-    //    return newSpawn;
-    //}
 
     @Override
     public String toString() {

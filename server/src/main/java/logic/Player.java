@@ -1,6 +1,12 @@
 package logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Player {
+
+    private static final Logger log = LogManager.getLogger(Player.class);
+
     private String name;
     private char input;
     private String color;
@@ -9,10 +15,13 @@ public class Player {
     }
 
     public Player(String name) {
+        log.trace("player"+ name+ " created");
         this.name = name;
+
     }
 
     public void setName(String name) {
+        log.trace("player " + this.name + " changed name to " + name);
         this.name = name;
     }
 
@@ -29,7 +38,7 @@ public class Player {
     }
 
     public void setInput(char input){
-        switch (input) {
+        /*switch (input) {
             case 'w' -> {
                 if (this.input != 's') this.input = 'w';
             }
@@ -42,7 +51,9 @@ public class Player {
             case 'd' -> {
                 if (this.input != 'a') this.input = 'd';
             }
-        }
+        }*/
+        this.input = input;
+        log.debug("player "+name+ " set input to "+ input );
     }
 
 
