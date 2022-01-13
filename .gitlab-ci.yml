@@ -50,7 +50,7 @@ verifyNetworking:
   stage: networking
   script: 
     - cd server
-    - mvn surefire:test -Dtest=sample
+    - mvn surefire:test -Dtest=Sample
 
 verifyLogic:
   stage: logic 
