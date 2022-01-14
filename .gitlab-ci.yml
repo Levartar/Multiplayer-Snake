@@ -44,7 +44,7 @@ verifyDatabase:
     - Database
   script:
     - cd server
-    - mvn verify
+    - mvn -X verify
 
 
 
