@@ -28,27 +28,25 @@ public class SQLConnection {
         DBUser = System.getenv("DBUserName");
         DBUserPW = System.getenv("DBUserPassword");
         DBIP = System.getenv("Server_IP");
-        SSHPrivatKey = System.getenv("SSH_PRIVATE_KEY");
-        log.info(SSHPrivatKey);
+        SSHPrivatKey = "";
     }
 
     public static void connectToServer(String dataBaseName) {
         setLoginDetails();
-        connectSSH();
+      //  connectSSH(); Because git Runner is now on the same server as database
         connectToDataBase(dataBaseName);
         log.info("Successfully connected to Database: " + dataBaseName);
     }
 
 
     public static void main(String[] args) {
+        //  setLoginDetails();
+        //  System.out.println(DBIP + DBUser + DBUserPW + SSHPrivatKey);
+       //  connectSSH();
 
         String name = "Jens";
         int highscore = 99;
-
-      //  SQLConnection.InsertSnakeHighscore(name,highscore);
-
-
-      //  String name = "Niko";
+        SQLConnection.InsertSnakeHighscore(name, highscore);
 
         try {
             ResultSet resultSet = SQLConnection.executeMyQuery("Select highscore from highscores where Name = '" + name + "';", "testdb");
@@ -57,9 +55,9 @@ public class SQLConnection {
             }
         } catch (SQLException e) {
             log.info(e);
-        }
-        SQLConnection.closeConnections();
+            SQLConnection.closeConnections();
 
+        }
     }
 
     private static void connectSSH() {
@@ -67,11 +65,9 @@ public class SQLConnection {
         String sshHost = DBIP;
         String sshuser = "root";
 
-
-        int localPort = 8000; // any free port can be used
+        int localPort = 8740; // any free port can be used
         String remoteHost = DBIP;
         int remotePort = 3306;
-
 
         try {
             java.util.Properties config = new java.util.Properties();
@@ -163,7 +159,8 @@ public class SQLConnection {
             return false;
         }
     }
-    public static boolean deleteHighscore(String name, String dataBaseName){
+
+    public static boolean deleteHighscore(String name, String dataBaseName) {
         String delete = "delete from `highscores` where `name` ='" + name + "';";
         try {
             connectToServer(dataBaseName);
