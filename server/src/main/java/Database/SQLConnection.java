@@ -2,6 +2,8 @@ package Database;
 
 import java.sql.*;
 
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,59 +20,64 @@ public class SQLConnection {
     private static Connection connection = null;
     private static String DBUser;
     private static String DBUserPW;
-  //  private static String DBIP;
-  //  private static String SSHPrivatKey;
+    private static String DBIP;
+    private static String SSHPrivatKey;
+    static Session session;
 
     public static void setLoginDetails() {
-        DBUser = System.getenv("DBUserName");
-        DBUserPW = System.getenv("DBUserPassword");
-  //      DBIP = System.getenv("Server_IP");
-  //      SSHPrivatKey = "";
+        DBUser = System.getenv("DBUser");
+        DBUserPW = System.getenv("DBUserPW");
+        DBIP = System.getenv("Server_IP");
+      //  SSHPrivatKey = "C:\\Users\\nikoh\\.ssh\\id_rsa";
     }
 
     public static void connectToServer(String dataBaseName) {
         setLoginDetails();
-      //  connectSSH(); Because git Runner is now on the same server as database
+       // connectSSH(); //Because git Runner is now on the same server as database
         connectToDataBase(dataBaseName);
         log.info("Successfully connected to Database: " + dataBaseName);
     }
 
 
     public static void main(String[] args) {
-        //  setLoginDetails();
-        //  System.out.println(DBIP + DBUser + DBUserPW + SSHPrivatKey);
-       //  connectSSH();
-
         String name = "Jens";
-        int highscore = 99;
-        SQLConnection.InsertSnakeHighscore(name, highscore);
-
+        String returnString = "";
         try {
             ResultSet resultSet = SQLConnection.executeMyQuery("Select highscore from highscores where Name = '" + name + "';", "testdb");
             while (resultSet.next()) {
-                System.out.println(resultSet.getString(1));
+                returnString = resultSet.getString(1);
             }
         } catch (SQLException e) {
             log.info(e);
-            SQLConnection.closeConnections();
-
         }
+        SQLConnection.closeConnections();
+        System.out.println(returnString);
+
     }
-    /*
+    public static void closeConnections() {
+        CloseDataBaseConnection();
+        CloseSSHConnection();
+        log.info("Successfully disconnected from Database: ");
+    }
+
     private static void connectSSH() {
 
-        String sshHost = DBIP;
+        String sshHost = System.getenv("Server_IP");
         String sshuser = "root";
+        String SshKeyFilepath = "";
 
-        int localPort = 8740; // any free port can be used
-        String remoteHost = DBIP;
+        int localPort = 8741; // any free port can be used
+        String remoteHost = "127.0.0.1";
         int remotePort = 3306;
+        String localSSHUrl = "localhost";
+        /***************/
+        String driverName = "com.mysql.jdbc.Driver";
 
         try {
             java.util.Properties config = new java.util.Properties();
             JSch jsch = new JSch();
             session = jsch.getSession(sshuser, sshHost, 22);
-            jsch.addIdentity(SSHPrivatKey);
+            jsch.addIdentity(SshKeyFilepath);
             config.put("StrictHostKeyChecking", "no");
             config.put("ConnectionAttempts", "3");
             session.setConfig(config);
@@ -87,21 +94,25 @@ public class SQLConnection {
             e.printStackTrace();
         }
     }
-    */
-    private static void connectToDataBase(String dataBaseName) {
 
-        int localPort = 8000; // any free port can be used
-        String localSSHUrl = "127.0.0.1";
+    private static void connectToDataBase(String dataBaseName) {
+        String dbuserName = System.getenv("DBUser");
+        System.out.println(dbuserName);
+        String dbpassword = System.getenv("DBUserPW");
+        int localPort = 8740; // any free port can be used
+        String localSSHUrl = "localhost";
         try {
+
             //mysql database connectivity
             MysqlDataSource dataSource = new MysqlDataSource();
             dataSource.setServerName(localSSHUrl);
             dataSource.setPortNumber(localPort);
-            dataSource.setUser(DBUser);
+            dataSource.setUser(dbuserName);
             dataSource.setAllowMultiQueries(true);
 
-            dataSource.setPassword(DBUserPW);
+            dataSource.setPassword(dbpassword);
             dataSource.setDatabaseName(dataBaseName);
+
             connection = dataSource.getConnection();
 
             System.out.print("Connection to server successful!:" + connection + "\n\n");
@@ -111,11 +122,7 @@ public class SQLConnection {
     }
 
 
-    public static void closeConnections() {
-        CloseDataBaseConnection();
-      //  CloseSSHConnection();
-        log.info("Successfully disconnected from Database: ");
-    }
+
 
     private static void CloseDataBaseConnection() {
         try {
@@ -129,12 +136,13 @@ public class SQLConnection {
 
     }
 
-   // private static void CloseSSHConnection() {
-   //     if (session != null && session.isConnected()) {
-   //         log.info("Closing SSH Connection");
-   //         session.disconnect();
-   //     }
-   // }
+    private static void CloseSSHConnection() {
+
+        if (session != null && session.isConnected()) {
+            log.info("Closing SSH Connection");
+            session.disconnect();
+        }
+    }
 
     public static boolean InsertSnakeHighscore(String name, int highscore) {
         String statement = "INSERT IGNORE INTO `highscores` SET `id` = NULL," +
