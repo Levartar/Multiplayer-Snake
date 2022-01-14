@@ -2,8 +2,6 @@ package Database;
 
 import java.sql.*;
 
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,17 +16,16 @@ public class SQLConnection {
 
 
     private static Connection connection = null;
-    private static Session session = null;
     private static String DBUser;
     private static String DBUserPW;
-    private static String DBIP;
-    private static String SSHPrivatKey;
+  //  private static String DBIP;
+  //  private static String SSHPrivatKey;
 
     public static void setLoginDetails() {
         DBUser = System.getenv("DBUserName");
         DBUserPW = System.getenv("DBUserPassword");
-        DBIP = System.getenv("Server_IP");
-        SSHPrivatKey = "";
+  //      DBIP = System.getenv("Server_IP");
+  //      SSHPrivatKey = "";
     }
 
     public static void connectToServer(String dataBaseName) {
@@ -59,7 +56,7 @@ public class SQLConnection {
 
         }
     }
-
+    /*
     private static void connectSSH() {
 
         String sshHost = DBIP;
@@ -90,7 +87,7 @@ public class SQLConnection {
             e.printStackTrace();
         }
     }
-
+    */
     private static void connectToDataBase(String dataBaseName) {
 
         int localPort = 8000; // any free port can be used
@@ -116,7 +113,7 @@ public class SQLConnection {
 
     public static void closeConnections() {
         CloseDataBaseConnection();
-        CloseSSHConnection();
+      //  CloseSSHConnection();
         log.info("Successfully disconnected from Database: ");
     }
 
@@ -132,12 +129,12 @@ public class SQLConnection {
 
     }
 
-    private static void CloseSSHConnection() {
-        if (session != null && session.isConnected()) {
-            log.info("Closing SSH Connection");
-            session.disconnect();
-        }
-    }
+   // private static void CloseSSHConnection() {
+   //     if (session != null && session.isConnected()) {
+   //         log.info("Closing SSH Connection");
+   //         session.disconnect();
+   //     }
+   // }
 
     public static boolean InsertSnakeHighscore(String name, int highscore) {
         String statement = "INSERT IGNORE INTO `highscores` SET `id` = NULL," +

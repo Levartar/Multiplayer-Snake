@@ -45,8 +45,6 @@ verifyDatabase:
   script:
     - cd server
     - mvn -Dtest=DatabaseTest test
-  except:
-    variables:
-      - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
 
 
