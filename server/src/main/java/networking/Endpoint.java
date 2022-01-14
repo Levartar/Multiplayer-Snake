@@ -70,7 +70,7 @@ public class Endpoint {
         return player;
     }
 
-    public void send(String data) throws GameOverException {
+    public void send(String data) {
         try {
             session.getBasicRemote().sendText(data);
             log.trace("synchronization message sent to player " + player.getName());

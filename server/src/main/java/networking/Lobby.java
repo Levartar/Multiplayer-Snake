@@ -13,7 +13,10 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.*;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Lobby {
     private static final Logger log = LogManager.getLogger(Lobby.class);
@@ -36,7 +39,6 @@ public class Lobby {
     }
 
     /**
-     *
      * @throws Exception if the lobby is full or the game is running
      */
     public void join(Endpoint endpoint) throws Exception {
@@ -49,18 +51,22 @@ public class Lobby {
         Player player = endpoint.getPlayer();
         players.add(player);
         endpoints.add(endpoint);
-        log.info("Player : "+ player.getName() +" Successfully joined the Lobby with joincode "  + joinCode);
+        log.info("Player : " + player.getName() + " Successfully joined the Lobby with joincode " + joinCode);
     }
 
     public void removePlayer(Endpoint endpoint) {
         Player player = endpoint.getPlayer();
         players.remove(player);
         endpoints.remove(endpoint);
-        log.info("Player : "+ player.getName() +" Successfully removed from the Lobby with joincode "  + joinCode);
+        log.info("Player : " + player.getName() + " Successfully removed from the Lobby with joincode " + joinCode);
     }
 
     public boolean hasPlayer(Endpoint endpoint) {
         return endpoints.contains(endpoint);
+    }
+
+    public Gamemode getGamemode() {
+        return gamemode;
     }
 
     public void setGamemode(String gamemode) {
@@ -72,10 +78,6 @@ public class Lobby {
             }
             default -> log.error("No such gamemode: " + gamemode);
         }
-    }
-
-    public Gamemode getGamemode(){
-        return gamemode;
     }
 
     public void start() throws Exception {
@@ -99,21 +101,24 @@ public class Lobby {
                 for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
                 }
+            } catch (GameNotInitializedException e) {
+                log.info("initializing game...");
+                String data = gamemode.init();
+                log.trace("init data: " + data);
+                for (Endpoint endpoint : endpoints) {
+                    endpoint.send(data);
+                }
             } catch (GameOverException e) {
                 log.info("Game ended from lobby " + joinCode);
                 java.util.Map<String, Integer> highscores = gamemode.getScores();
                 // TODO: 03.01.2022 send highscores data to database
                 running = false;
                 executor.shutdown();
-            } catch (GameNotInitializedException e) {
-                log.warn("Tried to start gamemode that was not initialized");
-                log.info("initializing game...");
-                gamemode.init();
             }
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
-    public boolean hasStarted(){
+    public boolean hasStarted() {
         return running;
     }
 
