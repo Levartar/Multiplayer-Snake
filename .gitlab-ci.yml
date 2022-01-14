@@ -44,7 +44,7 @@ verifyDatabase:
     - Database
   script:
     - cd server
-    - mvn -Dtest=DatabaseTest test
+    - mvn verify
 
 
 
