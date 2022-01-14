@@ -1,10 +1,13 @@
 package logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PositionTest {
+    private static final Logger log = LogManager.getLogger(PositionTest.class);
 
     @Test
     void add() {
@@ -41,6 +44,7 @@ class PositionTest {
             expected = new Position(1, 1);
             assertEquals(expected, actual);
         }
+        log.info("Test "+"add" +" passed");
     }
 
     @Test
@@ -59,6 +63,7 @@ class PositionTest {
             Position expected = new Position(3, 5);
             assertEquals(expected, actual);
         }
+        log.info("Test "+"set" +" passed");
     }
 
     @Test
@@ -75,5 +80,6 @@ class PositionTest {
 
             assertEquals(hash1, hash2);
         }
+        log.info("Test "+"testHashCode" +" passed");
     }
 }

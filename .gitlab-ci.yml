@@ -15,7 +15,10 @@
 # * Deploy built artifacts from master branch only.
 
 stages: 
-  - testServer
+  - logic
+  - networking
+  - frontend
+  - database
   - build
 
 variables:
@@ -29,11 +32,6 @@ variables:
 
 # This template uses jdk8 for verifying and deploying images
 image: maven:3.8-openjdk-17
-
-setup:
-  stage: build
-  script:
-    - cd server
 # Cache downloaded dependencies and plugins between builds.
 # To keep cache across branches add 'key: "$CI_JOB_NAME"'
 cache:
@@ -41,12 +39,29 @@ cache:
     - .m2/repository
 # For merge requests do not `deploy` but only run `verify`.
 # See https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-verify:
-  stage: testServer 
+
+verifyLogic:
+  stage: logic 
   script:
     - cd server
-    - 'mvn $MAVEN_CLI_OPTS verify'
+    - mvn -Dtest=SnakeTest,Positiontest,MapTest,BasicSnakeTest test
+
+verifyNetworking:
+  stage: networking
+  script: 
+    - cd server
+    - mvn -Dtest=ClientEndpoint,LobbyManagerTest,SnakeServerTest,WebsocketTest test
+
+verifyDatabase:
+  stage: database
+  script: 
+    - cd server
+    - mvn -Dtest=DatabaseTest test
   except:
     variables:
       - $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      
+
+verifyFrontend:
+  stage: frontend
+  script:
+    - cd server

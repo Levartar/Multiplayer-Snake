@@ -8,7 +8,8 @@ import java.util.List;
 
 public class Snake {
 
-    private static final Logger logger = LogManager.getLogger(Snake.class);
+    private static final Logger log = LogManager.getLogger(Snake.class);
+
     private final Player player;
     private List<Position> positions;
     private Direction direction = Direction.up;
@@ -16,6 +17,7 @@ public class Snake {
     public Snake(Position spawn, int length, Player player) {
         this.player = player;
         createSnakeOnSpawn(spawn, length);
+        log.debug("snake \""+ player.getName() + "\" created");
     }
 
     private void createSnakeOnSpawn(Position spawn, int length) {
@@ -43,12 +45,27 @@ public class Snake {
         // move head
         Position head = positions.get(0);
         head.add(direction);
+        log.trace("snake \""+ player.getName() + "\" moved to "+ head);
     }
 
     private void updateDirection() {
         Direction newDirection = Direction.getDirection(player.getInput());
         // only change direction, if a correct input is set
         if (newDirection != null) {
+        switch (newDirection) {
+            case up -> {
+                if (this.direction == Direction.down) newDirection = Direction.down;
+            }
+            case left -> {
+                if (this.direction == Direction.right) newDirection = Direction.right;
+            }
+            case down -> {
+                if (this.direction == Direction.up)newDirection = Direction.up;
+            }
+            case right -> {
+                if (this.direction == Direction.left) newDirection = Direction.left;
+            }
+        }
             this.direction = newDirection;
         }
     }
@@ -75,6 +92,7 @@ public class Snake {
         for (int i = 0; i < count; i++) {
             positions.add(new Position(lastPosition));
         }
+        log.trace("snake \""+ player.getName() + "\" grew by "+ count );
     }
 
     public int length() {

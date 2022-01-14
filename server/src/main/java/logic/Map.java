@@ -1,5 +1,8 @@
 package logic;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -7,6 +10,8 @@ import java.nio.file.Path;
 import java.util.*;
 
 public class Map {
+
+    private static final Logger log = LogManager.getLogger(Map.class);
 
     private Material[][] map;
     private List<Position> spawnPoints = new ArrayList<>();
@@ -18,28 +23,38 @@ public class Map {
         this.mapString = mapString;
         parseMapString(mapString);
         updateMapString();
-        generateRandomSortedSpawns();
+        shuffleSpawnPoints();
+        log.debug("Map created: \n" +mapString);
     }
 
     public Map(Path mapPath) throws IOException {
         this.mapString = Files.readString(mapPath, StandardCharsets.UTF_8);
         parseMapString(mapString);
         updateMapString();
-        generateRandomSortedSpawns();
+        shuffleSpawnPoints();
+        log.debug("Map from "+mapPath+" created: \n" +mapString);
     }
 
     public void changeMaterial(Position pos, Material material) {
         map[pos.getX()][pos.getY()] = material;
         updateMapString();
+        log.debug("Material changed:"+ pos+" -> "+ material );
     }
 
     public void changeMaterial(int x, int y, Material material) {
         map[x][y] = material;
         updateMapString();
+        log.debug("Material changed:"+ "x:" + x + "," + "y:" + y+" -> "+ material );
     }
 
     public Material[][] getMap() { //maybe useless
-        return map;
+        Material[][] output = new Material[getWidth()][getHeight()];
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                output[i][j] = map[i][j];
+            }
+        }
+        return output;
     }
 
     public Material getMaterialAt(Position pos) {
@@ -50,35 +65,35 @@ public class Map {
         return map[x][y];
     }
 
-    private void generateRandomSortedSpawns() {
-//        Position spawnUpLeft = new Position(spawnDistanceX,getHeight() - spawnDistanceY);
-//        Position spawnUpRight = new Position(getWidth() - spawnDistanceX,getHeight() - spawnDistanceY);
-//        Position spawnDownLeft = new Position(spawnDistanceX,spawnDistanceY);
-//        Position spawnDownRight = new Position(getWidth() - spawnDistanceX,spawnDistanceY);
-//
-//        spawnPoints.add(spawnUpLeft);
-//        spawnPoints.add(spawnUpRight);
-//        spawnPoints.add(spawnDownLeft);
-//        spawnPoints.add(spawnDownRight);
+    private void shuffleSpawnPoints() {
         Collections.shuffle(spawnPoints);
     }
 
     private void parseMapString(String mapString) {
-        mapString = parseString(mapString);
-        String[] splitStrings = mapString.split("\n");
-        //have to remove '\n' = carriage return as well if it exists
-        map = new Material[splitStrings[0].length()][splitStrings.length];
-
-        for (int i = 0; i < splitStrings.length; i++) {
-            char[] tmp = splitStrings[i].toCharArray();
-            for (int j = 0; j < tmp.length; j++) {
-                if (tmp[j] == 's'){
-                    map[j][getHeight() - i - 1] = Material.FREESPACE;
-                    spawnPoints.add(new Position(j,i));
-                } else {
-                    map[j][getHeight() - i - 1] = Material.getMaterial(tmp[j]);
+        try {
+            mapString = parseString(mapString);
+            String[] splitStrings = mapString.split("\n");
+            //have to remove '\n' = carriage return as well if it exists
+            for (int i = 0; i < splitStrings.length - 1; i++) {
+                if (splitStrings[i].length() != splitStrings[i+1].length()){
+                    throw new Exception("Length of line in mapstring doesnt fit.");
                 }
             }
+            map = new Material[splitStrings[0].length()][splitStrings.length];
+
+            for (int y = 0; y < splitStrings.length; y++) {
+                char[] tmp = splitStrings[y].toCharArray();
+                for (int x = 0; x < tmp.length; x++) {
+                    if(tmp[x] == 's'){
+                        map[x][y] = Material.FREESPACE;
+                        spawnPoints.add(new Position(x,y));
+                    } else {
+                        map[x][y] = Material.getMaterial(tmp[x]);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.error(e);
         }
     }
 
@@ -86,17 +101,6 @@ public class Map {
     private String parseString(String str) {
         return str.replace("\r","");
     }
-
-    //public Position getSpawn() {
-    //    Position newSpawn = spawnPoints.get(0);
-    //    while (spawnPoints.contains(newSpawn)/*&&Positions.get(newSpawn)!=Material.WALL*/){
-    //        Random rand = new Random();
-    //        //10 is max steps. Could lead to Map out of bounds Problems
-    //        newSpawn = new Position(spawnPoints.get(0).x+rand.nextInt(10)*spawnPointWidth,spawnPoints.get(0).y+rand.nextInt(10)*spawnPointHeight);
-    //    }
-    //    spawnPoints.add(newSpawn);
-    //    return newSpawn;
-    //}
 
     @Override
     public String toString() {
@@ -106,9 +110,9 @@ public class Map {
     private void updateMapString() {
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < getHeight(); i++) {
-            for (int j = 0; j < getWidth(); j++) {
-                sb.append(map[j][getHeight() - 1 - i]);
+        for (int y = 0; y < getHeight(); y++) {
+            for (int x = 0; x < getWidth(); x++) {
+                sb.append(map[x][y]);
             }
             sb.append('\n');
         }
