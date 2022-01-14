@@ -13,8 +13,7 @@
 # * Caches downloaded dependencies and plugins between invocation.
 # * Verify but don't deploy merge requests.
 # * Deploy built artifacts from master branch only.
-services:
-  - mysql:latest
+
 
 stages:
   - logic
@@ -30,7 +29,6 @@ stages:
   # when running from the command line.
   # `installAtEnd` and `deployAtEnd` are only effective with recent version of the corresponding plugins.
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
-
 
 
 # This template uses jdk8 for verifying and deploying images
