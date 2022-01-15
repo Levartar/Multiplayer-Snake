@@ -83,7 +83,8 @@ class Join_session extends React.Component{
                             //look if the lobby with the sessionID is running if yes open ws
                             console.log(obj)
                             isValideId = obj.exists
-                            isFull = obj.playerNames.length > 3;
+                            playerNames = obj.playerNames
+                            isFull = playerNames.length > 3;
                             hasStarted = obj.hasStarted
 
                             //check if player can connect to lobby
@@ -123,19 +124,7 @@ class Join_session extends React.Component{
 //define the Main menu with a banner, nameInput, createSession ,join session and HighscoreTable
 class Main_menu extends React.Component {
     componentDidMount() {
-        //const url = "http://localhost:80/game-info"
-        //const request = new Request(url, {
-        //        method: 'GET'
-        //    }
-        //)
-
-        //fetch(request)
-        //    .then(response => {
-        //        response.json()
-        //    })
-        //    .then(response => {
-        //        let playerScores = response
-        //    })
+        //clearInterval(checkCurrentPlayers)
     }
     render(){
         return (
@@ -193,12 +182,13 @@ function PlayerScore(props){
 }
 
 //define a list of player that are currently in the lobby
-function List(){
+function List(props){
     return(
         <div>
             <h2>Player:</h2>
             <ul>
-                {player.map((player, i) =>
+                {props.players.map((player, i) =>
+                    //console.log(player + " and " + i)
                     <li id={"player" + i}>{player.name}</li>
                 )}
             </ul>
@@ -232,7 +222,7 @@ const testMaps = [
 class Lobby extends React.Component {
     componentDidMount() {
         document.getElementById("buttonexitLobby").addEventListener("click", () => {
-            //ws.close()
+            ws.close()
             ReactDOM.render(
                 <Main_menu />,
                 document.getElementById('root')
@@ -240,26 +230,17 @@ class Lobby extends React.Component {
         })
 
         document.getElementById("buttonstartGame").addEventListener("click", () => {
-            const url = "http://localhost:3000/game-info?" + sessionID
+            const url = "http://localhost:80/start?code=" + sessionID
             const request = new Request(url, {
-                    method:'POST',
-                    headers:{
-                        'Content-Type':'application/x-www-form-urlencoded'
-                    },
-                    body:"lang=en"
+                    method:'POST'
                 }
             )
 
-            fetch(request)
-                .then(response => {
-                    // start the game
-                })
-
-            ReactDOM.render(
-                <Game />,
-                document.getElementById('root')
-            );
+            // start the game
+            fetch(request).then()
         })
+
+        //checkCurrentPlayers = setInterval(currentPlayer, 1000);
     }
 
     render() {
@@ -274,11 +255,11 @@ class Lobby extends React.Component {
                 <div id="lobby" className="noMargin">
                     <div id="sessionIDDIV">
                         <h2 id="sessionIDHeadline" className="noMargin">SessionID:</h2>
-                        <p id="sessionIDtext" className="noMargin"></p>
+                        <p id="sessionIDtext" className="noMargin"> </p>
                     </div>
                     <MapSelect data={testMaps}/>
                     <div id="playerTable">
-                        <List />
+                        <List players={this.props.players}/>
                     </div>
                 </div>
                 <div id="startGameDIV" className="flexed">
@@ -295,7 +276,7 @@ class Game extends React.Component {
         document.getElementById("buttonexitGame").addEventListener("click", () => {
             //ws.close()
             ReactDOM.render(
-                <Lobby />,
+                <Lobby players={player} />,
                 document.getElementById('root')
             );
         })
@@ -345,7 +326,7 @@ class Game extends React.Component {
 
 //render the Main_menu when the site is opened
 ReactDOM.render(
-    <Lobby />,
+    <Main_menu />,
     document.getElementById('root')
 );
 
@@ -356,7 +337,40 @@ let isValideId
 let isFull
 //boolean if the game has already started
 let hasStarted
+// Array with player names
+let playerNames
+// websocket
+let ws
+// interval for refreshing the player list
+let checkCurrentPlayers
+// size of the tiles of the grid
+const cellSize = 20
 
 function nameCheck(){
     return document.getElementById("inputName").value === ""
+}
+
+function currentPlayer() {
+    const url = "http://localhost:80/game-info?code=" + sessionID
+    const request = new Request(url, {
+            method: 'GET'
+        }
+    )
+
+    fetch(request)
+        .then(response => {
+            response.json().then(obj => {
+                playerNames = obj.playerNames
+                //render lobby again with new players
+                console.log(playerNames)
+                ReactDOM.render(
+                    <Lobby players={playerNames} />,
+                    document.getElementById('root')
+                );
+            })
+        })
+}
+
+function stopInterval(interval){
+    clearInterval(interval)
 }
