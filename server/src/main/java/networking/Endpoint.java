@@ -26,6 +26,7 @@ public class Endpoint {
     @OnOpen
     public void onOpen(@PathParam("code") int joinCode, @PathParam("name") String name, Session session) throws IOException {
         this.session = session;
+        session.setMaxIdleTimeout(3600000);
         endpoints.add(this);
 
         try {
