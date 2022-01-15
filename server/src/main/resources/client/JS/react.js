@@ -1,3 +1,14 @@
+// sessionID of the last lobby the player tried to join
+let sessionID
+// Array with player names
+let playerNames
+// websocket
+let ws
+// interval for refreshing the player list (is a function)
+let checkCurrentPlayers
+// size of the tiles of the grid
+const cellSize = 20
+
 function Button(props){
     return(
         <div id={props.name + "ButtonDiv"}>
@@ -274,9 +285,9 @@ class Lobby extends React.Component {
 class Game extends React.Component {
     componentDidMount() {
         document.getElementById("buttonexitGame").addEventListener("click", () => {
-            //ws.close()
+            ws.close()
             ReactDOM.render(
-                <Lobby players={player} />,
+                <Main_menu />,
                 document.getElementById('root')
             );
         })
@@ -333,17 +344,7 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-// sessionID of the last lobby the player tried to join
-let sessionID
-// Array with player names
-let playerNames
-// websocket
-let ws
-// interval for refreshing the player list
-let checkCurrentPlayers
-// size of the tiles of the grid
-const cellSize = 20
-
+// extra Functions that have nothing to do with react
 function nameCheck(){
     return document.getElementById("inputName").value === ""
 }

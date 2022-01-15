@@ -1,3 +1,7 @@
+// World sync message
+let world
+let replace
+
 function websockets(name, sessionID){
     ws = new WebSocket("ws://localhost:80/join/" + sessionID + "/name/" + name)
     ws.onopen = function () {
@@ -16,6 +20,10 @@ function websockets(name, sessionID){
     ws.onmessage = function (evt) {
         let json = JSON.parse(evt.data)
         console.log(json)
+        if(json.gameover !== undefined){
+            alert("The Winner is: " + json.gameover.winner)
+            ws.close()
+        }
         if(json.world !== undefined){
             // copy the newest coppy of the World if the backend sends it
             world = json.world
@@ -43,16 +51,12 @@ function websockets(name, sessionID){
             <Main_menu />,
             document.getElementById('root')
         );
-        alert("Connection is closed...");
     };
 
     ws.onerror = function (error){
         console.log("Error: " + error)
     }
 }
-// World sync message
-let world
-let replace
 
 //draw a grid depending on the width ang height of the gameBoard
 function drawGrid(bw, bh, cellSize){
