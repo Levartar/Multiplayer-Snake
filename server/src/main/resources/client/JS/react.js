@@ -142,19 +142,11 @@ class Main_menu extends React.Component {
                         <Join_session  />
                     </div>
                 </main>
-                <PlayerScore id={"tableMainMenu"} data={player} tableHead1={"Player"} tableHead2={"Score"}/>
+                <PlayerScore id={"tableMainMenu"} data={[{name:"", points:""}]} tableHead1={"Player"} tableHead2={"Score"}/>
             </div>
         )
     }
 }
-
-//placeholder data before we can communicate with the Database
-let player = [
-    {name: "Tim", score: "420"},
-    {name: "Lukas", score: "1337"},
-    {name: "Felix", score: "69"},
-    {name: "Timo", score: "7"}
-]
 
 //define how the HighscoreTable looks like
 function PlayerScore(props){
@@ -172,7 +164,7 @@ function PlayerScore(props){
                 {props.data.map((player, i) =>
                     <tr key={i}>
                         <td>{props.data[i].name}</td>
-                        <td>{props.data[i].score}</td>
+                        <td>{props.data[i].points}</td>
                     </tr>
                 )}
                 </tbody>
@@ -327,7 +319,7 @@ class Game extends React.Component {
                         </canvas>
                     </div>
                     <div id="gameScores">
-                        <PlayerScore data={player} tableHead1={"Player"} tableHead2={"Score"}/>
+                        <PlayerScore data={this.props.scores} tableHead1={"Player"} tableHead2={"Score"}/>
                     </div>
                 </div>
             </div>

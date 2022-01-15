@@ -15,6 +15,7 @@ function websockets(name, sessionID){
     }
     ws.onmessage = function (evt) {
         let json = JSON.parse(evt.data)
+        console.log(json)
         if(json.world !== undefined){
             // copy the newest coppy of the World if the backend sends it
             world = json.world
@@ -29,7 +30,7 @@ function websockets(name, sessionID){
 
         //render Game World
         ReactDOM.render(
-            <Game  width={world.width * cellSize + 1} height={world.height * cellSize + 1}/>,
+            <Game  width={world.width * cellSize + 1} height={world.height * cellSize + 1} scores={json.scores}/>,
             document.getElementById('root')
         )
         drawWorld(world.worldstring, cellSize)
