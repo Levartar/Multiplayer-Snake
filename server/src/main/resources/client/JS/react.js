@@ -263,10 +263,10 @@ class Lobby extends React.Component {
                 <div id="lobbyHeadlineDIV">
                     <h1 id="lobbyHeadline">Lobby</h1>
                 </div>
-                <div id="lobby" className="noMargin">
+                <div id="lobby">
                     <div id="sessionIDDIV">
-                        <h2 id="sessionIDHeadline" className="noMargin">SessionID:</h2>
-                        <p id="sessionIDtext" className="noMargin"> </p>
+                        <h2 id="sessionIDHeadline" >SessionID:</h2>
+                        <p id="sessionIDtext" > </p>
                     </div>
                     <MapSelect data={testMaps}/>
                     <div id="playerTable">
@@ -322,9 +322,9 @@ class Game extends React.Component {
 
     render() {
         return(
-            <div className="frame">
-                <Button name={"exitGame"} text={"back"}/>
+            <div className="frame" id="frameGame">
                 <div className="flexed" id="gameScreen">
+                    <Button name={"exitGame"} text={"back"}/>
                     <div id="gameMap">
                         <canvas id="mapCanvas" width={this.props.width} height={this.props.height}>
                         </canvas>
