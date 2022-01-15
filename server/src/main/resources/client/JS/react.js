@@ -82,10 +82,10 @@ class Join_session extends React.Component{
                         response.json().then(obj => {
                             //look if the lobby with the sessionID is running if yes open ws
                             console.log(obj)
-                            isValideId = obj.exists
+                            let isValideId = obj.exists
                             playerNames = obj.playerNames
-                            isFull = playerNames.length > 3;
-                            hasStarted = obj.hasStarted
+                            let isFull = playerNames.length > 3;
+                            let hasStarted = obj.hasStarted
 
                             //check if player can connect to lobby
                             if(isValideId){
@@ -124,7 +124,7 @@ class Join_session extends React.Component{
 //define the Main menu with a banner, nameInput, createSession ,join session and HighscoreTable
 class Main_menu extends React.Component {
     componentDidMount() {
-        //clearInterval(checkCurrentPlayers)
+        clearInterval(checkCurrentPlayers)
     }
     render(){
         return (
@@ -189,7 +189,7 @@ function List(props){
             <ul>
                 {props.players.map((player, i) =>
                     //console.log(player + " and " + i)
-                    <li id={"player" + i}>{player.name}</li>
+                    <li id={"player" + i}>{player}</li>
                 )}
             </ul>
         </div>
@@ -240,7 +240,15 @@ class Lobby extends React.Component {
             fetch(request).then()
         })
 
-        //checkCurrentPlayers = setInterval(currentPlayer, 1000);
+        checkCurrentPlayers = setInterval(() => {
+            currentPlayer()
+            if(playerNames !== undefined){
+                ReactDOM.render(
+                    <Lobby players={playerNames}/>,
+                    document.getElementById("root")
+                )
+            }
+        }, 1000);
     }
 
     render() {
@@ -280,6 +288,9 @@ class Game extends React.Component {
                 document.getElementById('root')
             );
         })
+
+        // clear the interval refreshing the player list
+        clearInterval(checkCurrentPlayers)
 
         //send the input of the Player to the backend
         document.addEventListener("keydown", (event) => {
@@ -330,13 +341,8 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
+// sessionID of the last lobby the player tried to join
 let sessionID
-//boolean if lobby with this sessionID is open
-let isValideId
-//boolean if there is space for the player to join
-let isFull
-//boolean if the game has already started
-let hasStarted
 // Array with player names
 let playerNames
 // websocket
@@ -361,16 +367,6 @@ function currentPlayer() {
         .then(response => {
             response.json().then(obj => {
                 playerNames = obj.playerNames
-                //render lobby again with new players
-                console.log(playerNames)
-                ReactDOM.render(
-                    <Lobby players={playerNames} />,
-                    document.getElementById('root')
-                );
             })
         })
-}
-
-function stopInterval(interval){
-    clearInterval(interval)
 }
