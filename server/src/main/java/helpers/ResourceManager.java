@@ -1,6 +1,12 @@
 package helpers;
 
+import logic.Map;
+
+import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -17,8 +23,14 @@ public class ResourceManager {
      * @return a {@link Path} object.
      */
     public static Path GetResourceDirectory(){
-        Path resourceDirectory = Paths.get("src","main","resources");
-        return  Path.of(resourceDirectory.toFile().getAbsolutePath());
+        try{
+            Path dir = Paths.get(ResourceManager.class.getResource("/").toURI()).getParent().getParent();
+            Path resourceDirectory = Paths.get(dir.toString(),"src/main/resources");
+            return resourceDirectory;
+        }catch (Exception e){
+            System.out.println("Resource Directory not Found. error in getResourceDirectory() wrong Code");
+            return null;
+        }
     }
 
     public static Path getMapPath(String mapName){
