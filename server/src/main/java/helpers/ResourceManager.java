@@ -1,39 +1,32 @@
 package helpers;
 
-import logic.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 /**
  * <p>ResourceManager class.</p>
  * Collection for static methods for dealing with Paths and Streams
+ *
  * @version $Id: $Id
  */
 public class ResourceManager {
+    private static final Logger log = LogManager.getLogger(ResourceManager.class);
 
-    /**
-     * <p>GetResourceDirectory.</p>
-     * gets the individual Path to the current resource directory
-     * @return a {@link Path} object.
-     */
-    public static Path GetResourceDirectory(){
-        try{
-            Path dir = Paths.get(ResourceManager.class.getResource("/").toURI()).getParent().getParent();
-            Path resourceDirectory = Paths.get(dir.toString(),"src/main/resources");
-            return resourceDirectory;
-        }catch (Exception e){
-            System.out.println("Resource Directory not Found. error in getResourceDirectory() wrong Code");
-            return null;
+    public static String getMapString(String fileName) throws IOException {
+        InputStream inputStream = ResourceManager.class.getClassLoader().getResourceAsStream("maps/" + fileName);
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        for (int result = bis.read(); result != -1; result = bis.read()) {
+            buf.write((byte) result);
         }
-    }
-
-    public static Path getMapPath(String mapName){
-        return GetResourceDirectory().resolve("maps/"+mapName);
+        String fileContent = buf.toString(StandardCharsets.UTF_8);
+        log.debug("file content = " + fileContent);
+        return fileContent;
     }
 }

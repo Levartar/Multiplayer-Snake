@@ -1,6 +1,5 @@
 package networking;
 
-import com.sun.tools.javac.Main;
 import networking.requests.CreateLobby;
 import networking.requests.GetGameInfo;
 import networking.requests.StartLobby;
@@ -40,7 +39,7 @@ public class SnakeServer {
         log.debug("configuring static file serving...");
         // static webpage configuration
         ServletHolder defaultHolder = new ServletHolder("default", new DefaultServlet());
-        String resourceBase = Objects.requireNonNull(Main.class
+        String resourceBase = Objects.requireNonNull(this.getClass()
                         .getClassLoader()
                         .getResource("client"))
                 .toExternalForm();

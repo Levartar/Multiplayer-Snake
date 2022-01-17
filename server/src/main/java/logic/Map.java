@@ -27,14 +27,6 @@ public class Map {
         log.debug("Map created: \n" +mapString);
     }
 
-    public Map(Path mapPath) throws IOException {
-        this.mapString = Files.readString(mapPath, StandardCharsets.UTF_8);
-        parseMapString(mapString);
-        updateMapString();
-        shuffleSpawnPoints();
-        log.debug("Map from "+mapPath+" created: \n" +mapString);
-    }
-
     public void changeMaterial(Position pos, Material material) {
         map[pos.getX()][pos.getY()] = material;
         updateMapString();
