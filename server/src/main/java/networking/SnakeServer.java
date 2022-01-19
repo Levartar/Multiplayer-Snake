@@ -32,7 +32,7 @@ public class SnakeServer {
         JavaxWebSocketServletContainerInitializer.configure(contextHandler, ((servletContext, serverContainer) -> {
             serverContainer.setDefaultMaxTextMessageBufferSize(69);
             // timeout for websockets (in milliseconds I think)
-            serverContainer.setDefaultMaxSessionIdleTimeout(100000);
+            serverContainer.setDefaultMaxSessionIdleTimeout(3600000);
             serverContainer.addEndpoint(Endpoint.class);
         }));
 
