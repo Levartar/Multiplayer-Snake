@@ -37,7 +37,7 @@ public class SelectMap extends HttpServlet {
             try {
                 lobby = LobbyManager.getLobby(joinCode);
                 lobby.setMap(mapFileName);
-                log.info("New Map selected.");
+                log.info("New Map selected: " + mapFileName);
             } catch (Exception e) {
                 log.error(e.getMessage());
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Lobby does not exist");

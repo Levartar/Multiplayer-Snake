@@ -1,12 +1,12 @@
 package networking.requests;
 
 import exceptions.NoSuchLobbyException;
+import helpers.ResourceManager;
+import logic.Gamemode;
 import logic.Player;
 import logic.gamemodes.BasicSnake;
-import networking.LobbyManager;
 import networking.Lobby;
-import logic.Gamemode;
-import logic.Map;
+import networking.LobbyManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -56,9 +56,13 @@ public class GetGameInfo extends HttpServlet {
             else log.warn("gamemode is unknown, add a new if clause here");
 
             String map = lobby.getMapName();
-            jsonMessage.put("selected_map", map);
+            jsonMessage.put("selectedMap", map);
 
-            // TODO: 19.01.2022 give color 
+            try {
+                jsonMessage.put("mapNames", ResourceManager.getMapNames());
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
 
         } catch (NoSuchLobbyException e) {
             log.warn(e.getMessage());

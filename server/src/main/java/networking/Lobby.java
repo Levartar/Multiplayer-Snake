@@ -94,6 +94,8 @@ public class Lobby {
             throw new Exception("Not enough players or not every player is ready");
         }
 
+        setPlayerColors();
+
         running = true;
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
@@ -121,13 +123,29 @@ public class Lobby {
         }, 0, 1000, TimeUnit.MILLISECONDS);
     }
 
+    private void setPlayerColors() {
+        for (int i = 0; i < players.size(); i++) {
+
+            String color;
+            switch (i) {
+                case 0 -> color = "red";
+                case 1 -> color = "green";
+                case 2 -> color = "blue";
+                case 3 -> color = "magenta";
+                default -> color = "grey";
+            }
+
+            players.get(i).setColor(color);
+        }
+    }
+
     public boolean hasStarted() {
         return running;
     }
 
     private void createDefaultMap() {
         try {
-            this.mapName = "BasicMap50x50";
+            this.mapName = "default";
             this.map = new Map(ResourceManager.getMapString(mapName));
         } catch (IOException e) {
             log.error(e.getMessage());
