@@ -13,6 +13,8 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.javax.server.config.JavaxWebSocketServletContainerInitializer;
 
+import java.util.Objects;
+
 public class SnakeServer {
     private static final Logger log = LogManager.getLogger(SnakeServer.class);
 
@@ -25,6 +27,7 @@ public class SnakeServer {
 
         ServletContextHandler contextHandler = new ServletContextHandler(server, "/");
 
+        log.debug("configuring websockets...");
         // websocket configuration
         JavaxWebSocketServletContainerInitializer.configure(contextHandler, ((servletContext, serverContainer) -> {
             serverContainer.setDefaultMaxTextMessageBufferSize(69);
@@ -33,10 +36,19 @@ public class SnakeServer {
             serverContainer.addEndpoint(Endpoint.class);
         }));
 
+        log.debug("configuring static file serving...");
         // static webpage configuration
         ServletHolder defaultHolder = new ServletHolder("default", new DefaultServlet());
-        defaultHolder.setInitParameter("resourceBase", "./src/main/resources/client/");
+        String resourceBase = Objects.requireNonNull(this.getClass()
+                        .getClassLoader()
+                        .getResource("client"))
+                .toExternalForm();
+        log.debug("static files resource base = " + resourceBase);
+        contextHandler.setResourceBase(resourceBase);
+        defaultHolder.setInitParameter("resourceBase", resourceBase);
         contextHandler.addServlet(defaultHolder, "/*");
+
+        log.debug("configuring HTTP Requests...");
 
         // get request on /create
         ServletHolder createServlet = new ServletHolder(new CreateLobby());

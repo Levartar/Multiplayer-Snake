@@ -10,6 +10,8 @@ import logic.gamemodes.BasicSnake;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -124,9 +126,8 @@ public class Lobby {
 
     private void createDefaultMap() {
         try {
-            this.map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
-            log.info("Default Basic map created");
-        } catch (Exception e) {
+            this.map = new Map(ResourceManager.getMapString("BasicMap50x50"));
+        } catch (IOException e) {
             log.error(e.getMessage());
         }
     }

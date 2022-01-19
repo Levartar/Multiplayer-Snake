@@ -183,9 +183,7 @@ class BasicSnakeTest {
 
     @Test
     void testBigMapSpawnsAndMove() throws IOException, GameOverException, GameNotInitializedException {
-        Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
-
-        Map basicMap50x50 = new Map(basicMap50x50Path);
+        Map basicMap50x50 = new Map(ResourceManager.getMapString("BasicMap50x50"));
 
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
         gamemode.init();
@@ -287,9 +285,7 @@ class BasicSnakeTest {
 
     @Test
     void testSnakeCollidesWithItself() throws IOException, GameOverException, GameNotInitializedException {
-        Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
-
-        Map basicMap50x50 = new Map(basicMap50x50Path);
+        Map basicMap50x50 = new Map(ResourceManager.getMapString("BasicMap50x50"));
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
         gamemode.init();
         players.forEach(player -> player.setInput('w'));
@@ -385,9 +381,7 @@ class BasicSnakeTest {
 
     @Test
     void testBigMapSpawnsMoveRandomAndDie() throws IOException, GameOverException, GameNotInitializedException {
-        Path basicMap50x50Path = ResourceManager.getMapPath("BasicMap50x50");
-
-        Map basicMap50x50 = new Map(basicMap50x50Path);
+        Map basicMap50x50 = new Map(ResourceManager.getMapString("BasicMap50x50"));
 
         Gamemode gamemode = new BasicSnake(players, basicMap50x50);
         gamemode.init();
