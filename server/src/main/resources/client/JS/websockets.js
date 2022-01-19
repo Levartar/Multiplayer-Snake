@@ -6,13 +6,9 @@ function websockets(name, sessionID){
     ws = new WebSocket("ws://localhost:80/join/" + sessionID + "/name/" + name)
     ws.onopen = function () {
         //render the lobby when a player connected over the websocket
-        currentPlayer()
-        if(playerNames === undefined){
-            playerNames = [name]
-        }
-
+        playerNames = []
         ReactDOM.render(
-            <Lobby players={playerNames}/>,
+            <Lobby players={["loading..."]}/>,
             document.getElementById('root')
         );
         document.getElementById("sessionIDtext").innerText = sessionID
@@ -22,7 +18,10 @@ function websockets(name, sessionID){
         console.log(json)
         if(json.gameover !== undefined){
             alert("The Winner is: " + json.gameover.winner)
-            ws.close()
+            // disconect the players 6 sec after the game has ended
+            setTimeout(() => {
+                ws.close()
+            }, 6000)
         }
         if(json.world !== undefined){
             // copy the newest coppy of the World if the backend sends it

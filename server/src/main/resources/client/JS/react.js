@@ -140,7 +140,7 @@ class Main_menu extends React.Component {
     render(){
         return (
             <div className="frame" id="MainMenuDiv">
-                <img id="menuBanner" src="./assets/img.png" alt="Snake.IO banner image" />
+                <img id="menuBanner" src={"./assets/img.png"} alt="Snake.IO banner image" />
                 <main>
                     <h1>Snake IO</h1>
                     <div id="marginEnterName">
@@ -245,7 +245,7 @@ class Lobby extends React.Component {
 
         checkCurrentPlayers = setInterval(() => {
             currentPlayer()
-            if(playerNames !== undefined){
+            if(playerNames !== undefined && playerNames.length > 0){
                 ReactDOM.render(
                     <Lobby players={playerNames}/>,
                     document.getElementById("root")
