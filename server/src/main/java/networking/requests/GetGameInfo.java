@@ -56,7 +56,13 @@ public class GetGameInfo extends HttpServlet {
             else log.warn("gamemode is unknown, add a new if clause here");
 
             String map = lobby.getMapName();
-            jsonMessage.put("selected_map", map);
+            jsonMessage.put("selectedMap", map);
+
+            try {
+                jsonMessage.put("mapNames", ResourceManager.getMapNames());
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
 
             // TODO: 19.01.2022 give color 
 
