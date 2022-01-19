@@ -2,6 +2,7 @@ package networking;
 
 import networking.requests.CreateLobby;
 import networking.requests.GetGameInfo;
+import networking.requests.SelectMap;
 import networking.requests.StartLobby;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,6 +62,18 @@ public class SnakeServer {
         //post request on /start
         ServletHolder postGameStartServlet = new ServletHolder(new StartLobby());
         contextHandler.addServlet(postGameStartServlet, "/start");
+
+        //post request on /select-map
+        ServletHolder postSelectedMap = new ServletHolder(new SelectMap());
+        contextHandler.addServlet(postSelectedMap, "/select-map");
+
+//        //get request on /highscores
+//        ServletHolder getHighscores = new ServletHolder(new GetHighscores());
+//        contextHandler.addServlet(getHighscores, "/highscores");
+//
+//        //post request on /select-color
+//        ServletHolder postSelectedColor = new ServletHolder(new SelectColor());
+//        contextHandler.addServlet(postSelectedColor, "/select-color");
     }
 
     public void run() {

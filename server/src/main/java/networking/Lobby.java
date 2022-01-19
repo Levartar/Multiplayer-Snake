@@ -143,9 +143,17 @@ public class Lobby {
         return players;
     }
 
-    public void setMap(Map map) {
-        this.map = map;
+    public void setMap(String fileName) throws IOException {
+        this.map = new Map(ResourceManager.getMapString(fileName));
+        this.mapName = fileName;
         log.debug("Changed Map to: " + map + " for lobby " + joinCode);
+    }
+    public String getMapName(){
+        return mapName;
+    }
+
+    public Map getMap(){
+        return map;
     }
 
     @Override

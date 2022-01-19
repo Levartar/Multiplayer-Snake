@@ -6,6 +6,7 @@ import logic.gamemodes.BasicSnake;
 import networking.LobbyManager;
 import networking.Lobby;
 import logic.Gamemode;
+import logic.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -53,6 +54,11 @@ public class GetGameInfo extends HttpServlet {
             if (gamemode instanceof BasicSnake) jsonMessage.put("gamemode", Gamemode.BASIC_SNAKE);
             else if (gamemode == null) log.warn("gamemode is null, lobby: " + lobby);
             else log.warn("gamemode is unknown, add a new if clause here");
+
+            String map = lobby.getMapName();
+            jsonMessage.put("selected_map", map);
+
+            // TODO: 19.01.2022 give color 
 
         } catch (NoSuchLobbyException e) {
             log.warn(e.getMessage());
