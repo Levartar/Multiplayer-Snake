@@ -39,7 +39,7 @@ public class SnakeServer {
         ServletHolder defaultHolder = new ServletHolder("default", new DefaultServlet());
         String resourceBase = Objects.requireNonNull(this.getClass()
                         .getClassLoader()
-                        .getResource("client"))
+                        .getResource("client-test"))
                 .toExternalForm();
         log.debug("static files resource base = " + resourceBase);
         contextHandler.setResourceBase(resourceBase);
