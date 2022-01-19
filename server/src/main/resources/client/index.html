@@ -1,59 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>test page</title>
+    <meta charset="utf-8">
+    <title>SnakeIO</title>
+    <link rel="stylesheet" href="./CSS/style.css">
+    <link rel="shortcut icon" href="#">
+    <script type="application/javascript" src="https://unpkg.com/react@16.0.0/umd/react.production.min.js"></script>
+    <script type="application/javascript" src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.production.min.js"></script>
+    <script type="application/javascript" src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
 </head>
 <body>
-    test content
-    <script>
-        const url = "http://localhost:80"
-        const req = new Request(url + "/create", {method: 'GET'})
-        let joinCode
-        fetch(req).then(response => {
-            response.text().then(value => {
-                console.log("Joincode", value)
-                joinCode = value
-
-
-                const game_info_request = new Request(url + "/game-info?code=" + joinCode,
-                    {method: 'GET'})
-
-                fetch(game_info_request).then(response => {
-                    response.text().then(value1 => {
-                        console.log("game-info: ", JSON.parse(value1))
-                    })
-                })
-
-                join(joinCode)
-
-                setTimeout(() => {
-                    const start_request = new Request(url + "/start?code=" + joinCode,
-                        {method: 'POST'})
-                    fetch(start_request)
-                }, 2000)
-            })
-        })
-
-        function join(joinCode){
-            const wsUrl = "ws://localhost:80/join/" + joinCode + "/name/timo"
-            const ws = new WebSocket(wsUrl)
-
-            ws.onopen = () => {
-                console.log("websocket opened")
-            }
-
-            ws.onclose = (e) => {
-                console.log(e)
-                console.log("websocket closed")
-            }
-
-            ws.onmessage = (message) =>{
-                console.log(JSON.parse(message.data))
-            }
-        }
-
-
-    </script>
+    <div id="root"></div>
+    <script src="./JS/react.js" type="text/babel"></script>
+    <script src="./JS/websockets.js" type="text/babel"></script>
 </body>
+
 </html>
