@@ -49,7 +49,7 @@ public class BasicSnake implements Gamemode {
         this.map = map;
         this.countDown = 0;
         snakes = new ArrayList<>();
-        log.info("BasicSnake created\n"+this);
+        log.debug("BasicSnake created\n"+this);
     }
 
     private JSONObject getWorld() {
