@@ -3,15 +3,18 @@ package helpers;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.security.CodeSource;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -59,7 +62,7 @@ public class ResourceManager {
         }
 
         Stream<Path> list = Files.list(path);
-        for (Iterator<Path> it = list.iterator(); it.hasNext();) {
+        for (Iterator<Path> it = list.iterator(); it.hasNext(); ) {
             mapNames.add(it.next().getFileName().toString());
         }
         return mapNames;

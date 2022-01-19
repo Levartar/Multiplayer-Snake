@@ -7,6 +7,13 @@
 <body>
 test content
 <script>
+    const highscore_request = new Request("/highscores", {
+        method: 'GET'
+    })
+    fetch(highscore_request).then(response => {
+        response.json().then(value => console.log(value))
+    })
+
     const url = "http://localhost:80"
     const req = new Request(url + "/create", {method: 'GET'})
     let joinCode
