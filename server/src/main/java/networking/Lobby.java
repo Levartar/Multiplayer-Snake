@@ -29,6 +29,7 @@ public class Lobby {
     private boolean running = false;
     private Gamemode gamemode;
     private Map map;
+    private String mapName;
 
     public Lobby(int joinCode) {
         this.joinCode = joinCode;
@@ -126,7 +127,8 @@ public class Lobby {
 
     private void createDefaultMap() {
         try {
-            this.map = new Map(ResourceManager.getMapString("BasicMap50x50"));
+            this.mapName = "BasicMap50x50";
+            this.map = new Map(ResourceManager.getMapString(mapName));
         } catch (IOException e) {
             log.error(e.getMessage());
         }

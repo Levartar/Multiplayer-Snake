@@ -27,6 +27,9 @@
 
                 join(joinCode)
 
+                const selectMap = new Request("/select-map?code=" + joinCode, {method:'POST', body: 'BasicMap50x50'})
+                fetch(selectMap)
+
                 setTimeout(() => {
                     const start_request = new Request(url + "/start?code=" + joinCode,
                         {method: 'POST'})
@@ -36,6 +39,7 @@
         })
 
         function join(joinCode){
+
             const wsUrl = "ws://localhost:80/join/" + joinCode + "/name/timo"
             const ws = new WebSocket(wsUrl)
 
