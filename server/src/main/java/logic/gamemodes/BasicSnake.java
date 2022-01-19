@@ -263,6 +263,7 @@ public class BasicSnake implements Gamemode {
         snakes.forEach(snake -> {
             JSONObject snakeObject = new JSONObject();
             snakeObject.put("name", snake.getName());
+            snakeObject.put("color", snake.getPlayer().getColor());
             snakeObject.put("direction", snake.getDirection().toString());
             JSONArray positionsArray = new JSONArray();
             snake.getPositions().forEach(position -> {
