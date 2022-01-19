@@ -127,7 +127,7 @@ public class Lobby {
 
     private void createDefaultMap() {
         try {
-            this.mapName = "BasicMap50x50";
+            this.mapName = "default";
             this.map = new Map(ResourceManager.getMapString(mapName));
         } catch (IOException e) {
             log.error(e.getMessage());

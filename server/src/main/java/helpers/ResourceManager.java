@@ -4,10 +4,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.security.CodeSource;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>ResourceManager class.</p>
@@ -28,5 +33,35 @@ public class ResourceManager {
         String fileContent = buf.toString(StandardCharsets.UTF_8);
         log.debug("file content = " + fileContent);
         return fileContent;
+    }
+
+    public static List<String> getMapNames() throws IOException {
+        List<String> mapNames = new ArrayList<>();
+
+//        String directory = ResourceManager.class.getClassLoader().;
+//
+//        log.info("directory = " + directory);
+
+        URI uri = null;
+        try {
+            uri = ResourceManager.class.getClassLoader().getResource("maps/").toURI();
+        } catch (URISyntaxException e) {
+            log.error(e.getMessage());
+        }
+
+        Path path;
+        if (uri.getScheme().equals("jar")) {
+            // if in a jar, create a FileSystem
+            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
+            path = fileSystem.getPath("/maps");
+        } else {
+            path = Paths.get(uri);
+        }
+
+        Stream<Path> list = Files.list(path);
+        for (Iterator<Path> it = list.iterator(); it.hasNext();) {
+            mapNames.add(it.next().getFileName().toString());
+        }
+        return mapNames;
     }
 }
