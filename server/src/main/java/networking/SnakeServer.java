@@ -70,10 +70,6 @@ public class SnakeServer {
 //        //get request on /highscores
 //        ServletHolder getHighscores = new ServletHolder(new GetHighscores());
 //        contextHandler.addServlet(getHighscores, "/highscores");
-//
-//        //post request on /select-color
-//        ServletHolder postSelectedColor = new ServletHolder(new SelectColor());
-//        contextHandler.addServlet(postSelectedColor, "/select-color");
     }
 
     public void run() {

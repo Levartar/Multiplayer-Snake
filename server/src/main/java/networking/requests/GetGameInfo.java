@@ -64,8 +64,6 @@ public class GetGameInfo extends HttpServlet {
                 log.error(e.getMessage());
             }
 
-            // TODO: 19.01.2022 give color 
-
         } catch (NoSuchLobbyException e) {
             log.warn(e.getMessage());
             jsonMessage.put("exists", false);
