@@ -2,8 +2,14 @@ package networking;
 
 import org.junit.jupiter.api.Test;
 
+import javax.websocket.*;
+import java.io.IOException;
+import java.net.URI;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,7 +37,7 @@ class LobbyManagerTest {
         Endpoint endpoint = new Endpoint();
         endpoint.onOpen(joinCode, "Anjo", null);
 
-        Lobby lobby = LobbyManager.joinLobby(joinCode, endpoint);
+        Lobby lobby = LobbyManager.getLobby(joinCode);
 
         assertNotNull(lobby);
         assertTrue(lobby.hasPlayer(endpoint));
