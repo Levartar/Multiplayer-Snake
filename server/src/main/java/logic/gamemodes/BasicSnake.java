@@ -26,7 +26,7 @@ public class BasicSnake implements Gamemode {
     private long gameStartTime;
     private int gameMaxTime;
     private int timer;
-    private int countDown;
+    private int countDown = 0;
     private long maxCountdown;
     private final List<Snake> scheduledForRemoval = new ArrayList<>();
     private final JSONArray JSON_replace = new JSONArray();
@@ -34,7 +34,7 @@ public class BasicSnake implements Gamemode {
     private final JSONArray JSONArrayScores = new JSONArray();
     private final JSONObject JSONObjectGameover = new JSONObject();
     private final JSONObject JSONObjectWorld = new JSONObject();
-    private final HashMap<Player, Integer> scores = new HashMap<>();
+    private final java.util.Map<Player, Integer> scores = new HashMap<>();
     private final List<Player> players;
 
     public BasicSnake(List<Player> players, Map map, int countDown) {
@@ -85,7 +85,6 @@ public class BasicSnake implements Gamemode {
     public String init() {
 
         log.debug("Init BasicSnake:");
-        this.countDown = 0;
 
         // reset map
         this.currentMap = new Map(this.originalMap);
@@ -110,6 +109,7 @@ public class BasicSnake implements Gamemode {
         log.debug("snakes created: " + snakes);
 
         //init Scores
+        scores.clear();
         players.forEach(player -> scores.put(player,0));
         synchronizeScore();
 
@@ -129,8 +129,11 @@ public class BasicSnake implements Gamemode {
 
     @Override
     public java.util.Map<String, Integer> getScores() {
-        // TODO: 03.01.2022 convert scores to Map<String, Integer> and return it
-        return null;
+        java.util.Map<String, Integer> scoreMap = new HashMap<>();
+        scores.forEach((player, score) -> {
+            scoreMap.put(player.getName(), score);
+        });
+        return scoreMap;
     }
 
 
