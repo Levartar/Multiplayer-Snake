@@ -1,130 +1,57 @@
 package Database;
 
 import java.sql.*;
-
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
-import com.mysql.cj.jdbc.MysqlDataSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class SQLConnection {
     private static final Logger log = LogManager.getLogger(SQLConnection.class);
 
 
-    private static Connection connection = null;
+    private static Connection connection;
     private static String DBUser;
     private static String DBUserPW;
     private static String DBIP;
-    private static String SSHPrivatKey;
-    static Session session;
+    static Statement stmt;
+    static String databasename;
 
     public static void setLoginDetails() {
         DBUser = System.getenv("DBUser");
         DBUserPW = System.getenv("DBUserPW");
         DBIP = System.getenv("Server_IP");
-      //  SSHPrivatKey = "C:\\Users\\nikoh\\.ssh\\id_rsa";
+        databasename = "testdb";
+        log.debug(DBUser + DBUserPW + DBIP);
+
     }
 
     public static void connectToServer(String dataBaseName) {
         setLoginDetails();
-       // connectSSH(); //Because git Runner is now on the same server as database
         connectToDataBase(dataBaseName);
         log.info("Successfully connected to Database: " + dataBaseName);
     }
 
 
     public static void main(String[] args) {
-        String name = "Jens";
-        String returnString = "";
-        try {
-            ResultSet resultSet = SQLConnection.executeMyQuery("Select highscore from highscores where Name = '" + name + "';", "testdb");
-            while (resultSet.next()) {
-                returnString = resultSet.getString(1);
-            }
-        } catch (SQLException e) {
-            log.info(e);
-        }
-        SQLConnection.closeConnections();
-        System.out.println(returnString);
-
-    }
-    public static void closeConnections() {
-        CloseDataBaseConnection();
-        CloseSSHConnection();
-        log.info("Successfully disconnected from Database: ");
+        getName("");
     }
 
-    private static void connectSSH() {
-
-        String sshHost = System.getenv("Server_IP");
-        String sshuser = "root";
-        String SshKeyFilepath = "";
-
-        int localPort = 8741; // any free port can be used
-        String remoteHost = "127.0.0.1";
-        int remotePort = 3306;
-        String localSSHUrl = "localhost";
-        /***************/
-        String driverName = "com.mysql.jdbc.Driver";
-
-        try {
-            java.util.Properties config = new java.util.Properties();
-            JSch jsch = new JSch();
-            session = jsch.getSession(sshuser, sshHost, 22);
-            jsch.addIdentity(SshKeyFilepath);
-            config.put("StrictHostKeyChecking", "no");
-            config.put("ConnectionAttempts", "3");
-            session.setConfig(config);
-            session.connect();
-
-            System.out.println("SSH Connected");
-
-
-            int assinged_port = session.setPortForwardingL(localPort, remoteHost, remotePort);
-
-            System.out.println("localhost:" + assinged_port + " -> " + remoteHost + ":" + remotePort);
-            System.out.println("Port Forwarded");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private static void connectToDataBase(String dataBaseName) {
-        String dbuserName = System.getenv("DBUser");
-        System.out.println(dbuserName);
-        String dbpassword = System.getenv("DBUserPW");
-        int localPort = 8740; // any free port can be used
-        String localSSHUrl = "localhost";
+        int localPort = 3360;
+        String url = "jdbc:mariadb://" + DBIP + ":" + localPort + "/" + dataBaseName;
+
         try {
-
-            //mysql database connectivity
-            MysqlDataSource dataSource = new MysqlDataSource();
-            dataSource.setServerName(localSSHUrl);
-            dataSource.setPortNumber(localPort);
-            dataSource.setUser(dbuserName);
-            dataSource.setAllowMultiQueries(true);
-
-            dataSource.setPassword(dbpassword);
-            dataSource.setDatabaseName(dataBaseName);
-
-            connection = dataSource.getConnection();
-
-            System.out.print("Connection to server successful!:" + connection + "\n\n");
-        } catch (Exception e) {
+            connection = DriverManager.getConnection(url, DBUser, DBUserPW);
+            stmt = connection.createStatement();
+            log.info("Connection to server successful!:" + connection + "\n\n");
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-
-
-
-    private static void CloseDataBaseConnection() {
+    public static void closeDataBaseConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
                 log.info("Closing Database Connection");
@@ -136,28 +63,22 @@ public class SQLConnection {
 
     }
 
-    private static void CloseSSHConnection() {
-
-        if (session != null && session.isConnected()) {
-            log.info("Closing SSH Connection");
-            session.disconnect();
-        }
-    }
 
     public static boolean InsertSnakeHighscore(String name, int highscore) {
-        String statement = "INSERT IGNORE INTO `highscores` SET `id` = NULL," +
-                "`name` = '" + name + "'," +
-                "`highscore` = " + highscore + ";";
-        return InsertStatement(statement, "testdb");
+
+        String statement = "INSERT IGNORE INTO `Highscore` SET `score_id` = NULL," +
+                "`player_name` = '" + name + "'," +
+                "`score` = " + highscore + ";";
+        return InsertStatement(statement);
     }
 
-    public static boolean InsertStatement(String insert, String dataBaseName) {
+    public static boolean InsertStatement(String insert) {
         try {
-            connectToServer(dataBaseName);
-            Statement stmt = connection.createStatement();
+            connectToServer("testdb");
             stmt.executeUpdate(insert);
-            log.info("Database connection success");
-            closeConnections();
+            stmt.close();
+            log.info("InsertStatement executed");
+            closeDataBaseConnection();
             return true;
         } catch (SQLException e) {
             log.error(e);
@@ -165,14 +86,13 @@ public class SQLConnection {
         }
     }
 
-    public static boolean deleteHighscore(String name, String dataBaseName) {
-        String delete = "delete from `highscores` where `name` ='" + name + "';";
+    public static boolean deleteHighscore(String name) {
+        String delete = "delete from testdb.`Highscore` where `player_name` ='" + name + "';";
         try {
-            connectToServer(dataBaseName);
+            connectToServer("testdb");
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(delete);
             log.info("Database connection success");
-            closeConnections();
             return true;
         } catch (SQLException e) {
             log.error(e);
@@ -182,34 +102,47 @@ public class SQLConnection {
 
 
     // works ONLY FOR  single query (one SELECT or one DELETE etc)
-    public static ResultSet executeMyQuery(String query, String dataBaseName) {
-        ResultSet resultSet = null;
-
+    public static String getScore(String name) {
+        ResultSet resultSet;
+        String result = "";
         try {
-            connectToServer(dataBaseName);
+            connectToServer("testdb");
             Statement stmt = connection.createStatement();
-            resultSet = stmt.executeQuery(query);
+            resultSet = stmt.executeQuery("Select score from testdb.Highscore where player_name = '" + name + "';");
             log.info("Database connection success");
+            closeDataBaseConnection();
+            if (resultSet.next()) {
+                result = resultSet.getString(1);
+            }
+            log.debug("returning score:" + result);
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return resultSet;
+        return "Error!";
     }
 
-    public static List<String> getAllDBNames() {
-        // get all live db names incentral DB
-        List<String> organisationDbNames = new ArrayList<>();
-        ResultSet resultSet = executeMyQuery("show databases", "testdb");
+    public static String getName(String name) {
+        ResultSet resultSet;
+        String result = "";
         try {
-            while (resultSet.next()) {
-                String actualValue = resultSet.getString("Database");
-                organisationDbNames.add(actualValue);
+            connectToServer("testdb");
+            Statement stmt = connection.createStatement();
+            resultSet = stmt.executeQuery("SELECT player_name FROM testdb.Highscore where player_name ='" + name + "';");
+            closeDataBaseConnection();
+            if (resultSet.next()) {
+                result = resultSet.getString(1);
             }
+            log.debug("Database querry for name:" + name +" : "+ result);
+            if(result.equals("")){
+                log.debug("Database: no Matches for:" +name );
+                return "Could not find name: " + name;
+            }
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return organisationDbNames;
+        return "Could not find name:" + name;
     }
 
 

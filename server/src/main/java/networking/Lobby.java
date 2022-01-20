@@ -107,15 +107,15 @@ public class Lobby {
                 try{
                     highscores.forEach((key,value) -> {
                         // TODO: 05.01.2022 test the highscore saving!!!
-                        String query = "insert into highscores values ("+ key+", "+ value+")";
-                        ResultSet resultSet = SQLConnection.executeMyQuery(query,"testdb");
-                        log.debug(resultSet);
+                       // String query = "insert into highscores values ("+ key+", "+ value+")";
+                       // String resultSet = SQLConnection.executeMyQuery(query,"testdb");
+                       // log.debug(resultSet);
                     });
                 }catch(Exception ex){
                     log.error(ex.getMessage());
                 }
                 try{
-                    SQLConnection.closeConnections();
+
                     log.info("Successfully disconnected from Database: ");
                 }catch(Exception exp){
                     log.error(exp.getMessage());
