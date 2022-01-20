@@ -34,7 +34,7 @@ public class Lobby {
     public Lobby(int joinCode) {
         this.joinCode = joinCode;
         createDefaultMap();
-        gamemode = new BasicSnake(players, map);
+        gamemode = new BasicSnake(players, map, 3);
     }
 
     public int getJoinCode() {
@@ -108,10 +108,15 @@ public class Lobby {
                     data = gamemode.init();
                     log.trace("init data: " + data);
                     running = true;
-                } else {
-                    data = gamemode.gameLoop();//if doesn't send a string throw exception
-                    log.trace("gameLoop data: " + data);
+
+                    for (Endpoint endpoint : endpoints) {
+                        endpoint.send(data);
+                    }
                 }
+
+                data = gamemode.gameLoop();//if doesn't send a string throw exception
+                log.trace("gameLoop data: " + data);
+
                 for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
                 }
