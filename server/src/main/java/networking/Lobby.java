@@ -27,14 +27,14 @@ public class Lobby {
     private final List<Player> players = new ArrayList<>();
     private final Set<Endpoint> endpoints = new CopyOnWriteArraySet<>();
     private boolean running = false;
-    private Gamemode gamemode;
+    private final Gamemode gamemode;
     private Map map;
     private String mapName;
 
     public Lobby(int joinCode) {
         this.joinCode = joinCode;
         createDefaultMap();
-        gamemode = new BasicSnake(players, map);
+        gamemode = new BasicSnake(players, map, 3);
     }
 
     public int getJoinCode() {
@@ -72,17 +72,6 @@ public class Lobby {
         return gamemode;
     }
 
-    public void setGamemode(String gamemode) {
-        switch (gamemode) {
-            case Gamemode.BASIC_SNAKE -> {
-                this.gamemode = new BasicSnake(players, map);
-                log.info("Gamemode " + this.gamemode.getClass().getName()
-                        + " set for lobby with code " + joinCode);
-            }
-            default -> log.error("No such gamemode: " + gamemode);
-        }
-    }
-
     public void start() throws Exception {
         if (map == null) {
             createDefaultMap();
@@ -94,25 +83,36 @@ public class Lobby {
             throw new Exception("Not enough players or not every player is ready");
         }
 
+        gamemode.setMap(map);
+
         setPlayerColors();
 
-        running = true;
+        running = false;
+
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
         executor.scheduleAtFixedRate(() -> {
             try {
-                String data = gamemode.gameLoop();//if doesn't send a string throw exception
+                String data;
+                if (!running) {
+                    log.info("initializing game...");
+                    data = gamemode.init();
+                    log.trace("init data: " + data);
+                    running = true;
+
+                    for (Endpoint endpoint : endpoints) {
+                        endpoint.send(data);
+                    }
+                }
+
+                data = gamemode.gameLoop();//if doesn't send a string throw exception
                 log.trace("gameLoop data: " + data);
+
                 for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
                 }
             } catch (GameNotInitializedException e) {
-                log.info("initializing game...");
-                String data = gamemode.init();
-                log.trace("init data: " + data);
-                for (Endpoint endpoint : endpoints) {
-                    endpoint.send(data);
-                }
+                log.error(e.getMessage());
             } catch (GameOverException e) {
                 log.info("Game ended from lobby " + joinCode);
                 java.util.Map<String, Integer> highscores = gamemode.getScores();
@@ -120,7 +120,7 @@ public class Lobby {
                 running = false;
                 executor.shutdown();
             }
-        }, 0, 1000, TimeUnit.MILLISECONDS);
+        }, 0, 200, TimeUnit.MILLISECONDS);
     }
 
     private void setPlayerColors() {

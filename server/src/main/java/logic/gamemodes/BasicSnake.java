@@ -11,13 +11,13 @@ import org.json.JSONObject;
 
 import java.lang.System;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BasicSnake implements Gamemode {
 
     private static final Logger log = LogManager.getLogger(BasicSnake.class);
 
-    private final Map map;
+    private Map originalMap;
+    private Map currentMap;
     private final List<Snake> snakes;
 
     private int loopCount;
@@ -26,7 +26,7 @@ public class BasicSnake implements Gamemode {
     private long gameStartTime;
     private int gameMaxTime;
     private int timer;
-    private int countDown;
+    private int countDown = 0;
     private long maxCountdown;
     private final List<Snake> scheduledForRemoval = new ArrayList<>();
     private final JSONArray JSON_replace = new JSONArray();
@@ -34,28 +34,25 @@ public class BasicSnake implements Gamemode {
     private final JSONArray JSONArrayScores = new JSONArray();
     private final JSONObject JSONObjectGameover = new JSONObject();
     private final JSONObject JSONObjectWorld = new JSONObject();
-    private final HashMap<Player, Integer> scores = new HashMap<>();
+    private final java.util.Map<Player, Integer> scores = new HashMap<>();
     private final List<Player> players;
 
     public BasicSnake(List<Player> players, Map map, int countDown) {
         this.players = players;
-        this.map = map;
+        setMap(map);
         this.maxCountdown = countDown*1000;
-        snakes = new ArrayList<>();
-    }
-
-    public BasicSnake(List<Player> players, Map map) {
-        this.players = players;
-        this.map = map;
-        this.countDown = 0;
         snakes = new ArrayList<>();
         log.debug("BasicSnake created\n"+this);
     }
 
+    public BasicSnake(List<Player> players, Map map) {
+        this(players, map, 0);
+    }
+
     private JSONObject getWorld() {
-        JSONObjectWorld.put("worldstring",map.toString());
-        JSONObjectWorld.put("height",map.getHeight());
-        JSONObjectWorld.put("width",map.getWidth());
+        JSONObjectWorld.put("worldstring", currentMap.toString());
+        JSONObjectWorld.put("height", currentMap.getHeight());
+        JSONObjectWorld.put("width", currentMap.getWidth());
         return JSONObjectWorld;
     }
 
@@ -67,14 +64,14 @@ public class BasicSnake implements Gamemode {
             sendCountDown();
         } else {
 
+            loopCount++;
+            if (loopCount % (15 / snakes.size()) == 0) {
+                spawnFood();
+            }
+
             snakes.forEach(Snake::move);
             checkCollision();
             synchronizeScore();
-
-            loopCount++;
-            if (loopCount % 20 == 0) {
-                spawnFood();
-            }
         }
         updateTimer();
         log.debug("\nGamemode:\n"+this+"\nplayers:\n"+players.toString()+"\nscores:\n"+scores.toString()+"\nTimer:\n"+timer);
@@ -85,31 +82,48 @@ public class BasicSnake implements Gamemode {
     public String init() {
 
         log.debug("Init BasicSnake:");
+
+        // reset map
+        this.currentMap = new Map(this.originalMap);
+
         // initial message
         JSON_synchronizationMessage.put("world", getWorld());
+
+        // remove game over message
+        JSONObjectGameover.clear();
 
         //init GameTime
         gameMaxTime = (int) (60000*players.size()+maxCountdown); //1 Minute per player + CountDown in ms
         log.debug("set GameTime to:"+gameMaxTime/1000f);
 
         // create snakes
-        List<Position> spawnPoints = map.getSpawnPoints();
+        List<Position> spawnPoints = currentMap.getSpawnPoints();
         int size = Math.min(players.size(), spawnPoints.size());
         for (int i = 0; i < size; i++) {
             Snake snake = new Snake(spawnPoints.get(i), 5, players.get(i));
             snakes.add(snake);
         }
+        log.debug("snakes created: " + snakes);
 
         //init Scores
+        scores.clear();
         players.forEach(player -> scores.put(player,0));
         synchronizeScore();
 
         gameStartTime = System.currentTimeMillis();
         log.debug("started at: "+new Date(gameStartTime));
         updateTimer();
+
         initialized = true;
+        gameover = false;
 
         return getSynchronizationMessage();
+    }
+
+    @Override
+    public void setMap(Map map) {
+        this.originalMap = map;
+        this.currentMap = new Map(map);
     }
 
     private void sendCountDown() {
@@ -118,14 +132,17 @@ public class BasicSnake implements Gamemode {
 
     @Override
     public java.util.Map<String, Integer> getScores() {
-        // TODO: 03.01.2022 convert scores to Map<String, Integer> and return it
-        return null;
+        java.util.Map<String, Integer> scoreMap = new HashMap<>();
+        scores.forEach((player, score) -> {
+            scoreMap.put(player.getName(), score);
+        });
+        return scoreMap;
     }
 
 
     private void spawnFood() {
-        int width = map.getWidth();
-        int height = map.getHeight();
+        int width = currentMap.getWidth();
+        int height = currentMap.getHeight();
 
         Position spawnPosition = new Position(0, 0);
         Material currentMaterial;
@@ -135,9 +152,9 @@ public class BasicSnake implements Gamemode {
                     (int) Math.floor(Math.random() * width),
                     (int) Math.floor(Math.random() * height)
             );
-            currentMaterial = map.getMaterialAt(spawnPosition);
+            currentMaterial = currentMap.getMaterialAt(spawnPosition);
         } while (currentMaterial == Material.APPLE || currentMaterial == Material.WALL);
-        map.changeMaterial(spawnPosition, Material.APPLE);
+        currentMap.changeMaterial(spawnPosition, Material.APPLE);
         jsonChangeMaterial(spawnPosition, Material.APPLE);
     }
 
@@ -174,7 +191,7 @@ public class BasicSnake implements Gamemode {
             Position head = snake.getHead();
 
             // wall collisions
-            if (map.getMaterialAt(head) == Material.WALL) {
+            if (currentMap.getMaterialAt(head) == Material.WALL) {
                 scheduledForRemoval.add(snake);
             }
 
@@ -191,9 +208,9 @@ public class BasicSnake implements Gamemode {
             });
 
             // apple collisions
-            if (map.getMaterialAt(head) == Material.APPLE) {
+            if (currentMap.getMaterialAt(head) == Material.APPLE) {
                 snake.grow(1);
-                map.changeMaterial(head, Material.FREESPACE);
+                currentMap.changeMaterial(head, Material.FREESPACE);
                 jsonChangeMaterial(head, Material.FREESPACE);
             }
         });
@@ -207,18 +224,22 @@ public class BasicSnake implements Gamemode {
     }
 
     private void snakeToApples(Snake snake) {
-        List newApples = snake.getPositions();
-        newApples.remove(0);
+        List<Position> newApples = snake.getPositions();
         newApples.forEach(position -> {
-            map.changeMaterial((Position) position, Material.APPLE);
+            if (currentMap.getMaterialAt(position) == Material.FREESPACE) {
+                currentMap.changeMaterial(position, Material.APPLE);
+                jsonChangeMaterial(position, Material.APPLE);
+            }
         });
 
     }
 
     private void doesGameEnd() {
         if (timer<0){ //endif gameMaxTime is surpassed
+            log.debug("time is up");
             endGame();
         } else if (snakes.isEmpty()){ //Game ends when all snakes are dead
+            log.debug("Game ends, because there are no snakes");
             endGame();
         }
     }
@@ -291,7 +312,12 @@ public class BasicSnake implements Gamemode {
 
     @Override
     public String toString() {
-        Material[][] tmp = map.getMap();
+        Material[][] tmp;
+        if (currentMap == null) {
+            tmp = originalMap.getMap();
+        } else {
+            tmp = currentMap.getMap();
+        }
 
         // add snakes
         snakes.forEach(snake -> {
