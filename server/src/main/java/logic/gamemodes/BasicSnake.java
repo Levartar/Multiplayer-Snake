@@ -67,14 +67,14 @@ public class BasicSnake implements Gamemode {
             sendCountDown();
         } else {
 
-            snakes.forEach(Snake::move);
-            checkCollision();
-            synchronizeScore();
-
             loopCount++;
             if (loopCount % (15 / snakes.size()) == 0) {
                 spawnFood();
             }
+
+            snakes.forEach(Snake::move);
+            checkCollision();
+            synchronizeScore();
         }
         updateTimer();
         log.debug("\nGamemode:\n"+this+"\nplayers:\n"+players.toString()+"\nscores:\n"+scores.toString()+"\nTimer:\n"+timer);

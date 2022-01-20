@@ -245,7 +245,7 @@ class BasicSnakeTest {
                 #                                                  #
                 ####################################################""";
 
-        assertEquals(expected, gamemode.toString());
+        assertEquals(expected, gamemode.toString().replaceAll("@", " "));
         log.info("Test "+"testBigMapSpawnsAndMove" +" passed");
     }
 
@@ -312,8 +312,6 @@ class BasicSnakeTest {
                 #                                                  #
                 #                                                  #
                 #                                                  #
-                #             @@                  @@               #
-                #             @@                  @@               #
                 #                                                  #
                 #                                                  #
                 #                                                  #
@@ -332,8 +330,10 @@ class BasicSnakeTest {
                 #                                                  #
                 #                                                  #
                 #                                                  #
-                #             @@                  @@               #
-                #             @@                  @@               #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
                 #                                                  #
                 #                                                  #
                 #                                                  #
@@ -351,7 +351,7 @@ class BasicSnakeTest {
                 #                                                  #
                 ####################################################""";
 
-        assertEquals(expected, gamemode.toString());
+        assertEquals(expected, gamemode.toString().replaceAll("@", " "));
         log.info("Test "+"testSnakeCollidesWithItself" +" passed");
     }
 
