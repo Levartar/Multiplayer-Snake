@@ -17,6 +17,8 @@ public interface Gamemode {
 
     String init();
 
+    void setMap(logic.Map map);
+
     Map<String, Integer> getScores();
 
     int getTimer();

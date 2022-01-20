@@ -41,7 +41,7 @@ class Create_session extends React.Component{
         document.getElementById("buttonnewGame").addEventListener("click", () => {
             //create a new lobby
             if(!nameCheck()){
-                const url = "http://localhost:80/create"
+                const url = "/create"
                 const request = new Request(url, {
                         method: 'GET'
                     }
@@ -87,7 +87,7 @@ class Join_session extends React.Component{
                 //connect to lobby with sessionID
                 sessionID = document.getElementById("inputsessionId").value
 
-                const url = "http://localhost:80/game-info?code=" + sessionID
+                const url = "/game-info?code=" + sessionID
                 const request = new Request(url, {
                         method: 'GET'
                     }
@@ -235,7 +235,7 @@ class Lobby extends React.Component {
         })
 
         document.getElementById("buttonstartGame").addEventListener("click", () => {
-            const url = "http://localhost:80/start?code=" + sessionID
+            const url = "/start?code=" + sessionID
             const request = new Request(url, {
                     method:'POST'
                 }

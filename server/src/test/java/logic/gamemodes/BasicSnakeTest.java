@@ -245,7 +245,7 @@ class BasicSnakeTest {
                 #                                                  #
                 ####################################################""";
 
-        assertEquals(expected, gamemode.toString());
+        assertEquals(expected, gamemode.toString().replaceAll("@", " "));
         log.info("Test "+"testBigMapSpawnsAndMove" +" passed");
     }
 
@@ -297,7 +297,61 @@ class BasicSnakeTest {
         players.forEach(player -> player.setInput('d'));
         gamemode.gameLoop();
 
-        assertEquals(basicMap50x50.toString(), gamemode.toString());
+        String expected = """
+                ####################################################
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                ####################################################""";
+
+        assertEquals(expected, gamemode.toString().replaceAll("@", " "));
         log.info("Test "+"testSnakeCollidesWithItself" +" passed");
     }
 
@@ -433,7 +487,7 @@ class BasicSnakeTest {
         actual[6] = gamemode.gameLoop();
         expected[6] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":8,\"y\":2},{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2}],\"direction\":\"right\"}]}";
         actual[7] = gamemode.gameLoop();
-        expected[7] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[],\"gameover\":{\"winner\":\"jakob\"}}";
+        expected[7] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"replace\":[{\"mat\":\"@\",\"pos\":{\"x\":8,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":7,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":6,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":5,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":4,\"y\":2}}],\"snakes\":[],\"gameover\":{\"winner\":\"jakob\"}}";
 
         for (int i = 0; i < 8; i++) {
             assertEquals(expected[i], actual[i]);

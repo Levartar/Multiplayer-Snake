@@ -14,8 +14,7 @@ test content
         response.json().then(value => console.log(value))
     })
 
-    const url = "http://localhost:80"
-    const req = new Request(url + "/create", {method: 'GET'})
+    const req = new Request("/create", {method: 'GET'})
     let joinCode
     fetch(req).then(response => {
         response.text().then(value => {
@@ -23,7 +22,7 @@ test content
             joinCode = value
 
 
-            const game_info_request = new Request(url + "/game-info?code=" + joinCode,
+            const game_info_request = new Request("/game-info?code=" + joinCode,
                 {method: 'GET'})
 
             fetch(game_info_request).then(response => {
@@ -38,7 +37,7 @@ test content
             fetch(selectMap)
 
             setTimeout(() => {
-                const start_request = new Request(url + "/start?code=" + joinCode,
+                const start_request = new Request("/start?code=" + joinCode,
                     {method: 'POST'})
                 fetch(start_request)
             }, 2000)
@@ -46,8 +45,8 @@ test content
     })
 
     function join(joinCode){
-
-        const wsUrl = "ws://localhost:80/join/" + joinCode + "/name/timo"
+        const host = window.location.host; // e.g. localhost:8080
+        const wsUrl = "ws://" + host + "/join/" + joinCode + "/name/timo"
         const ws = new WebSocket(wsUrl)
 
         ws.onopen = () => {
