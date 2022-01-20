@@ -3,7 +3,8 @@ let world
 let replace
 
 function websockets(name, sessionID){
-    ws = new WebSocket("ws://" + window.location.host + "/join/" + sessionID + "/name/" + name)
+    let protocol = isSecure() ? "wss://" : "ws://"
+    ws = new WebSocket(protocol + window.location.host + "/join/" + sessionID + "/name/" + name)
     ws.onopen = function () {
         //render the lobby when a player connected over the websocket
         playerNames = []
@@ -55,6 +56,11 @@ function websockets(name, sessionID){
     ws.onerror = function (error){
         console.log("Error: " + error)
     }
+}
+
+function isSecure()
+{
+    return window.location.protocol === 'https:';
 }
 
 //draw a grid depending on the width ang height of the gameBoard
