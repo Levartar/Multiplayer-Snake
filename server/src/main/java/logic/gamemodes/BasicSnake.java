@@ -72,7 +72,7 @@ public class BasicSnake implements Gamemode {
             synchronizeScore();
 
             loopCount++;
-            if (loopCount % 20 == 0) {
+            if (loopCount % (15 / snakes.size()) == 0) {
                 spawnFood();
             }
         }

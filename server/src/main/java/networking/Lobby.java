@@ -124,7 +124,7 @@ public class Lobby {
                 running = false;
                 executor.shutdown();
             }
-        }, 0, 1000, TimeUnit.MILLISECONDS);
+        }, 0, 200, TimeUnit.MILLISECONDS);
     }
 
     private void setPlayerColors() {
