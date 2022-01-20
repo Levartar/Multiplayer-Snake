@@ -27,7 +27,7 @@ public class Lobby {
     private final List<Player> players = new ArrayList<>();
     private final Set<Endpoint> endpoints = new CopyOnWriteArraySet<>();
     private boolean running = false;
-    private Gamemode gamemode;
+    private final Gamemode gamemode;
     private Map map;
     private String mapName;
 
@@ -72,17 +72,6 @@ public class Lobby {
         return gamemode;
     }
 
-    public void setGamemode(String gamemode) {
-        switch (gamemode) {
-            case Gamemode.BASIC_SNAKE -> {
-                this.gamemode = new BasicSnake(players, map);
-                log.info("Gamemode " + this.gamemode.getClass().getName()
-                        + " set for lobby with code " + joinCode);
-            }
-            default -> log.error("No such gamemode: " + gamemode);
-        }
-    }
-
     public void start() throws Exception {
         if (map == null) {
             createDefaultMap();
@@ -93,6 +82,8 @@ public class Lobby {
         if (!isReadyToStart()) {
             throw new Exception("Not enough players or not every player is ready");
         }
+
+        gamemode.setMap(map);
 
         setPlayerColors();
 

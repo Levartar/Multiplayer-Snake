@@ -16,7 +16,7 @@ public class BasicSnake implements Gamemode {
 
     private static final Logger log = LogManager.getLogger(BasicSnake.class);
 
-    private final Map originalMap;
+    private Map originalMap;
     private Map currentMap;
     private final List<Snake> snakes;
 
@@ -39,17 +39,14 @@ public class BasicSnake implements Gamemode {
 
     public BasicSnake(List<Player> players, Map map, int countDown) {
         this.players = players;
-        this.originalMap = map;
-        this.currentMap = new Map(map);
+        setMap(map);
         this.maxCountdown = countDown*1000;
         snakes = new ArrayList<>();
+        log.debug("BasicSnake created\n"+this);
     }
 
     public BasicSnake(List<Player> players, Map map) {
-        this.players = players;
-        this.originalMap = map;
-        snakes = new ArrayList<>();
-        log.debug("BasicSnake created\n"+this);
+        this(players, map, 0);
     }
 
     private JSONObject getWorld() {
@@ -121,6 +118,12 @@ public class BasicSnake implements Gamemode {
         gameover = false;
 
         return getSynchronizationMessage();
+    }
+
+    @Override
+    public void setMap(Map map) {
+        this.originalMap = map;
+        this.currentMap = new Map(map);
     }
 
     private void sendCountDown() {
