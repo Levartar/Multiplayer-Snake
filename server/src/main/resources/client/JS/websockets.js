@@ -6,9 +6,12 @@ function websockets(name, sessionID){
     ws = new WebSocket("ws://localhost:80/join/" + sessionID + "/name/" + name)
     ws.onopen = function () {
         //render the lobby when a player connected over the websocket
-        playerNames = []
+        if(playerNames === undefined){
+            playerNames = []
+        }
+
         ReactDOM.render(
-            <Lobby players={["loading..."]}/>,
+            <Lobby players={playerNames} maps={maps}/>,
             document.getElementById('root')
         );
         document.getElementById("sessionIDtext").innerText = sessionID

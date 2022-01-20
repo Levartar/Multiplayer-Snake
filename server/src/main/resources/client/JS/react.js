@@ -2,6 +2,9 @@
 let sessionID
 // Array with player names
 let playerNames
+// mappool
+let currentMap
+let maps = []
 // websocket
 let ws
 // interval for refreshing the player list (is a function)
@@ -51,6 +54,8 @@ class Create_session extends React.Component{
                             sessionID = value
                             // values of the input fields
                             const name = document.getElementById("inputName").value
+
+                            getGameInfo(sessionID)
                             websockets(name, sessionID)
                         })
                     })
@@ -92,9 +97,10 @@ class Join_session extends React.Component{
                     .then(response => {
                         response.json().then(obj => {
                             //look if the lobby with the sessionID is running if yes open ws
-                            console.log(obj)
                             let isValideId = obj.exists
                             playerNames = obj.playerNames
+                            currentMap = obj.selectedMap
+                            maps = obj.mapNames
                             let isFull = playerNames.length > 3;
                             let hasStarted = obj.hasStarted
 
@@ -206,7 +212,7 @@ function MapSelect(props) {
             <h2 id="mapSelectHeadline">Select Map</h2>
             <select name="maps" id="mapDropDown">
                 {props.data.map((mapOptions, i) =>
-                    <option key={i}>{props.data[i].mapOption}</option>
+                    <option key={i}>{props.data[i]}</option>
                 )}
             </select>
         </div>
@@ -215,11 +221,7 @@ function MapSelect(props) {
 }
 
 //placeholder data as long as there is no data from backend
-const testMaps = [
-    {mapOption: "coolMap"},
-    {mapOption: "awesomeMap"},
-    {mapOption: "42"}
-]
+
 
 //define the lobby with eventListener, buttons and mapOptions
 class Lobby extends React.Component {
@@ -242,15 +244,26 @@ class Lobby extends React.Component {
             // start the game
             fetch(request).then()
         })
+        document.getElementById("mapDropDown").addEventListener("change", () => {
+            const url = "/select-map?code=" + sessionID
+            const request = new Request(url, {
+                    method:'POST',
+                    body: document.getElementById("mapDropDown").value
+                }
+            )
+            // send the selected map to the backend
+            fetch(request).then()
+        })
 
         checkCurrentPlayers = setInterval(() => {
-            currentPlayer()
-            if(playerNames !== undefined && playerNames.length > 0){
+            getGameInfo(sessionID)
+            if(playerNames !== undefined && playerNames.length > 0 && maps !== undefined){
                 ReactDOM.render(
-                    <Lobby players={playerNames}/>,
+                    <Lobby players={playerNames} maps={maps}/>,
                     document.getElementById("root")
                 )
             }
+            setDefault(currentMap)
         }, 1000);
     }
 
@@ -268,7 +281,7 @@ class Lobby extends React.Component {
                         <h2 id="sessionIDHeadline" >SessionID:</h2>
                         <p id="sessionIDtext" > </p>
                     </div>
-                    <MapSelect data={testMaps}/>
+                    <MapSelect data={this.props.maps}/>
                     <div id="playerTable">
                         <List players={this.props.players}/>
                     </div>
@@ -349,8 +362,8 @@ function nameCheck(){
     return document.getElementById("inputName").value === ""
 }
 
-function currentPlayer() {
-    const url = "http://localhost:80/game-info?code=" + sessionID
+function getGameInfo(sessionID){
+    const url = "/game-info?code=" + sessionID
     const request = new Request(url, {
             method: 'GET'
         }
@@ -359,7 +372,21 @@ function currentPlayer() {
     fetch(request)
         .then(response => {
             response.json().then(obj => {
+                currentMap = obj.selectedMap
                 playerNames = obj.playerNames
+                maps = obj.mapNames
             })
         })
+}
+function setDefault(currentMap){
+    let mySelect = document.getElementById('mapDropDown');
+    let options = mySelect.children
+
+    for (let i = 0; i < options.length; i++) {
+
+        if(options[i].value === currentMap){
+            options[i].selected = true
+            break
+        }
+    }
 }
