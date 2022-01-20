@@ -257,13 +257,7 @@ class Lobby extends React.Component {
 
         checkCurrentPlayers = setInterval(() => {
             getGameInfo(sessionID)
-            if(playerNames !== undefined && playerNames.length > 0 && maps !== undefined){
-                ReactDOM.render(
-                    <Lobby players={playerNames} maps={maps}/>,
-                    document.getElementById("root")
-                )
-            }
-            setDefault(currentMap)
+
         }, 1000);
     }
 
@@ -375,6 +369,14 @@ function getGameInfo(sessionID){
                 currentMap = obj.selectedMap
                 playerNames = obj.playerNames
                 maps = obj.mapNames
+
+                if(playerNames !== undefined && playerNames.length > 0 && maps !== undefined){
+                    ReactDOM.render(
+                        <Lobby players={playerNames} maps={maps}/>,
+                        document.getElementById("root")
+                    )
+                }
+                setDefault(currentMap)
             })
         })
 }
