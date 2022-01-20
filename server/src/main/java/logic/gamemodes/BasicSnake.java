@@ -207,10 +207,12 @@ public class BasicSnake implements Gamemode {
     }
 
     private void snakeToApples(Snake snake) {
-        List newApples = snake.getPositions();
-        newApples.remove(0);
+        List<Position> newApples = snake.getPositions();
         newApples.forEach(position -> {
-            map.changeMaterial((Position) position, Material.APPLE);
+            if (map.getMaterialAt(position) == Material.FREESPACE) {
+                map.changeMaterial(position, Material.APPLE);
+                jsonChangeMaterial(position, Material.APPLE);
+            }
         });
 
     }
