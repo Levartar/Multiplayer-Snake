@@ -18,8 +18,8 @@ public class SQLConnection {
     static String databasename;
 
     public static void setLoginDetails() {
-        DBUser = System.getenv("DBUser");
-        DBUserPW = System.getenv("DBUserPW");
+        DBUser = System.getenv("DBUserName");
+        DBUserPW = System.getenv("DBUserPassword");
         DBIP = System.getenv("Server_IP");
         databasename = "testdb";
         log.debug(DBUser + DBUserPW + DBIP);
