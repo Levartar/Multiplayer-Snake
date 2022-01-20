@@ -52,10 +52,11 @@ public class ResourceManager {
             log.error(e.getMessage());
         }
 
+        FileSystem fileSystem = null;
         Path path;
         if (uri.getScheme().equals("jar")) {
             // if in a jar, create a FileSystem
-            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
+            fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
             path = fileSystem.getPath("/maps");
         } else {
             path = Paths.get(uri);
@@ -64,6 +65,9 @@ public class ResourceManager {
         Stream<Path> list = Files.list(path);
         for (Iterator<Path> it = list.iterator(); it.hasNext(); ) {
             mapNames.add(it.next().getFileName().toString());
+        }
+        if (fileSystem != null) {
+            fileSystem.close();
         }
         return mapNames;
     }
