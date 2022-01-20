@@ -11,13 +11,13 @@ import org.json.JSONObject;
 
 import java.lang.System;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class BasicSnake implements Gamemode {
 
     private static final Logger log = LogManager.getLogger(BasicSnake.class);
 
-    private final Map map;
+    private final Map originalMap;
+    private Map currentMap;
     private final List<Snake> snakes;
 
     private int loopCount;
@@ -39,23 +39,23 @@ public class BasicSnake implements Gamemode {
 
     public BasicSnake(List<Player> players, Map map, int countDown) {
         this.players = players;
-        this.map = map;
+        this.originalMap = map;
+        this.currentMap = new Map(map);
         this.maxCountdown = countDown*1000;
         snakes = new ArrayList<>();
     }
 
     public BasicSnake(List<Player> players, Map map) {
         this.players = players;
-        this.map = map;
-        this.countDown = 0;
+        this.originalMap = map;
         snakes = new ArrayList<>();
         log.debug("BasicSnake created\n"+this);
     }
 
     private JSONObject getWorld() {
-        JSONObjectWorld.put("worldstring",map.toString());
-        JSONObjectWorld.put("height",map.getHeight());
-        JSONObjectWorld.put("width",map.getWidth());
+        JSONObjectWorld.put("worldstring", currentMap.toString());
+        JSONObjectWorld.put("height", currentMap.getHeight());
+        JSONObjectWorld.put("width", currentMap.getWidth());
         return JSONObjectWorld;
     }
 
@@ -85,20 +85,29 @@ public class BasicSnake implements Gamemode {
     public String init() {
 
         log.debug("Init BasicSnake:");
+        this.countDown = 0;
+
+        // reset map
+        this.currentMap = new Map(this.originalMap);
+
         // initial message
         JSON_synchronizationMessage.put("world", getWorld());
+
+        // remove game over message
+        JSONObjectGameover.clear();
 
         //init GameTime
         gameMaxTime = (int) (60000*players.size()+maxCountdown); //1 Minute per player + CountDown in ms
         log.debug("set GameTime to:"+gameMaxTime/1000f);
 
         // create snakes
-        List<Position> spawnPoints = map.getSpawnPoints();
+        List<Position> spawnPoints = currentMap.getSpawnPoints();
         int size = Math.min(players.size(), spawnPoints.size());
         for (int i = 0; i < size; i++) {
             Snake snake = new Snake(spawnPoints.get(i), 5, players.get(i));
             snakes.add(snake);
         }
+        log.debug("snakes created: " + snakes);
 
         //init Scores
         players.forEach(player -> scores.put(player,0));
@@ -107,7 +116,9 @@ public class BasicSnake implements Gamemode {
         gameStartTime = System.currentTimeMillis();
         log.debug("started at: "+new Date(gameStartTime));
         updateTimer();
+
         initialized = true;
+        gameover = false;
 
         return getSynchronizationMessage();
     }
@@ -124,8 +135,8 @@ public class BasicSnake implements Gamemode {
 
 
     private void spawnFood() {
-        int width = map.getWidth();
-        int height = map.getHeight();
+        int width = currentMap.getWidth();
+        int height = currentMap.getHeight();
 
         Position spawnPosition = new Position(0, 0);
         Material currentMaterial;
@@ -135,9 +146,9 @@ public class BasicSnake implements Gamemode {
                     (int) Math.floor(Math.random() * width),
                     (int) Math.floor(Math.random() * height)
             );
-            currentMaterial = map.getMaterialAt(spawnPosition);
+            currentMaterial = currentMap.getMaterialAt(spawnPosition);
         } while (currentMaterial == Material.APPLE || currentMaterial == Material.WALL);
-        map.changeMaterial(spawnPosition, Material.APPLE);
+        currentMap.changeMaterial(spawnPosition, Material.APPLE);
         jsonChangeMaterial(spawnPosition, Material.APPLE);
     }
 
@@ -174,7 +185,7 @@ public class BasicSnake implements Gamemode {
             Position head = snake.getHead();
 
             // wall collisions
-            if (map.getMaterialAt(head) == Material.WALL) {
+            if (currentMap.getMaterialAt(head) == Material.WALL) {
                 scheduledForRemoval.add(snake);
             }
 
@@ -191,9 +202,9 @@ public class BasicSnake implements Gamemode {
             });
 
             // apple collisions
-            if (map.getMaterialAt(head) == Material.APPLE) {
+            if (currentMap.getMaterialAt(head) == Material.APPLE) {
                 snake.grow(1);
-                map.changeMaterial(head, Material.FREESPACE);
+                currentMap.changeMaterial(head, Material.FREESPACE);
                 jsonChangeMaterial(head, Material.FREESPACE);
             }
         });
@@ -209,8 +220,8 @@ public class BasicSnake implements Gamemode {
     private void snakeToApples(Snake snake) {
         List<Position> newApples = snake.getPositions();
         newApples.forEach(position -> {
-            if (map.getMaterialAt(position) == Material.FREESPACE) {
-                map.changeMaterial(position, Material.APPLE);
+            if (currentMap.getMaterialAt(position) == Material.FREESPACE) {
+                currentMap.changeMaterial(position, Material.APPLE);
                 jsonChangeMaterial(position, Material.APPLE);
             }
         });
@@ -219,8 +230,10 @@ public class BasicSnake implements Gamemode {
 
     private void doesGameEnd() {
         if (timer<0){ //endif gameMaxTime is surpassed
+            log.debug("time is up");
             endGame();
         } else if (snakes.isEmpty()){ //Game ends when all snakes are dead
+            log.debug("Game ends, because there are no snakes");
             endGame();
         }
     }
@@ -293,7 +306,12 @@ public class BasicSnake implements Gamemode {
 
     @Override
     public String toString() {
-        Material[][] tmp = map.getMap();
+        Material[][] tmp;
+        if (currentMap == null) {
+            tmp = originalMap.getMap();
+        } else {
+            tmp = currentMap.getMap();
+        }
 
         // add snakes
         snakes.forEach(snake -> {

@@ -96,23 +96,27 @@ public class Lobby {
 
         setPlayerColors();
 
-        running = true;
+        running = false;
+
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
         executor.scheduleAtFixedRate(() -> {
             try {
-                String data = gamemode.gameLoop();//if doesn't send a string throw exception
-                log.trace("gameLoop data: " + data);
+                String data;
+                if (!running) {
+                    log.info("initializing game...");
+                    data = gamemode.init();
+                    log.trace("init data: " + data);
+                    running = true;
+                } else {
+                    data = gamemode.gameLoop();//if doesn't send a string throw exception
+                    log.trace("gameLoop data: " + data);
+                }
                 for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
                 }
             } catch (GameNotInitializedException e) {
-                log.info("initializing game...");
-                String data = gamemode.init();
-                log.trace("init data: " + data);
-                for (Endpoint endpoint : endpoints) {
-                    endpoint.send(data);
-                }
+                log.error(e.getMessage());
             } catch (GameOverException e) {
                 log.info("Game ended from lobby " + joinCode);
                 java.util.Map<String, Integer> highscores = gamemode.getScores();

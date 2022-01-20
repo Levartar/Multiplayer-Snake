@@ -19,7 +19,12 @@ public class Map {
     //private final int spawnDistanceX = 0;
     //private final int spawnDistanceY = 0;
 
-    public Map(String mapString) {//Overloaded Method to Load Map via String or Path
+    public Map(Map map) {
+        this(map.toString());
+        this.spawnPoints = List.copyOf(map.spawnPoints);
+    }
+
+    public Map(String mapString) {
         this.mapString = mapString;
         parseMapString(mapString);
         updateMapString();

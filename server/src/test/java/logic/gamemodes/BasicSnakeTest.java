@@ -297,7 +297,61 @@ class BasicSnakeTest {
         players.forEach(player -> player.setInput('d'));
         gamemode.gameLoop();
 
-        assertEquals(basicMap50x50.toString(), gamemode.toString());
+        String expected = """
+                ####################################################
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #             @@                  @@               #
+                #             @@                  @@               #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #             @@                  @@               #
+                #             @@                  @@               #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                #                                                  #
+                ####################################################""";
+
+        assertEquals(expected, gamemode.toString());
         log.info("Test "+"testSnakeCollidesWithItself" +" passed");
     }
 
