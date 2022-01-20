@@ -3,7 +3,7 @@ let world
 let replace
 
 function websockets(name, sessionID){
-    ws = new WebSocket("ws://localhost:80/join/" + sessionID + "/name/" + name)
+    ws = new WebSocket("ws://" + window.location.host + "/join/" + sessionID + "/name/" + name)
     ws.onopen = function () {
         //render the lobby when a player connected over the websocket
         playerNames = []
