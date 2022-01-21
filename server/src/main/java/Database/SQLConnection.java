@@ -22,7 +22,6 @@ public class SQLConnection {
         DBUserPW = System.getenv("DBUserPassword");
         DBIP = System.getenv("Server_IP");
         databasename = "testdb";
-        log.debug(DBUser + DBUserPW + DBIP);
 
     }
 
@@ -65,8 +64,10 @@ public class SQLConnection {
 
 
     public static boolean InsertSnakeHighscore(String name, int highscore) {
-
-        String statement = "INSERT IGNORE INTO `Highscore` SET `score_id` = NULL," +
+        if(name.length() >= 100){
+            return false;
+        }
+        String statement = "INSERT IGNORE INTO `Highscore` " +"SET `score_id` = NULL," +
                 "`player_name` = '" + name + "'," +
                 "`score` = " + highscore + ";";
         return InsertStatement(statement);
@@ -75,9 +76,10 @@ public class SQLConnection {
     public static boolean InsertStatement(String insert) {
         try {
             connectToServer("testdb");
-            stmt.executeUpdate(insert);
+            int rowAffected = stmt.executeUpdate(insert);
+            log.debug(rowAffected + "rows affected");
             stmt.close();
-            log.info("InsertStatement executed");
+            log.info("InsertStatement executed" + insert);
             closeDataBaseConnection();
             return true;
         } catch (SQLException e) {
@@ -86,17 +88,19 @@ public class SQLConnection {
         }
     }
 
-    public static boolean deleteHighscore(String name) {
+    public static int deleteHighscore(String name) {
         String delete = "delete from testdb.`Highscore` where `player_name` ='" + name + "';";
+        int result = 0;
         try {
             connectToServer("testdb");
             Statement stmt = connection.createStatement();
-            stmt.executeUpdate(delete);
+            result = stmt.executeUpdate(delete);
             log.info("Database connection success");
-            return true;
+            log.info("Deleted" + result + "rows");
+            return result;
         } catch (SQLException e) {
             log.error(e);
-            return false;
+            return result;
         }
     }
 

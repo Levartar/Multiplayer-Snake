@@ -32,18 +32,11 @@ public class DatabaseTest {
         SQLConnection.InsertSnakeHighscore("Timo", 21);
         SQLConnection.InsertSnakeHighscore("Felix", 23);
         SQLConnection.InsertSnakeHighscore("Anjo", 24);
-        SQLConnection.deleteHighscore("Felix");
+        assertEquals(1,SQLConnection.deleteHighscore("Felix"));
 
 
         assertEquals("Could not find name: " + name, SQLConnection.getName("Felix"));
     }
-
-    // @Test
-    // void failedInsert(){
-    //     name = "IammuchlongerthanonlysixtywordsbecauseihavetocreateanBIGError!";
-    //     assertFalse(sendData());
-
-    // }
 
     public boolean sendData() {
 

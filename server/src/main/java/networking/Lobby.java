@@ -105,12 +105,7 @@ public class Lobby {
                 log.info("Game ended from lobby " + joinCode);
                 java.util.Map<String, Integer> highscores = gamemode.getScores();
                 try{
-                    highscores.forEach((key,value) -> {
-                        // TODO: 05.01.2022 test the highscore saving!!!
-                       // String query = "insert into highscores values ("+ key+", "+ value+")";
-                       // String resultSet = SQLConnection.executeMyQuery(query,"testdb");
-                       // log.debug(resultSet);
-                    });
+                    highscores.forEach(SQLConnection::InsertSnakeHighscore);
                 }catch(Exception ex){
                     log.error(ex.getMessage());
                 }
