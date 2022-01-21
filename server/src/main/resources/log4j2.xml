@@ -9,7 +9,7 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="info">
+        <Root level="trace">
             <AppenderRef ref="STDOUT"/>
             <AppenderRef ref="A1"/>
         </Root>
