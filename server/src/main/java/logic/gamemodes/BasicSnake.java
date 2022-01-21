@@ -37,11 +37,12 @@ public class BasicSnake implements Gamemode {
     private long lastFrameSystemTime;
     private int timeLeft;
     private int countDown;
+    private final int initialCountDown;
 
     public BasicSnake(List<Player> players, Map map, int countDown) {
         this.players = players;
         setMap(map);
-        this.countDown = countDown * 1000;
+        this.initialCountDown = countDown * 1000;
         log.debug("BasicSnake created\n" + this);
     }
 
@@ -62,6 +63,7 @@ public class BasicSnake implements Gamemode {
         JSONObjectGameOver.clear();
 
         // init GameTime
+        countDown = initialCountDown;
         timeLeft = 60000 * players.size() + countDown; // 1 Minute per player + CountDown
 
         // create snakes
