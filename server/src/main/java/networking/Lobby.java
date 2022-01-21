@@ -9,6 +9,7 @@ import logic.Player;
 import logic.gamemodes.BasicSnake;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import Database.SQLConnection;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -42,6 +43,7 @@ public class Lobby {
     }
 
     /**
+     *
      * @throws Exception if the lobby is full or the game is running
      */
     public void join(Endpoint endpoint) throws Exception {
@@ -116,7 +118,17 @@ public class Lobby {
             } catch (GameOverException e) {
                 log.info("Game ended from lobby " + joinCode);
                 java.util.Map<String, Integer> highscores = gamemode.getScores();
-                // TODO: 03.01.2022 send highscores data to database
+                try{
+                    highscores.forEach(SQLConnection::InsertSnakeHighscore);
+                }catch(Exception ex){
+                    log.error(ex.getMessage());
+                }
+                try{
+
+                    log.info("Successfully disconnected from Database: ");
+                }catch(Exception exp){
+                    log.error(exp.getMessage());
+                }
                 running = false;
                 executor.shutdown();
             }
