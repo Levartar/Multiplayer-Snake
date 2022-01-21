@@ -16,7 +16,7 @@ public class SQLConnection {
     private static String DBIP;
     static Statement stmt;
     static String databasename = "testdb";
-
+    
     public static void setLoginDetails() {
         DBUser = System.getenv("DBUserName");
         DBUserPW = System.getenv("DBUserPassword");
@@ -58,22 +58,29 @@ public class SQLConnection {
 
 
     public static boolean InsertSnakeHighscore(String name, int highscore) {
-        if(name.length() >= 100){
+        String test = name.toUpperCase();
+        if(test.length() >= 100 || test.contains("FROM")||
+                test.contains("DELETE") || test.contains("INSERT") || test.contains("DROP") ||
+                test.contains(";") || test.contains("1=1") || test.contains("REPLACE") || test.contains("SELECT")){
             return false;
         }
-        String statement = "INSERT IGNORE INTO `Highscore` " +"SET `score_id` = NULL," +
-                "`player_name` = '" + name + "'," +
-                "`score` = " + highscore + ";";
-        return InsertStatement(statement);
+        String statement = "INSERT IGNORE INTO `Highscore`" +
+                " SET `score_id` = NULL," +
+                "`player_name` =  ?, " +"`score` = ?";
+        return InsertStatement(statement, name, highscore);
     }
 
-    public static boolean InsertStatement(String insert) {
+    public static boolean InsertStatement(String insert, String name, int highscore) {
         try {
+
             connectToServer(databasename);
-            int rowAffected = stmt.executeUpdate(insert);
+            PreparedStatement ps = connection.prepareStatement(insert);
+            ps.setString(1, name);
+            ps.setInt(2, highscore);
+            int rowAffected = ps.executeUpdate();
             log.debug(rowAffected + "rows affected");
             stmt.close();
-            log.info("InsertStatement executed" + insert);
+            log.info("InsertStatement executed" + ps);
             closeDataBaseConnection();
             return true;
         } catch (SQLException e) {
