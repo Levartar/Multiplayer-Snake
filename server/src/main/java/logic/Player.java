@@ -56,8 +56,15 @@ public class Player {
         log.debug("player "+name+ " set input to "+ input );
     }
 
-
     public String getName(){
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                '}';
     }
 }

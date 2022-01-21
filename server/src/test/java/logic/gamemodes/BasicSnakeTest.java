@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -473,21 +472,21 @@ class BasicSnakeTest {
         String[] expected = new String[8];
         String[] actual = new String[8];
         actual[0] = gamemode.init();
-        expected[0] = "{\"timer\":" + gamemode.getTimer() + ",\"world\":{\"worldstring\":\"##########\\n#        #\\n#     @  #\\n#        #\\n##########\",\"width\":10,\"height\":5},\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[0] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"world\":{\"worldstring\":\"##########\\n#        #\\n#     @  #\\n#        #\\n##########\",\"width\":10,\"height\":5},\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[1] = gamemode.gameLoop();
-        expected[1] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[1] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[2] = gamemode.gameLoop();
-        expected[2] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[2] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[3] = gamemode.gameLoop();
-        expected[3] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[3] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[4] = gamemode.gameLoop();
-        expected[4] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"replace\":[{\"mat\":\" \",\"pos\":{\"x\":6,\"y\":2}}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[4] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"replace\":[{\"mat\":\" \",\"pos\":{\"x\":6,\"y\":2}}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[5] = gamemode.gameLoop();
-        expected[5] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[5] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[6] = gamemode.gameLoop();
-        expected[6] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":8,\"y\":2},{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2}],\"direction\":\"right\"}]}";
+        expected[6] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":8,\"y\":2},{\"x\":7,\"y\":2},{\"x\":6,\"y\":2},{\"x\":5,\"y\":2},{\"x\":4,\"y\":2},{\"x\":3,\"y\":2}],\"direction\":\"right\"}]}";
         actual[7] = gamemode.gameLoop();
-        expected[7] = "{\"timer\":" + gamemode.getTimer() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"replace\":[{\"mat\":\"@\",\"pos\":{\"x\":8,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":7,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":6,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":5,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":4,\"y\":2}}],\"snakes\":[],\"gameover\":{\"winner\":\"jakob\"}}";
+        expected[7] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"scores\":[{\"name\":\"jakob\",\"points\":6}],\"replace\":[{\"mat\":\"@\",\"pos\":{\"x\":8,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":7,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":6,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":5,\"y\":2}},{\"mat\":\"@\",\"pos\":{\"x\":4,\"y\":2}}],\"snakes\":[],\"gameover\":{\"winner\":\"jakob\"}}";
 
         for (int i = 0; i < 8; i++) {
             assertEquals(expected[i], actual[i]);
@@ -554,8 +553,8 @@ class BasicSnakeTest {
         for (int i = 0; i < 6; i++) {
             gamemode.gameLoop();
             Thread.sleep(1000);
-            assertEquals(60-i,gamemode.getTimer());
-            log.debug("Timer: "+gamemode.getTimer());
+            assertEquals(60-i,gamemode.getTimeLeft());
+            log.debug("Timer: "+gamemode.getTimeLeft());
         }
 
         log.info("Test "+"testTimer" +" passed");
@@ -612,9 +611,16 @@ class BasicSnakeTest {
         _players.forEach(player -> player.setInput('d'));
         gamemode.init();
 
-        for (int i = 0; i < 8; i++) {
-            log.info(gamemode.gameLoop());
-            Thread.sleep(1000);
-        }
+        assertTrue(gamemode.gameLoop().contains("\"countdown\":5"));
+        Thread.sleep(1000);
+        assertTrue(gamemode.gameLoop().contains("\"countdown\":4"));
+        Thread.sleep(1000);
+        assertTrue(gamemode.gameLoop().contains("\"countdown\":3"));
+        Thread.sleep(1000);
+        assertTrue(gamemode.gameLoop().contains("\"countdown\":2"));
+        Thread.sleep(1000);
+        assertTrue(gamemode.gameLoop().contains("\"countdown\":1"));
+        Thread.sleep(1000);
+        assertFalse(gamemode.gameLoop().contains("\"countdown\""));
     }
 }

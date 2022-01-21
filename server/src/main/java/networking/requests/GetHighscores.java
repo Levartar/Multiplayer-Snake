@@ -1,16 +1,17 @@
 package networking.requests;
 
+import Database.SQLConnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-//import Database.SQLConnector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.ResultSet;
 
 public class GetHighscores extends HttpServlet {
     private static final Logger log = LogManager.getLogger(GetHighscores.class);
@@ -20,14 +21,18 @@ public class GetHighscores extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info(req);
-
-        //executeMyQuery("Select * from highscores order by highscore DESC, "Database")
-        // TODO: 19.01.2022 stream highscore data into JSON Object and send to frontend, X amount of entries
-
-        // for every database entry
-        addToJSON("sample", 100000);
-        addToJSON("sample2", 42);
-
+        ResultSet resultSet = SQLConnection.getScores();
+        try{
+            for (int i = 0; i < 20 &&resultSet.next(); i++) {
+                try{
+                    addToJSON(resultSet.getString("player_name"), Integer.parseInt(resultSet.getString("score")));
+                }catch(Exception e){
+                    log.error("For loop Error: " + e.getMessage());
+                }
+            }
+        }catch(Exception e){
+            log.error("External for loop Error:  " + e.getMessage());
+        }
         try {
             resp.setStatus(HttpServletResponse.SC_OK);
         } catch (Exception e) {

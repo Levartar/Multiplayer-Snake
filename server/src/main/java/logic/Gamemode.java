@@ -21,5 +21,5 @@ public interface Gamemode {
 
     Map<String, Integer> getScores();
 
-    int getTimer();
+    int getTimeLeft();
 }
