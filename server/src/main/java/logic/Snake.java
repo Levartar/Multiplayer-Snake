@@ -102,4 +102,11 @@ public class Snake {
     public Player getPlayer(){
         return player;
     }
+
+    @Override
+    public String toString() {
+        return "Snake{" +
+                "player=" + player +
+                '}';
+    }
 }
