@@ -1,67 +1,134 @@
 package logic.gamemodes;
 
+import exceptions.GameNotInitializedException;
+import exceptions.GameOverException;
 import logic.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
 
 public class BasicSnake implements Gamemode {
+    private static final Logger log = LogManager.getLogger(BasicSnake.class);
 
-    private final Map map;
-    private final List<Snake> snakes;
+    private final List<Snake> snakes = new ArrayList<>();
+    private final List<Snake> scheduledForRemoval = new ArrayList<>();
+    private final List<Player> players;
+    private final java.util.Map<Player, Integer> scores = new HashMap<>();
+    private final JSONArray JSONReplace = new JSONArray();
+    private final JSONObject JSONSynchronizationMessage = new JSONObject();
+    private final JSONArray JSONArrayScores = new JSONArray();
+    private final JSONObject JSONObjectGameOver = new JSONObject();
+    private final JSONObject JSONObjectWorld = new JSONObject();
+    private Map originalMap;
+    private Map currentMap;
+
+    private boolean gameOver = false;
+    private boolean initialized = false;
 
     private int loopCount;
-    private final List<Snake> scheduledForRemoval = new ArrayList<>();
-    private final JSONArray JSON_replace = new JSONArray();
-    private final JSONObject JSON_synchronizationMessage = new JSONObject();
-    private final JSONArray JSONArrayScores = new JSONArray();
-    private final HashMap<Player, Integer> scores = new HashMap<>();
+
+    private long lastFrameSystemTime;
+    private int timeLeft;
+    private int countDown;
+
+    public BasicSnake(List<Player> players, Map map, int countDown) {
+        this.players = players;
+        setMap(map);
+        this.countDown = countDown * 1000;
+        log.debug("BasicSnake created\n" + this);
+    }
 
     public BasicSnake(List<Player> players, Map map) {
-        this.map = map;
-        snakes = new ArrayList<>();
+        this(players, map, 0);
+    }
 
-        // initial message
-        JSON_synchronizationMessage.put("world", map.toString());
+    @Override
+    public String init() {
 
-        //init Scores
-        players.forEach(player -> scores.put(player,0));
+        // reset map
+        this.currentMap = new Map(this.originalMap);
+
+        // initial message has world
+        JSONSynchronizationMessage.put("world", jsonGetWorld());
+
+        // remove game over message
+        JSONObjectGameOver.clear();
+
+        // init GameTime
+        timeLeft = 60000 * players.size() + countDown; // 1 Minute per player + CountDown
 
         // create snakes
-        List<Position> spawnPoints = map.getSpawnPoints();
+        List<Position> spawnPoints = currentMap.getSpawnPoints();
         int size = Math.min(players.size(), spawnPoints.size());
         for (int i = 0; i < size; i++) {
             Snake snake = new Snake(spawnPoints.get(i), 5, players.get(i));
             snakes.add(snake);
         }
-    }
 
-    @Override
-    public String gameLoop() {
-        snakes.forEach(Snake::move);
-        checkCollision();
-        synchronizeScore();
-        loopCount++;
-        if (loopCount % 20 == 0) {
-            spawnFood();
-        }
+        //init Scores
+        scores.clear();
+        players.forEach(player -> scores.put(player, 0));
+        updateScore();
+
+        lastFrameSystemTime = System.currentTimeMillis();
+        updateTime();
+
+        initialized = true;
+        gameOver = false;
+
+        log.debug("BasicSnake initialized: snakes: " + snakes + ", game time (millis): " + timeLeft);
+
         return getSynchronizationMessage();
     }
 
     @Override
-    public java.util.Map<String, Integer> getScores() {
-        // TODO: 03.01.2022 convert scores to Map<String, Integer> and return it
-        return null;
+    public String gameLoop() throws GameOverException, GameNotInitializedException {
+        if (gameOver) throw new GameOverException();
+        if (!initialized) throw new GameNotInitializedException();
+        log.trace("updating time...");
+        updateTime();
+        log.trace("countdown in milliseconds: " + countDown);
+        if (countDown <= 0) {
+            update();
+        } else {
+            log.trace("countdown: " + (int) Math.ceil(countDown / 1000f));
+            log.trace("countdown in milliseconds: " + countDown);
+        }
+        log.trace("getting synchronization message...");
+        String message = getSynchronizationMessage();
+        log.trace("game loop done:\n" +
+                "world state:\n" + this + "\n" +
+                "players: " + players.toString() + "\n" +
+                "scores: " + scores + "\n" +
+                "time left (millis): " + timeLeft + "\n" +
+                "synchronization message: " + message);
+        return message;
     }
 
+    private void update() {
+        loopCount++;
+        if (loopCount % (15 / snakes.size()) == 0) {
+            spawnFood();
+        }
+
+        log.trace("moving snakes...");
+        snakes.forEach(Snake::move);
+        log.trace("checking collisions...");
+        checkCollisions();
+        log.trace("updating score...");
+        updateScore();
+    }
 
     private void spawnFood() {
-        int width = map.getWidth();
-        int height = map.getHeight();
+        int width = currentMap.getWidth();
+        int height = currentMap.getHeight();
 
         Position spawnPosition = new Position(0, 0);
         Material currentMaterial;
@@ -71,29 +138,15 @@ public class BasicSnake implements Gamemode {
                     (int) Math.floor(Math.random() * width),
                     (int) Math.floor(Math.random() * height)
             );
-            currentMaterial = map.getMaterialAt(spawnPosition);
-        } while (currentMaterial == Material.APPLE || currentMaterial == Material.WALL);
-        map.changeMaterial(spawnPosition, Material.APPLE);
+            currentMaterial = currentMap.getMaterialAt(spawnPosition);
+        } while (currentMaterial != Material.FREESPACE);
+
+        currentMap.changeMaterial(spawnPosition, Material.APPLE);
         jsonChangeMaterial(spawnPosition, Material.APPLE);
+        log.trace("food spawned at " + spawnPosition);
     }
 
-    private String getSynchronizationMessage() {
-        if (!JSON_replace.isEmpty()) {
-            JSON_synchronizationMessage.put("replace", JSON_replace);
-        }
-        JSON_synchronizationMessage.put("snakes", printSnakes());
-
-        JSON_synchronizationMessage.put("scores", printScores());
-
-
-        String message = JSON_synchronizationMessage.toString();
-        JSON_synchronizationMessage.clear();
-        JSON_replace.clear();
-
-        return message;
-    }
-
-    private void checkCollision() {
+    private void checkCollisions() {
         // Collision rules are made here!
         // # = Wall = Death
         // @ = Apple = grow
@@ -106,52 +159,145 @@ public class BasicSnake implements Gamemode {
             Position head = snake.getHead();
 
             // wall collisions
-            if (map.getMaterialAt(head) == Material.WALL) {
+            if (currentMap.getMaterialAt(head) == Material.WALL) {
                 scheduledForRemoval.add(snake);
             }
 
-            // snake collisions
-            snakes.forEach(snake2 -> {
-                if (snake2 == null) return;
+            // collision with its own body
+            snake.getPositions().forEach(position -> {
+                if (position != head && position.equals(head)) {
+                    log.debug(snake + " collided with its own body at " + head);
+                    scheduledForRemoval.add(snake);
+                }
+            });
 
-                snake2.getPositions().forEach(position -> {
-                    // remove snake, if its head collides with another snake or its own body
-                    if (head.equals(position) && position != head) {
-                        scheduledForRemoval.add(snake);
-                    }
-                });
+            // collisions with another snake
+            snakes.forEach(otherSnake -> {
+                if (otherSnake == snake) return;
+                if (otherSnake == null) return;
+                if (otherSnake.getPositions().contains(head)) {
+                    log.debug(snake + " collided with another snake at " + head);
+                    scheduledForRemoval.add(snake);
+                }
             });
 
             // apple collisions
-            if (map.getMaterialAt(head) == Material.APPLE) {
+            if (currentMap.getMaterialAt(head) == Material.APPLE) {
                 snake.grow(1);
-                map.changeMaterial(head, Material.FREESPACE);
+                currentMap.changeMaterial(head, Material.FREESPACE);
                 jsonChangeMaterial(head, Material.FREESPACE);
             }
         });
 
+        scheduledForRemoval.forEach(this::snakeToApples);
+        scheduledForRemoval.forEach(snake -> log.info("snake " + snake.getName() + " died"));
         scheduledForRemoval.forEach(snakes::remove);
+        gameEnds();
         scheduledForRemoval.clear();
+    }
+
+    private void snakeToApples(Snake snake) {
+        List<Position> newApples = snake.getPositions();
+        newApples.forEach(position -> {
+            if (currentMap.getMaterialAt(position) == Material.FREESPACE) {
+                currentMap.changeMaterial(position, Material.APPLE);
+                jsonChangeMaterial(position, Material.APPLE);
+            }
+        });
 
     }
 
-    private void jsonChangeMaterial(Position position, Material material) {
-        // bad performance, because many objects are created
-        JSONObject materialChange = new JSONObject();
-        JSONObject pos = new JSONObject();
-        pos.put("x", position.getX());
-        pos.put("y", position.getY());
-        materialChange.put("pos", pos);
-        materialChange.put("mat", material.toString());
-        JSON_replace.put(materialChange);
+    private void gameEnds() {
+        if (timeLeft < 0) { //endif gameMaxTime is surpassed
+            log.debug("time is up");
+            endGame();
+        } else if (snakes.isEmpty()) { //Game ends when all snakes are dead
+            log.debug("Game ends, because there are no snakes");
+            endGame();
+        }
     }
 
-    private JSONArray printSnakes() {
+    private void endGame() {
+        gameOver = true;
+        initialized = false;
+        JSONObjectGameOver.put("winner", getWinner());
+        log.info("Game Ends winner: " + getWinner());
+    }
+
+    private String getWinner() {
+        String winner = "";
+        int maxPoints = Collections.max(scores.values());
+        boolean alreadyAWinner = false;
+        for (java.util.Map.Entry<Player, Integer> entry : scores.entrySet()) {  // Iterate through hashmap
+            if (entry.getValue() == maxPoints) {
+                if (alreadyAWinner) {
+                    return "draw";
+                }
+                winner = entry.getKey().getName();
+                alreadyAWinner = true;
+            }
+        }
+        return winner; //should never be reached
+    }
+
+    private void updateScore() {
+        snakes.forEach(snake -> setScore(snake, snake.length()));
+    }
+
+    private void setScore(Snake snake, int points) {
+        scores.put(snake.getPlayer(), points);
+        log.trace("set points for " + snake + " :" + points + " points");
+    }
+
+    private void updateTime() {
+        long now = System.currentTimeMillis();
+        int delta = (int) (now - lastFrameSystemTime);
+        lastFrameSystemTime = now;
+        log.trace("delta (millis) = " + delta);
+
+        timeLeft -= delta;
+        countDown -= delta;
+        log.trace("time left (millis): " + timeLeft);
+    }
+
+    private String getSynchronizationMessage() {
+        if (countDown > 0) {
+            JSONSynchronizationMessage.put("countdown", Math.ceil(countDown / 1000f));
+        }
+        if (!JSONReplace.isEmpty()) {
+            JSONSynchronizationMessage.put("replace", JSONReplace);
+        }
+        JSONSynchronizationMessage.put("snakes", jsonGetSnakes());
+
+        JSONSynchronizationMessage.put("scores", jsonGetScores());
+
+        if (!JSONObjectGameOver.isEmpty()) {
+            JSONSynchronizationMessage.put("gameover", JSONObjectGameOver);
+        }
+
+        JSONSynchronizationMessage.put("timer", getTimeLeft());
+
+        String message = JSONSynchronizationMessage.toString();
+        JSONSynchronizationMessage.clear();
+        JSONReplace.clear();
+
+        return message;
+    }
+
+    private JSONObject jsonGetWorld() {
+        JSONObjectWorld.put("worldstring", currentMap.toString());
+        JSONObjectWorld.put("height", currentMap.getHeight());
+        JSONObjectWorld.put("width", currentMap.getWidth());
+        return JSONObjectWorld;
+    }
+
+    private JSONArray jsonGetSnakes() {
         // bad performance, because many objects are created
         JSONArray snakeArray = new JSONArray();
         snakes.forEach(snake -> {
             JSONObject snakeObject = new JSONObject();
             snakeObject.put("name", snake.getName());
+            snakeObject.put("color", snake.getPlayer().getColor());
             snakeObject.put("direction", snake.getDirection().toString());
             JSONArray positionsArray = new JSONArray();
             snake.getPositions().forEach(position -> {
@@ -166,68 +312,77 @@ public class BasicSnake implements Gamemode {
         return snakeArray;
     }
 
-    private JSONArray printScores(){
+    private JSONArray jsonGetScores() {
         JSONArrayScores.clear();
-        scores.forEach((player, points) ->  {
+        scores.forEach((player, points) -> {
             JSONObject score = new JSONObject();
-            score.put("name",player.getName());
-            score.put("points",points);
+            score.put("name", player.getName());
+            score.put("points", points);
             JSONArrayScores.put(score);
         });
         return JSONArrayScores;
     }
 
+    private void jsonChangeMaterial(Position position, Material material) {
+        // bad performance, because many objects are created
+        JSONObject materialChange = new JSONObject();
+        JSONObject pos = new JSONObject();
+        pos.put("x", position.getX());
+        pos.put("y", position.getY());
+        materialChange.put("pos", pos);
+        materialChange.put("mat", material.toString());
+        JSONReplace.put(materialChange);
+    }
+
+    @Override
+    public void setMap(Map map) {
+        this.originalMap = map;
+        this.currentMap = new Map(map);
+    }
+
+    @Override
+    public int getTimeLeft() {
+        return (int) Math.ceil(timeLeft / 1000f);
+    }
+
+    @Override
+    public java.util.Map<String, Integer> getScores() {
+        java.util.Map<String, Integer> scoreMap = new HashMap<>();
+        scores.forEach((player, score) -> scoreMap.put(player.getName(), score));
+        return scoreMap;
+    }
+
     @Override
     public String toString() {
-        // convert map string to list
-        List<String> lines = map.toString().lines().collect(Collectors.toList());
+        Material[][] tmp = currentMap.getMap();
 
-        // add snakes
+        // add snakes to tmp
         snakes.forEach(snake -> {
             Position head = snake.getHead();
             snake.getPositions().forEach(position -> {
                 int x = position.getX();
                 int y = position.getY();
-                String line = lines.get(y);
 
-                char insert;
                 // if the current position is the head -> write H
                 if (position == head) {
-                    insert = 'H';
-                    // if the current position is at the position of the head -> don't override the head symbol
-                } else if (position.equals(head)) {
-                    return;
-                } else {
-                    insert = Material.SNAKE.getSymbol();
+                    tmp[x][y] = Material.SNAKEHEAD;
+                } else if (!position.equals(head)) { // if the head is at the current position -> don't override
+                    tmp[x][y] = Material.SNAKE;
                 }
-
-                line = line.substring(0, x) + insert + line.substring(x + 1);
-                lines.set(y, line);
             });
         });
 
         StringBuilder result = new StringBuilder();
-        for (String line :
-                lines) {
-            result.append(line).append('\n');
+        for (int y = 0; y < tmp[0].length; y++) {
+            for (Material[] materials : tmp) {
+                result.append(materials[y].toString());
+            }
+            result.append("\n");
         }
+
+        // delete '\n' at the end
         result.deleteCharAt(result.length() - 1);
+
         return result.toString();
-    }
-
-    private void raiseScoreForAll(int points){
-        snakes.forEach(snake -> {
-            scores.put(snake.getPlayer(),points);
-        });
-    }
-
-    private void raiseScore(Snake snake,int points){
-        scores.put(snake.getPlayer(),points);
-    }
-
-    private void synchronizeScore() {
-        snakes.forEach(snake -> {
-            raiseScore(snake, snake.length());
-        });
     }
 }

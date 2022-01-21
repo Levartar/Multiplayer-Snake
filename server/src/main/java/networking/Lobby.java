@@ -1,5 +1,6 @@
 package networking;
 
+import exceptions.GameNotInitializedException;
 import exceptions.GameOverException;
 import helpers.ResourceManager;
 import logic.Gamemode;
@@ -10,7 +11,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import Database.SQLConnection;
 
-import java.sql.ResultSet;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,11 +28,14 @@ public class Lobby {
     private final List<Player> players = new ArrayList<>();
     private final Set<Endpoint> endpoints = new CopyOnWriteArraySet<>();
     private boolean running = false;
-    private Gamemode gamemode;
+    private final Gamemode gamemode;
     private Map map;
+    private String mapName;
 
     public Lobby(int joinCode) {
         this.joinCode = joinCode;
+        createDefaultMap();
+        gamemode = new BasicSnake(players, map, 3);
     }
 
     public int getJoinCode() {
@@ -51,56 +56,65 @@ public class Lobby {
         Player player = endpoint.getPlayer();
         players.add(player);
         endpoints.add(endpoint);
-        log.info("Player : "+ player.getName() +" Successfully joined the Lobby with joincode "  + joinCode);
+        log.info("Player : " + player.getName() + " Successfully joined the Lobby with joincode " + joinCode);
     }
 
     public void removePlayer(Endpoint endpoint) {
         Player player = endpoint.getPlayer();
         players.remove(player);
         endpoints.remove(endpoint);
-        log.info("Player : "+ player.getName() +" Successfully removed from the Lobby with joincode "  + joinCode);
+        log.info("Player : " + player.getName() + " Successfully removed from the Lobby with joincode " + joinCode);
     }
 
     public boolean hasPlayer(Endpoint endpoint) {
         return endpoints.contains(endpoint);
     }
 
-    public void setGamemode(String gamemode) {
-        switch (gamemode) {
-            case "basic_snake" -> {
-                this.gamemode = new BasicSnake(players, map);
-                log.info("Gamemode " + this.gamemode.getClass().getName()
-                        + " set for lobby with code " + joinCode);
-            }
-            default -> log.error("Wrong String input for Gamemode");
-        }
+    public Gamemode getGamemode() {
+        return gamemode;
     }
 
     public void start() throws Exception {
+        if (map == null) {
+            createDefaultMap();
+        }
         if (gamemode == null) {
             throw new Exception("Cannot start game. No Gamemode was selected.");
-        }
-        if (map == null) {
-            try {
-                this.map = new Map(ResourceManager.getMapPath("BasicMap50x50"));
-                log.info("Default Basic map created");
-            } catch (Exception e) {
-                log.error(e.getMessage());
-            }
         }
         if (!isReadyToStart()) {
             throw new Exception("Not enough players or not every player is ready");
         }
 
-        running = true;
+        gamemode.setMap(map);
+
+        setPlayerColors();
+
+        running = false;
+
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
         executor.scheduleAtFixedRate(() -> {
             try {
-                String data = gamemode.gameLoop();//if doesn't send a string throw exception
+                String data;
+                if (!running) {
+                    log.info("initializing game...");
+                    data = gamemode.init();
+                    log.trace("init data: " + data);
+                    running = true;
+
+                    for (Endpoint endpoint : endpoints) {
+                        endpoint.send(data);
+                    }
+                }
+
+                data = gamemode.gameLoop();//if doesn't send a string throw exception
+                log.trace("gameLoop data: " + data);
+
                 for (Endpoint endpoint : endpoints) {
                     endpoint.send(data);
                 }
+            } catch (GameNotInitializedException e) {
+                log.error(e.getMessage());
             } catch (GameOverException e) {
                 log.info("Game ended from lobby " + joinCode);
                 java.util.Map<String, Integer> highscores = gamemode.getScores();
@@ -118,20 +132,66 @@ public class Lobby {
                 running = false;
                 executor.shutdown();
             }
-        }, 0, 1000, TimeUnit.MILLISECONDS);
+        }, 0, 200, TimeUnit.MILLISECONDS);
+    }
+
+    private void setPlayerColors() {
+        for (int i = 0; i < players.size(); i++) {
+
+            String color;
+            switch (i) {
+                case 0 -> color = "red";
+                case 1 -> color = "green";
+                case 2 -> color = "blue";
+                case 3 -> color = "magenta";
+                default -> color = "grey";
+            }
+
+            players.get(i).setColor(color);
+        }
+    }
+
+    public boolean hasStarted() {
+        return running;
+    }
+
+    private void createDefaultMap() {
+        try {
+            this.mapName = "default";
+            this.map = new Map(ResourceManager.getMapString(mapName));
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
     }
 
     public boolean isReadyToStart() {
         // TODO: 02.01.2022 check if all players are ready, Player needs a isReady() method
-        return false;
+        return true;
     }
 
     public List<Player> getPlayers() {
         return players;
     }
 
-    public void setMap(Map map) {
-        this.map = map;
+    public void setMap(String fileName) throws IOException {
+        this.map = new Map(ResourceManager.getMapString(fileName));
+        this.mapName = fileName;
         log.debug("Changed Map to: " + map + " for lobby " + joinCode);
+    }
+    public String getMapName(){
+        return mapName;
+    }
+
+    public Map getMap(){
+        return map;
+    }
+
+    @Override
+    public String toString() {
+        return "Lobby{" +
+                "joinCode=" + joinCode +
+                ", running=" + running +
+                ", gamemode=" + gamemode.getClass().getName() +
+                '}';
     }
 }
