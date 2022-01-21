@@ -20,13 +20,7 @@ function websockets(name, sessionID){
     ws.onmessage = function (evt) {
         let json = JSON.parse(evt.data)
         console.log(json)
-        if(json.gameover !== undefined){
-            alert("The Winner is: " + json.gameover.winner)
-            // disconect the players 6 sec after the game has ended
-            setTimeout(() => {
-                ws.close()
-            }, 6000)
-        }
+
         if(json.world !== undefined){
             // copy the newest coppy of the World if the backend sends it
             world = json.world
@@ -47,6 +41,28 @@ function websockets(name, sessionID){
         drawWorld(world.worldstring, cellSize)
         drawSnakes(json.snakes, cellSize)
         drawGrid(world.width * cellSize + 1, world.height * cellSize + 1, cellSize)
+
+        // draw a countdown before the game starts
+        if(json.countdown !== undefined){
+            const canvasMap = document.getElementById("mapCanvas")
+            const context = canvasMap.getContext("2d")
+
+            context.font = "64px Arial"
+            context.fillStyle = "black"
+            context.fillText(json.countdown, (world.width/2) * cellSize, (world.height/2) * cellSize)
+        }
+        // check if the game is over and display the winner
+        if(json.gameover !== undefined){
+            alert("The Winner is: " + json.gameover.winner)
+            // disconect the players 6 sec after the game has ended
+            setTimeout(() => {
+                console.log("game ended")
+                ReactDOM.render(
+                    <Lobby players={playerNames} maps={maps}/>,
+                    document.getElementById("root")
+                )
+            }, 1500)
+        }
     }
     //exit the lobby/game and render the main_Menu
     ws.onclose = function () {
@@ -99,7 +115,7 @@ function drawWorld(world, cellSize){
                 x += cellSize
                 break
             case "@":
-                context.fillStyle = "red"
+                context.fillStyle = "yellow"
                 context.fillRect(x, y, cellSize, cellSize)
                 x += cellSize
                 break
@@ -128,9 +144,14 @@ function drawSnakes(snakes, cellSize){
             let x = snakes[i].positions[j].x
             let y = snakes[i].positions[j].y
 
-            context.fillStyle = "green"
+            context.fillStyle = snakes[i].color
             context.fillRect(x * cellSize, y * cellSize, cellSize, cellSize)
         }
+
+        // draw the names of the players over their names
+        context.font = "16px Arial"
+        context.fillStyle = "black"
+        context.fillText(snakes[i].name, snakes[i].positions[0].x * cellSize, snakes[i].positions[0].y * cellSize)
     }
 }
 // used to change the worldString with the new data from replace

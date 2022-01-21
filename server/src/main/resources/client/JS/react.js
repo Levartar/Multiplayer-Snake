@@ -375,13 +375,15 @@ function getGameInfo(sessionID){
 }
 function setDefault(currentMap){
     let mySelect = document.getElementById('mapDropDown');
-    let options = mySelect.children
+    if(mySelect !== undefined && mySelect !== null){
+        let options = mySelect.children
 
-    for (let i = 0; i < options.length; i++) {
+        for (let i = 0; i < options.length; i++) {
 
-        if(options[i].value === currentMap){
-            options[i].selected = true
-            break
+            if(options[i].value === currentMap){
+                options[i].selected = true
+                break
+            }
         }
     }
 }
