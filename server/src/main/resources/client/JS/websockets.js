@@ -50,10 +50,7 @@ function websockets(name, sessionID){
     }
     //exit the lobby/game and render the main_Menu
     ws.onclose = function () {
-        ReactDOM.render(
-            <Main_menu />,
-            document.getElementById('root')
-        );
+        renderMain()
     };
 
     ws.onerror = function (error){

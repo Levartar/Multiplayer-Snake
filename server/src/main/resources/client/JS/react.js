@@ -159,7 +159,7 @@ class Main_menu extends React.Component {
                         <Join_session  />
                     </div>
                 </main>
-                <PlayerScore id={"tableMainMenu"} data={[{name:"", points:""}]} tableHead1={"Player"} tableHead2={"Score"}/>
+                <PlayerScore id={"tableMainMenu"} data={this.props.scores} tableHead1={"Player"} tableHead2={"Score"}/>
             </div>
         )
     }
@@ -228,10 +228,7 @@ class Lobby extends React.Component {
     componentDidMount() {
         document.getElementById("buttonexitLobby").addEventListener("click", () => {
             ws.close()
-            ReactDOM.render(
-                <Main_menu />,
-                document.getElementById('root')
-            );
+            renderMain()
         })
 
         document.getElementById("buttonstartGame").addEventListener("click", () => {
@@ -293,10 +290,7 @@ class Game extends React.Component {
     componentDidMount() {
         document.getElementById("buttonexitGame").addEventListener("click", () => {
             ws.close()
-            ReactDOM.render(
-                <Main_menu />,
-                document.getElementById('root')
-            );
+            renderMain()
         })
 
         // clear the interval refreshing the player list
@@ -345,11 +339,10 @@ class Game extends React.Component {
     }
 }
 
-//render the Main_menu when the site is opened
-ReactDOM.render(
-    <Main_menu />,
-    document.getElementById('root')
-);
+// render the Main_menu when the site is opened
+// the request asks for the highscores to render them
+renderMain()
+
 
 // extra Functions that have nothing to do with react
 function nameCheck(){
@@ -391,4 +384,30 @@ function setDefault(currentMap){
             break
         }
     }
+}
+
+function renderMain(){
+    let request = new Request("/highscores", {
+        method: 'GET'
+    })
+
+    fetch(request)
+        .then(response => response.json().then(obj => {
+            /*
+                to use the same code as fore the score table during the game
+                i change the name score to points, because otherwise i would have tho change to
+                much
+            */
+            let scores = []
+            for (let i = 0; i < obj.length; i++) {
+                scores[i] = {
+                                name: obj[i].name,
+                                points: obj[i].score
+                            }
+            }
+            ReactDOM.render(
+                <Main_menu scores={scores}/>,
+                document.getElementById('root')
+            );
+        }))
 }
