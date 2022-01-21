@@ -15,13 +15,12 @@ public class SQLConnection {
     private static String DBUserPW;
     private static String DBIP;
     static Statement stmt;
-    static String databasename;
+    static String databasename = "testdb";
 
     public static void setLoginDetails() {
         DBUser = System.getenv("DBUserName");
         DBUserPW = System.getenv("DBUserPassword");
         DBIP = System.getenv("Server_IP");
-        databasename = "testdb";
 
     }
 
@@ -29,11 +28,6 @@ public class SQLConnection {
         setLoginDetails();
         connectToDataBase(dataBaseName);
         log.info("Successfully connected to Database: " + dataBaseName);
-    }
-
-
-    public static void main(String[] args) {
-        getName("");
     }
 
 
@@ -46,7 +40,7 @@ public class SQLConnection {
             stmt = connection.createStatement();
             log.info("Connection to server successful!:" + connection + "\n\n");
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("connectToDataBase Error: " + e.getMessage());
         }
     }
 
@@ -57,7 +51,7 @@ public class SQLConnection {
                 connection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("closeDataBaseConnection Error: " + e.getMessage());
         }
 
     }
@@ -75,7 +69,7 @@ public class SQLConnection {
 
     public static boolean InsertStatement(String insert) {
         try {
-            connectToServer("testdb");
+            connectToServer(databasename);
             int rowAffected = stmt.executeUpdate(insert);
             log.debug(rowAffected + "rows affected");
             stmt.close();
@@ -83,7 +77,7 @@ public class SQLConnection {
             closeDataBaseConnection();
             return true;
         } catch (SQLException e) {
-            log.error(e);
+            log.error("InsertStatement Error: " + e);
             return false;
         }
     }
@@ -92,14 +86,14 @@ public class SQLConnection {
         String delete = "delete from testdb.`Highscore` where `player_name` ='" + name + "';";
         int result = 0;
         try {
-            connectToServer("testdb");
+            connectToServer(databasename);
             Statement stmt = connection.createStatement();
             result = stmt.executeUpdate(delete);
             log.info("Database connection success");
             log.info("Deleted" + result + "rows");
             return result;
         } catch (SQLException e) {
-            log.error(e);
+            log.error("deleteHighscore Error: " + e.getMessage());
             return result;
         }
     }
@@ -110,7 +104,7 @@ public class SQLConnection {
         ResultSet resultSet;
         String result = "";
         try {
-            connectToServer("testdb");
+            connectToServer(databasename);
             Statement stmt = connection.createStatement();
             resultSet = stmt.executeQuery("Select score from testdb.Highscore where player_name = '" + name + "';");
             log.info("Database connection success");
@@ -121,16 +115,32 @@ public class SQLConnection {
             log.debug("returning score:" + result);
             return result;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("getScore Error: " + e.getMessage());
         }
         return "Error!";
+    }
+
+    public static ResultSet getScores(){
+        String statement = "Select * from testdb.Highscore order by score DESC";
+        ResultSet resultSet;
+
+        try{
+            connectToServer(databasename);
+            resultSet = stmt.executeQuery(statement);
+            closeDataBaseConnection();
+            return resultSet;
+        }catch(SQLException e){
+            log.error("getScores Error : " + e.getMessage());
+        }
+
+        return null;
     }
 
     public static String getName(String name) {
         ResultSet resultSet;
         String result = "";
         try {
-            connectToServer("testdb");
+            connectToServer(databasename);
             Statement stmt = connection.createStatement();
             resultSet = stmt.executeQuery("SELECT player_name FROM testdb.Highscore where player_name ='" + name + "';");
             closeDataBaseConnection();
@@ -144,9 +154,9 @@ public class SQLConnection {
             }
             return result;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("getName Error: " + e.getMessage());
         }
-        return "Could not find name:" + name;
+        return "Could not find name: " + name;
     }
 
 
