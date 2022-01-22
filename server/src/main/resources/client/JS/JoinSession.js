@@ -1,5 +1,5 @@
 //define the "joinSession" with inputField and button
-class Join_session extends React.Component{
+class JoinSession extends React.Component{
     componentDidMount() {
         document.getElementById("buttonsessionId").addEventListener("click", () => {
             if(!nameCheck()){

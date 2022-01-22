@@ -1,5 +1,5 @@
 //define the "createSession" with label, button and event listeners
-class Create_session extends React.Component{
+class CreateSession extends React.Component{
     componentDidMount() {
         document.getElementById("buttonnewGame").addEventListener("click", () => {
             //create a new lobby

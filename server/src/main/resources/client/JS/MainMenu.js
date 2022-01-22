@@ -11,7 +11,7 @@ let ws
 let checkCurrentPlayers
 
 //define the Main menu with a banner, nameInput, createSession ,join session and HighscoreTable
-class Main_menu extends React.Component {
+class MainMenu extends React.Component {
     componentDidMount() {
         clearInterval(checkCurrentPlayers)
         clearTimeout(gameEnding)
@@ -26,10 +26,10 @@ class Main_menu extends React.Component {
                         <Input name={"Name"} type={"text"} placeholder={"name"} text={"Enter your name: "} maxLength={"10"}/>
                     </div>
                     <div className="marginBottom">
-                        <Create_session />
+                        <CreateSession />
                     </div>
                     <div>
-                        <Join_session  />
+                        <JoinSession  />
                     </div>
                 </main>
                 <PlayerScore id={"tableMainMenu"} data={this.props.scores} tableHead1={"Player"} tableHead2={"Score"}/>

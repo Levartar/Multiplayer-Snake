@@ -73,5 +73,4 @@ function MapSelect(props) {
             </select>
         </div>
     )
-
 }
