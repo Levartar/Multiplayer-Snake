@@ -40,6 +40,7 @@ public class GetHighscores extends HttpServlet {
         } finally {
             resp.setContentType("text/html;charset=UTF-8");
             resp.getWriter().print(jsonArray);
+            jsonArray.clear();
             resp.getWriter().close();
         }
     }

@@ -11,8 +11,47 @@
 </head>
 <body>
     <div id="root"></div>
-    <script src="./JS/react.js" type="text/babel"></script>
     <script src="./JS/websockets.js" type="text/babel"></script>
+    <script src="./JS/Game.js" type="text/babel"></script>
+    <script src="./JS/Lobby.js" type="text/babel"></script>
+    <script src="JS/MainMenu.js" type="text/babel"></script>
+    <script src="JS/JoinSession.js" type="text/babel"></script>
+    <script src="JS/CreateSession.js" type="text/babel"></script>
+    <script src="JS/CreateSession.js" type="text/babel"></script>
+    <script src="JS/FunctionComponents.js" type="text/babel"></script>
+    <script src="JS/getGameInfo.js" type="text/babel"></script>
+    <script src="JS/drawCanvas.js" type="text/babel"></script>
+    <script type="text/babel">
+        // render the Main_menu when the site is opened
+        // the request asks for the highscores to render them
+        function renderMain(){
+            let request = new Request("/highscores", {
+                method: 'GET'
+            })
+
+            fetch(request)
+                .then(response => response.json().then(obj => {
+                    /*
+                        to use the same code as fore the score table during the game
+                        i change the name score to points, because otherwise i would have tho change to
+                        much
+                    */
+                    let scores = []
+                    for (let i = 0; i < obj.length; i++) {
+                        scores[i] = {
+                            name: obj[i].name,
+                            points: obj[i].score
+                        }
+                    }
+                    ReactDOM.render(
+                        <MainMenu scores={scores}/>,
+                        document.getElementById('root')
+                    );
+                }))
+        }
+
+        renderMain()
+    </script>
 </body>
 
 </html>
