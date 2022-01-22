@@ -70,6 +70,7 @@ function drawSnakes(snakes, cellSize){
         // draw the names of the players over their names
         context.font = "16px Arial"
         context.fillStyle = "black"
-        context.fillText(snakes[i].name, snakes[i].positions[0].x * cellSize, snakes[i].positions[0].y * cellSize)
+        // the '- (snakes[i].name.length * 8)/2 + cellSize/2' is to center the name over the players head
+        context.fillText(snakes[i].name, (snakes[i].positions[0].x * cellSize) - (snakes[i].name.length * 8)/2 + cellSize/2, snakes[i].positions[0].y * cellSize, cellSize * 4)
     }
 }
