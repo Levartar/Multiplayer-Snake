@@ -467,12 +467,14 @@ class BasicSnakeTest {
         _players.add(player1);
         Gamemode gamemode = new BasicSnake(_players, map,0);
 
-        _players.forEach(player -> player.setInput('d'));
 
         String[] expected = new String[8];
         String[] actual = new String[8];
         actual[0] = gamemode.init();
-        expected[0] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"world\":{\"worldstring\":\"##########\\n#        #\\n#     @  #\\n#        #\\n##########\",\"width\":10,\"height\":5},\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
+
+        _players.forEach(player -> player.setInput('d'));
+
+        expected[0] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"world\":{\"worldstring\":\"##########\\n#        #\\n#     @  #\\n#        #\\n##########\",\"width\":10,\"height\":5},\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"up\"}]}";
         actual[1] = gamemode.gameLoop();
         expected[1] = "{\"timer\":" + gamemode.getTimeLeft() + ",\"scores\":[{\"name\":\"jakob\",\"points\":5}],\"snakes\":[{\"name\":\"jakob\",\"positions\":[{\"x\":3,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2},{\"x\":2,\"y\":2}],\"direction\":\"right\"}]}";
         actual[2] = gamemode.gameLoop();
@@ -545,9 +547,9 @@ class BasicSnakeTest {
         _players.add(player1);
         Gamemode gamemode = new BasicSnake(_players, map);
 
-        _players.forEach(player -> player.setInput('d'));
-
         gamemode.init();
+
+        _players.forEach(player -> player.setInput('d'));
 
 
         for (int i = 0; i < 6; i++) {
@@ -576,8 +578,8 @@ class BasicSnakeTest {
         player1.setName("jakob");
         _players.add(player1);
         Gamemode gamemode = new BasicSnake(_players, map);
-        _players.forEach(player -> player.setInput('d'));
         gamemode.init();
+        _players.forEach(player -> player.setInput('d'));
 
         for (int i = 0; i < 7; i++) {
             gamemode.gameLoop();
