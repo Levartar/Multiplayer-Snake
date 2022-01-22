@@ -2,6 +2,12 @@
 let world
 let replace
 
+// time out after the game is finished
+let gameEnding
+
+// size of the tiles of the grid
+const cellSize = 20
+
 function websockets(name, sessionID){
     let protocol = isSecure() ? "wss://" : "ws://"
     ws = new WebSocket(protocol + window.location.host + "/join/" + sessionID + "/name/" + name)
@@ -55,7 +61,7 @@ function websockets(name, sessionID){
         if(json.gameover !== undefined){
             alert("The Winner is: " + json.gameover.winner)
             // disconect the players 6 sec after the game has ended
-            setTimeout(() => {
+            gameEnding = setTimeout(() => {
                 console.log("game ended")
                 ReactDOM.render(
                     <Lobby players={playerNames} maps={maps}/>,
