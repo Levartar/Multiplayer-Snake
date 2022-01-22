@@ -62,7 +62,7 @@ public class Map {
         return map[x][y];
     }
 
-    private void shuffleSpawnPoints() {
+    public void shuffleSpawnPoints() {
         Collections.shuffle(spawnPoints);
     }
 

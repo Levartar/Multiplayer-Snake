@@ -6,10 +6,16 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Snake class is responsible for spawning a snake, its movements and let it grow if a Snake eats an apple.
+ */
 public class Snake {
 
     private static final Logger log = LogManager.getLogger(Snake.class);
 
+    /**
+     * The player belonging to the snake.
+     */
     private final Player player;
     private List<Position> positions;
     private Direction direction = Direction.up;
