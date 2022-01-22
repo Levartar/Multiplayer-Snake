@@ -28,7 +28,7 @@ public class Lobby {
     private final List<Player> players = new ArrayList<>();
     private final Set<Endpoint> endpoints = new CopyOnWriteArraySet<>();
     private boolean running = false;
-    private final Gamemode gamemode;
+    private Gamemode gamemode;
     private Map map;
     private String mapName;
 
@@ -85,7 +85,9 @@ public class Lobby {
             throw new Exception("Not enough players or not every player is ready");
         }
 
-        gamemode.setMap(map);
+        map.shuffleSpawnPoints();
+        //gamemode.setMap(map);
+        gamemode = new BasicSnake(players, map, 3);
 
         setPlayerColors();
 

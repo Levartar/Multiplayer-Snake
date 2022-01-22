@@ -41,6 +41,9 @@ public class BasicSnake implements Gamemode {
 
     public BasicSnake(List<Player> players, Map map, int countDown) {
         this.players = players;
+        for (Player p: this.players) {
+            p.setInput(' ');
+        }
         setMap(map);
         this.initialCountDown = countDown * 1000;
         log.debug("BasicSnake created\n" + this);

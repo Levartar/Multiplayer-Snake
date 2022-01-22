@@ -17,7 +17,6 @@ public class Player {
     public Player(String name) {
         log.trace("player"+ name+ " created");
         this.name = name;
-
     }
 
     public void setName(String name) {
@@ -52,7 +51,7 @@ public class Player {
                 if (this.input != 'a') this.input = 'd';
             }
         }*/
-        this.input = input;
+        this.input = Character.toLowerCase(input);
         log.debug("player "+name+ " set input to "+ input );
     }
 
