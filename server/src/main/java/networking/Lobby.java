@@ -86,8 +86,7 @@ public class Lobby {
         }
 
         map.shuffleSpawnPoints();
-        //gamemode.setMap(map);
-        gamemode = new BasicSnake(players, map, 3);
+        gamemode.setMap(map);
 
         setPlayerColors();
 
