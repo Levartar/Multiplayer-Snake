@@ -7,9 +7,11 @@ body{
             linear-gradient(rgba(159, 148, 148, 0.5) 2px, transparent 2px),
             linear-gradient(90deg, rgba(119, 113, 113, 0.5) 2px, transparent 2px),
             linear-gradient(rgba(51, 49, 49, 0.28) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 0, 0, 0.28) 1px, transparent 1px);
-    background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
+            linear-gradient(90deg, rgba(0, 0, 0, 0.28) 1px, transparent 1px),
+            url('../assets/snake.png');
+    background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px,1920px 1080px;
     background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+
 }
 h1,h2{
     font-weight: lighter;
@@ -180,16 +182,16 @@ select{
 
 /* Player */
 #player0{
-    color: #ff0000;
+    color: #349335;
 }
 #player1{
-    color: #ffbf7bff;
+    color: #34abf5;
 }
 #player2{
-    color: #5abbbeff;
+    color: #7761e5;
 }
 #player3{
-    color: #036c99ff;
+    color: #fdee48;
 }
 
 /* map */
