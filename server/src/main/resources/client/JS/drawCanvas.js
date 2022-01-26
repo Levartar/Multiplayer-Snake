@@ -32,17 +32,17 @@ function drawWorld(world, cellSize){
     for (let i = 0; i < world.length; i++) {
         switch (world[i]) {
             case "#":
-                //context.fillStyle = "black"
-                //context.fillRect(x, y, cellSize, cellSize)
                 //s = source, d = destination
                 //.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
                 context.drawImage(atlasImage, 10, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Wall
                 x += cellSize
                 break
             case "@":
-                //context.fillStyle = "red"
-                //context.fillRect(x, y, cellSize, cellSize)
                 context.drawImage(atlasImage, 0, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Apple
+                x += cellSize
+                break
+            case "T":
+                context.drawImage(atlasImage, 20, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //AppleTree
                 x += cellSize
                 break
             case " ":

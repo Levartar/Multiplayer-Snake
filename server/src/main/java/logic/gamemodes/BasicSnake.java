@@ -69,7 +69,7 @@ public class BasicSnake implements Gamemode {
 
         // init GameTime
         countDown = initialCountDown;
-        timeLeft = 60000 * players.size() + countDown; // 1 Minute per player + CountDown
+        timeLeft = 60000 *10* players.size() + countDown; // 1 Minute per player + CountDown
 
         // create snakes
         List<Position> spawnPoints = currentMap.getSpawnPoints();
@@ -193,6 +193,8 @@ public class BasicSnake implements Gamemode {
                 snake.grow(1);
                 currentMap.changeMaterial(head, Material.FREESPACE);
                 jsonChangeMaterial(head, Material.FREESPACE);
+            }else if (currentMap.getMaterialAt(head) == Material.APPLETREE){
+                snake.grow(1);
             }
         });
 
