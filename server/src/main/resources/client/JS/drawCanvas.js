@@ -46,8 +46,21 @@ function drawWorld(world, cellSize){
                 x += cellSize
                 break
             case " ":
-                context.fillStyle = "#d3d3d3"
-                context.fillRect(x, y, cellSize, cellSize)
+                const hashValue = hash(x+""+y)
+                console.log(hashValue)
+                console.log(hashValue % 4)
+                switch ((hashValue % 4) +1){
+                    case 1: context.drawImage(atlasImage, 40, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground1
+                        break
+                    case 2: context.drawImage(atlasImage, 50, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground2
+                        break
+                    case 3: context.drawImage(atlasImage, 40, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground3
+                        break
+                    case 4: context.drawImage(atlasImage, 50, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground4
+                        break
+                    default: context.fillStyle = "#d3d3d3"
+                        context.fillRect(x, y, cellSize, cellSize)
+                }
                 x += cellSize
                 break
             case "\n":
@@ -202,3 +215,20 @@ function alterImage(imageObj,color){
     ctx.putImageData(id, 0, 0);
     return canvas
 }
+
+//hash from https://gist.github.com/iperelivskiy
+function hash(s) {
+    /* Simple hash function. */
+    var a = 1, c = 0, h, o;
+    if (s) {
+        a = 0;
+        /*jshint plusplus:false bitwise:false*/
+        for (h = s.length - 1; h >= 0; h--) {
+            o = s.charCodeAt(h);
+            a = (a<<6&268435455) + o + (o<<14);
+            c = a & 266338304;
+            a = c!==0?a^c>>21:a;
+        }
+    }
+    return String(a);
+};
