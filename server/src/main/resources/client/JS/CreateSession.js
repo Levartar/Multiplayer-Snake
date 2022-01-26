@@ -19,7 +19,7 @@ class CreateSession extends React.Component{
                             //connect the player to the lobby
                             sessionID = value
                             // values of the input fields
-                            const name = document.getElementById("inputName").value
+                            let name = document.getElementById("inputName").value
 
                             getGameInfo(sessionID)
                             websockets(name, sessionID)

@@ -90,11 +90,7 @@ function drawSnakes(snakes, cellSize){
             if (x-after.x===-1&&y-prior.y===-1){direction = "downToRight"} else
             if (y-after.y===-1&&x-prior.x===-1){direction = "downToRight"} else
 
-            {direction = "nd"
-                console.log("x="+x+",y="+y)
-                console.log("after.x="+after.x+",after.y="+after.x)
-                console.log("prior.x="+prior.x+",prior.y="+prior.y)
-            }
+            {direction = "nd"}
             switch (direction){
                 case "sideways":
                     context.drawImage(coloredAtlasImage, 10, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailUp
@@ -186,6 +182,9 @@ function alterImage(imageObj,color){
     let canvas = document.createElement("canvas",);
     let ctx= canvas.getContext("2d");
     console.log(color)
+    console.log(parseInt(color.substr(1,2),16))
+    console.log(parseInt(color.substr(3,2),16))
+    console.log(parseInt(color.substr(5,2),16))
 
     ctx.drawImage(imageObj, 0, 0);
     let id= ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -194,11 +193,11 @@ function alterImage(imageObj,color){
     for (let i = 0; i < id.data.length; i += 4) {
         // Check if RGB == 0 (black)
         //color = #FF0000
-        id.data[i] = (id.data[i]*parseInt(color.substr(1,4)))/255
-        id.data[i+1] = (id.data[i+1]*parseInt(color.substr(4,7)))/255
-        id.data[i+2] = (id.data[i+2]*parseInt(color.substr(7,10)))/525
+        id.data[i] = (id.data[i]*parseInt(color.substr(1,2),16))/255
+        id.data[i+1] = (id.data[i+1]*parseInt(color.substr(3,2),16))/255
+        id.data[i+2] = (id.data[i+2]*parseInt(color.substr(5,2),16))/255
     }
-
+    console.log(id)
     // redraw your altered data on the canvas.
     ctx.putImageData(id, 0, 0);
     return canvas

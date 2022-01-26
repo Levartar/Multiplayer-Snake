@@ -29,7 +29,7 @@ class JoinSession extends React.Component{
                         if(isValideId){
                             if(!isFull){
                                 if(!hasStarted){
-                                    const name = document.getElementById("inputName").value
+                                    let name = document.getElementById("inputName").value
                                     websockets(name, sessionID)
                                 }else {
                                     alert("the game has already Started. please Wait until it has finished or join another lobby")
