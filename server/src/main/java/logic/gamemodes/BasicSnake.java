@@ -72,6 +72,7 @@ public class BasicSnake implements Gamemode {
         timeLeft = 60000 * players.size() + countDown; // 1 Minute per player + CountDown
 
         // create snakes
+        snakes.clear();
         List<Position> spawnPoints = currentMap.getSpawnPoints();
         int size = Math.min(players.size(), spawnPoints.size());
         for (int i = 0; i < size; i++) {
