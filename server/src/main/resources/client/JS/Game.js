@@ -14,6 +14,7 @@ class Game extends React.Component {
         document.addEventListener('touchstart', handleTouchStart, false);
         document.addEventListener('touchmove', handleTouchMove, false);
 
+        //Mobile Inputs from https://stackoverflow.com/users/7852/givanse
         let xDown = null;
         let yDown = null;
 
