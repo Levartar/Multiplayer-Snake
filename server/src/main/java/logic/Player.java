@@ -17,6 +17,7 @@ public class Player {
     public Player(String name) {
         log.trace("player"+ name+ " created");
         this.name = name;
+        this.color = String.format("#%d3",Math.floor(Math.random()*255),Math.floor(Math.random()*255),Math.floor(Math.random()*255));
     }
 
     public void setName(String name) {

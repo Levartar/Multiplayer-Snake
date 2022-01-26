@@ -68,6 +68,7 @@ function drawSnakes(snakes, cellSize){
     atlasImage.src = "./assets/snakeAtlas.png"; // Set source path
 
     for (let i = 0; i < snakes.length; i++) {
+        const coloredAtlasImage = alterImage(atlasImage,snakes[i].color)
         //draw Body
         for (let j = 1; j < snakes[i].positions.length-1; j++) {
 
@@ -96,25 +97,25 @@ function drawSnakes(snakes, cellSize){
             }
             switch (direction){
                 case "sideways":
-                    context.drawImage(atlasImage, 10, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailUp
+                    context.drawImage(coloredAtlasImage, 10, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailUp
                     break;
                 case "straight":
-                    context.drawImage(atlasImage, 0, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailDown
+                    context.drawImage(coloredAtlasImage, 0, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailDown
                     break;
                 case "downToLeft":
-                    context.drawImage(atlasImage, 40, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailLeft
+                    context.drawImage(coloredAtlasImage, 40, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailLeft
                     break;
                 case "downToRight":
-                    context.drawImage(atlasImage, 20, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailRight
+                    context.drawImage(coloredAtlasImage, 20, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailRight
                     break;
                 case "upToRight":
-                    context.drawImage(atlasImage, 30, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailRight
+                    context.drawImage(coloredAtlasImage, 30, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailRight
                     break;
                 case "upToLeft":
-                    context.drawImage(atlasImage, 50, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailRight
+                    context.drawImage(coloredAtlasImage, 50, 0, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailRight
                     break;
                 case "nd":
-                    context.drawImage(atlasImage, 0, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //Bubble
+                    context.drawImage(coloredAtlasImage, 0, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //Bubble
                     break;
             }
             //context.fillStyle = snakes[i].color
@@ -136,19 +137,19 @@ function drawSnakes(snakes, cellSize){
             {direction = "nd"}
             switch (direction){
                 case "up":
-                    context.drawImage(atlasImage, 20, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailUp
+                    context.drawImage(coloredAtlasImage, 20, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailUp
                     break;
                 case "down":
-                    context.drawImage(atlasImage, 10, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailDown
+                    context.drawImage(coloredAtlasImage, 10, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailDown
                     break;
                 case "left":
-                    context.drawImage(atlasImage, 30, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailLeft
+                    context.drawImage(coloredAtlasImage, 30, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailLeft
                     break;
                 case "right":
-                    context.drawImage(atlasImage, 40, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailRight
+                    context.drawImage(coloredAtlasImage, 40, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //TailRight
                     break;
                 case "nd":
-                    context.drawImage(atlasImage, 0, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //Bubble
+                    context.drawImage(coloredAtlasImage, 0, 10, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //Bubble
                     break;
             }
         }
@@ -159,24 +160,46 @@ function drawSnakes(snakes, cellSize){
             let y = snakes[i].positions[0].y
             switch (snakes[i].direction){
                 case "up":
-                    context.drawImage(atlasImage, 0, 20, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //HeadUp
+                    context.drawImage(coloredAtlasImage, 0, 20, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //HeadUp
                     break;
                 case "down":
-                    context.drawImage(atlasImage, 10, 20, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //HeadDown
+                    context.drawImage(coloredAtlasImage, 10, 20, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //HeadDown
                     break;
                 case "right":
-                    context.drawImage(atlasImage, 30, 20, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //HeadLeft
+                    context.drawImage(coloredAtlasImage, 30, 20, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //HeadLeft
                     break;
                 case "left":
-                    context.drawImage(atlasImage, 20, 20, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //HeadRight
+                    context.drawImage(coloredAtlasImage, 20, 20, 10, 10, x * cellSize, y * cellSize, cellSize, cellSize); //HeadRight
                     break;
             }
         }
 
         // draw the names of the players over their names
         context.font = "bolder 16px Arial"
-        context.fillStyle = "white"
+        context.fillStyle = "Black"
         // the '- (snakes[i].name.length * 8)/2 + cellSize/2' is to center the name over the players head
         context.fillText(snakes[i].name, (snakes[i].positions[0].x * cellSize) - (snakes[i].name.length * 8)/2 + cellSize/2, snakes[i].positions[0].y * cellSize, cellSize * 4)
     }
+}
+
+function alterImage(imageObj,color){
+    let canvas = document.createElement("canvas",);
+    let ctx= canvas.getContext("2d");
+    console.log(color)
+
+    ctx.drawImage(imageObj, 0, 0);
+    let id= ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    // Iterate over data.  Data is RGBA matrix so go by +=4 to get to next pixel data.
+    for (let i = 0; i < id.data.length; i += 4) {
+        // Check if RGB == 0 (black)
+        //color = #FF0000
+        id.data[i] = (id.data[i]*parseInt(color.substr(1,4)))/255
+        id.data[i+1] = (id.data[i+1]*parseInt(color.substr(4,7)))/255
+        id.data[i+2] = (id.data[i+2]*parseInt(color.substr(7,10)))/525
+    }
+
+    // redraw your altered data on the canvas.
+    ctx.putImageData(id, 0, 0);
+    return canvas
 }

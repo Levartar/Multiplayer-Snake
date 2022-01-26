@@ -3,7 +3,10 @@ class CreateSession extends React.Component{
     componentDidMount() {
         document.getElementById("buttonnewGame").addEventListener("click", () => {
             //create a new lobby
-            if(!nameCheck()){
+            if(nameCheck()){
+                document.getElementById("inputName").value = "Guest"+Math.floor(Math.random()*999999)
+            }
+
                 const url = "/create"
                 const request = new Request(url, {
                         method: 'GET'
@@ -23,10 +26,6 @@ class CreateSession extends React.Component{
                         })
                     })
                     .catch(err => console.log(err.message))
-            }else {
-                alert("Enter a name!!!")
-            }
-
         })
     }
 
