@@ -45,14 +45,13 @@ function websockets(name, sessionID){
         if (json.replace !== undefined) {
             // copy the replace Data, then change world
             replace = json.replace
-            for (let i = 0; i < replace.length; i++) {
-                drawReplace(json.replace, cellsize)
-                //world.worldstring = world.worldstring.replaceAt(replace[i].pos.y * (world.width + 1) + replace[i].pos.x, replace[i].mat)
-            }
+            drawReplace(json.replace, cellsize)
+            //world.worldstring = world.worldstring.replaceAt(replace[i].pos.y * (world.width + 1) + replace[i].pos.x, replace[i].mat)
+        }
 
-            if (json.snakes !== undefined) {
-                drawSnakes(json.snakes, cellSize)
-            }
+        if (json.snakes !== undefined) {
+            drawSnakes(json.snakes, cellSize)
+        }
 
             // draw a countdown before the game starts
             if (json.countdown !== undefined) {

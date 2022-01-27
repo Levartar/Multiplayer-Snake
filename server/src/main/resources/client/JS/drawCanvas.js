@@ -31,44 +31,12 @@ function drawWorld(world, cellSize){
 
     // draw the World array
     for (let i = 0; i < world.length; i++) {
-        switch (world[i]) {
-            case "#":
-                //s = source, d = destination
-                //.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-                context.drawImage(atlasImage, 10, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Wall
-                console.log("Wall drawn")
-                x += cellSize
-                break
-            case "@":
-                context.drawImage(atlasImage, 0, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Apple
-                x += cellSize
-                break
-            case "T":
-                context.drawImage(atlasImage, 20, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //AppleTree
-                x += cellSize
-                break
-            case " ":
-                const hashValue = hash(x+""+y)
-                switch ((hashValue % 4) +1){
-                    case 1: context.drawImage(atlasImage, 40, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground1
-                        break
-                    case 2: context.drawImage(atlasImage, 50, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground2
-                        break
-                    case 3: context.drawImage(atlasImage, 40, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground3
-                        break
-                    case 4: context.drawImage(atlasImage, 50, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground4
-                        break
-                    default: context.fillStyle = "#d3d3d3"
-                        context.fillRect(x, y, cellSize, cellSize)
-                }
-                x += cellSize
-                break
-            case "\n":
-                x = 0
-                y += cellSize
-                break
-            default:
-                break
+        if (world[i] !== '\n'){
+            replace(context,atlasImage,x,y,cellSize,world[i])
+            x+=cellSize
+        }else {
+            y+=cellSize
+            x=0
         }
     }
 }
@@ -83,34 +51,7 @@ function drawReplace(replace, cellSize){
     for (let i = 0; i < replace.length; i++) {
         let x = replace.pos.x
         let y = replace.pos.y
-        switch (replace[i].mat) {
-            case "#":
-                //s = source, d = destination
-                //.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-                context.drawImage(atlasImage, 10, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Wall
-                break
-            case "@":
-                context.drawImage(atlasImage, 0, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Apple
-                break
-            case "T":
-                context.drawImage(atlasImage, 20, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //AppleTree
-                break
-            case " ":
-                const hashValue = hash(x+""+y)
-                switch ((hashValue % 4) +1){
-                    case 1: context.drawImage(atlasImage, 40, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground1
-                        break
-                    case 2: context.drawImage(atlasImage, 50, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground2
-                        break
-                    case 3: context.drawImage(atlasImage, 40, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground3
-                        break
-                    case 4: context.drawImage(atlasImage, 50, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground4
-                        break
-                    default: context.fillStyle = "#d3d3d3"
-                        context.fillRect(x, y, cellSize, cellSize)
-                }
-        }
-
+        replace(context,atlasImage,x,y,cellSize,replace[i].mat)
     }
 }
 
@@ -274,3 +215,34 @@ function hash(s) {
     }
     return String(a);
 };
+
+function replace(context,atlasImage,x,y,cellSize,material){
+    console.log("Replace Material "+x+" "+y+"->"+material)
+    switch (material) {
+        case "#":
+            //s = source, d = destination
+            //.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+            context.drawImage(atlasImage, 10, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Wall
+            break
+        case "@":
+            context.drawImage(atlasImage, 0, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Apple
+            break
+        case "T":
+            context.drawImage(atlasImage, 20, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //AppleTree
+            break
+        case " ":
+            const hashValue = hash(x+""+y)
+            switch ((hashValue % 4) +1){
+                case 1: context.drawImage(atlasImage, 40, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground1
+                    break
+                case 2: context.drawImage(atlasImage, 50, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground2
+                    break
+                case 3: context.drawImage(atlasImage, 40, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground3
+                    break
+                case 4: context.drawImage(atlasImage, 50, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground4
+                    break
+                default: context.fillStyle = "#d3d3d3"
+                    context.fillRect(x, y, cellSize, cellSize)
+            }
+    }
+}
