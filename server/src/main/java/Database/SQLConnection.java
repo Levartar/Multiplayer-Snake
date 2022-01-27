@@ -16,11 +16,27 @@ public class SQLConnection {
     private static String DBIP;
     static Statement stmt;
     static String databasename = "testdb";
-    
+    private static int localPort = 3360;
+
+    public static void main(String[] args) {
+        InsertSnakeHighscore("NikoLocal",22);
+    }
+
+
     public static void setLoginDetails() {
         DBUser = System.getenv("DBUserName");
         DBUserPW = System.getenv("DBUserPassword");
         DBIP = System.getenv("Server_IP");
+        /**
+         * if no enviroment variables expect local db for test purposes
+         */
+        if(DBIP == null || DBIP.equals("")){
+            DBIP = "localhost";
+            DBUser = "root";
+            DBUserPW = "testpw!";
+            log.info("DB expected locally");
+            localPort = 3306;
+        }
 
     }
 
@@ -32,13 +48,13 @@ public class SQLConnection {
 
 
     private static void connectToDataBase(String dataBaseName) {
-        int localPort = 3360;
+
         String url = "jdbc:mariadb://" + DBIP + ":" + localPort + "/" + dataBaseName;
 
         try {
             connection = DriverManager.getConnection(url, DBUser, DBUserPW);
             stmt = connection.createStatement();
-            log.info("Connection to server successful!:" + connection + "\n\n");
+            log.info("Connection to server successful!:" + DBIP);
         } catch (SQLException e) {
             log.error("connectToDataBase Error: " + e.getMessage());
         }
