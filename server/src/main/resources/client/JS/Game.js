@@ -69,14 +69,15 @@ class Game extends React.Component {
                 <div className="flexed" id="gameScreen">
                     <Button name={"exitGame"} text={"back"}/>
                     <div id="gameMap">
-                        <canvas id="worldCanvas" width={this.props.width} height={this.props.height}
-                                style="position: absolute; left: 0; top: 0; z-index: 0;">
+                        <canvas id="pseudoCanvas" width={this.props.width} height={this.props.height}></canvas>
+                        <canvas id="worldCanvas" class="canvas" width={this.props.width} height={this.props.height}
+                                style={{position: 'absolute','z-index': 0}}>
                         </canvas>
-                        <canvas id="snakeCanvas" width={this.props.width} height={this.props.height}
-                                style="position: absolute; left: 0; top: 0; z-index: 1;">
+                        <canvas id="snakeCanvas" class="canvas" width={this.props.width} height={this.props.height}
+                                style={{position: 'absolute','z-index': 1}}>
                         </canvas>
-                        <canvas id="gridCanvas" width={this.props.width} height={this.props.height}
-                                style="position: absolute; left: 0; top: 0; z-index: 2;">
+                        <canvas id="gridCanvas" class="canvas" width={this.props.width} height={this.props.height}
+                                style={{position: 'absolute','z-index': 2}}>
                         </canvas>
                     </div>
                     <div id="gameScores">
