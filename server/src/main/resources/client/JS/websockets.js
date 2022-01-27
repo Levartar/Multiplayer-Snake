@@ -23,36 +23,41 @@ function websockets(name, sessionID){
         );
         document.getElementById("sessionIDtext").innerText = sessionID
     }
+
     ws.onmessage = function (evt) {
         let json = JSON.parse(evt.data)
         console.log(json)
 
-        if(json.world !== undefined){
-            // copy the newest coppy of the World if the backend sends it
+
+        if (json.world !== undefined) {
             world = json.world
+            ReactDOM.render(
+                <Game width={world.width * cellSize + 1} height={world.height * cellSize + 1} scores={json.scores}/>,
+                document.getElementById('root')
+            )
+            // copy the newest coppy of the World if the backend sends it
+            drawWorld(world.worldstring, cellSize)
+            drawGrid(world.width * cellSize + 1, world.height * cellSize + 1, cellSize)
+            //render Game World
+
         }
-        if(json.replace !== undefined){
+
+        if (json.replace !== undefined) {
             // copy the replace Data, then change world
             replace = json.replace
             for (let i = 0; i < replace.length; i++) {
-                world.worldstring = world.worldstring.replaceAt(replace[i].pos.y * (world.width + 1) + replace[i].pos.x, replace[i].mat)
+                drawReplace(json.replace, cellsize)
+                //world.worldstring = world.worldstring.replaceAt(replace[i].pos.y * (world.width + 1) + replace[i].pos.x, replace[i].mat)
             }
-        }
 
-        //render Game World
-        ReactDOM.render(
-            <Game  width={world.width * cellSize + 1} height={world.height * cellSize + 1} scores={json.scores}/>,
-            document.getElementById('root')
-        )
+            if (json.snakes !== undefined) {
+                drawSnakes(json.snakes, cellSize)
+            }
 
-        drawWorld(world.worldstring, cellSize)
-        drawSnakes(json.snakes, cellSize)
-        drawGrid(world.width * cellSize + 1, world.height * cellSize + 1, cellSize)
-
-        // draw a countdown before the game starts
-        if(json.countdown !== undefined){
-            const canvasMap = document.getElementById("mapCanvas")
-            const context = canvasMap.getContext("2d")
+            // draw a countdown before the game starts
+            if (json.countdown !== undefined) {
+                const canvasMap = document.getElementById("mapCanvas")
+                const context = canvasMap.getContext("2d")
 
             context.font = "64px Arial"
             context.fillStyle = "black"
