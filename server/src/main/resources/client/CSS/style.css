@@ -65,6 +65,13 @@ label{
     display: flex;
     justify-content: center;
 }
+
+.canvas{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 #newGameButtonDiv, #sessionIdButtonDiv, #sessionIdInputDiv, #sessionIdLabelDiv{
     text-align: center;
 }
@@ -195,10 +202,10 @@ select{
 }
 
 /* map */
-#mapCanvas{
+canvas{
     margin-left: 4em;
     margin-right: 4em;
-    background: white;
+    background-color: transparent;
 }
 #frameGame{
     margin: 2%;

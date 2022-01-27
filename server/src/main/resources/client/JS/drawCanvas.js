@@ -1,6 +1,6 @@
 //draw a grid depending on the width ang height of the gameBoard
 function drawGrid(bw, bh, cellSize){
-    const canvasMap = document.getElementById("mapCanvas")
+    const canvasMap = document.getElementById("gridCanvas")
     const context = canvasMap.getContext("2d")
 
 
@@ -20,65 +20,56 @@ function drawGrid(bw, bh, cellSize){
 
 //draw the gameWorld of the world synchronization massage
 function drawWorld(world, cellSize){
-    const canvasMap = document.getElementById("mapCanvas")
+    console.log("DrawWorld: "+world)
+    const canvasMap = document.getElementById("worldCanvas")
+    const context = canvasMap.getContext("2d")
+    const atlasImage = new Image();   // Create new img element
+    atlasImage.src = "./assets/snakeAtlas.png"; // Set source path
+    atlasImage.onload=start;
+
+    function start(){
+        //Test
+        context.drawImage(atlasImage,100,100)
+
+        let x = 0
+        let y = 0
+
+        // draw the World array
+        for (let i = 0; i < world.length; i++) {
+
+            if (world[i] !== '\n'){
+                replaceMaterial(context,atlasImage,x,y,cellSize,world[i])
+                console.log("drewMap: "+x+" "+y+""+world[i])
+                x+=cellSize
+            }else {
+                y+=cellSize
+                x=0
+            }
+        }
+    }
+}
+
+function drawReplace(replaceObj, cellSize){
+    const canvasMap = document.getElementById("worldCanvas")
     const context = canvasMap.getContext("2d")
     const atlasImage = new Image();   // Create new img element
     atlasImage.src = "./assets/snakeAtlas.png"; // Set source path
 
-    let x = 0
-    let y = 0
-
-    // draw the World array
-    for (let i = 0; i < world.length; i++) {
-        switch (world[i]) {
-            case "#":
-                //s = source, d = destination
-                //.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-                context.drawImage(atlasImage, 10, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Wall
-                x += cellSize
-                break
-            case "@":
-                context.drawImage(atlasImage, 0, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Apple
-                x += cellSize
-                break
-            case "T":
-                context.drawImage(atlasImage, 20, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //AppleTree
-                x += cellSize
-                break
-            case " ":
-                const hashValue = hash(x+""+y)
-                console.log(hashValue)
-                console.log(hashValue % 4)
-                switch ((hashValue % 4) +1){
-                    case 1: context.drawImage(atlasImage, 40, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground1
-                        break
-                    case 2: context.drawImage(atlasImage, 50, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground2
-                        break
-                    case 3: context.drawImage(atlasImage, 40, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground3
-                        break
-                    case 4: context.drawImage(atlasImage, 50, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground4
-                        break
-                    default: context.fillStyle = "#d3d3d3"
-                        context.fillRect(x, y, cellSize, cellSize)
-                }
-                x += cellSize
-                break
-            case "\n":
-                x = 0
-                y += cellSize
-                break
-            default:
-                break
-        }
+    for (let i = 0; i < replaceObj.length; i++) {
+        console.log("replace= "+replaceObj[i])
+        let x = replaceObj[i].pos.x*cellSize
+        let y = replaceObj[i].pos.y*cellSize
+        replaceMaterial(context,atlasImage,x,y,cellSize,replaceObj[i].mat)
     }
 }
 
 // draw snakes from an array with all player snakes
 function drawSnakes(snakes, cellSize){
-    const canvasMap = document.getElementById("mapCanvas")
+    const canvasMap = document.getElementById("snakeCanvas")
     const context = canvasMap.getContext("2d")
     const atlasImage = new Image();   // Create new img element
     atlasImage.src = "./assets/snakeAtlas.png"; // Set source path
+    context.clearRect(0, 0, canvasMap.width, canvasMap.height);
 
     for (let i = 0; i < snakes.length; i++) {
         const coloredAtlasImage = alterImage(atlasImage,snakes[i].color)
@@ -194,10 +185,6 @@ function drawSnakes(snakes, cellSize){
 function alterImage(imageObj,color){
     let canvas = document.createElement("canvas",);
     let ctx= canvas.getContext("2d");
-    console.log(color)
-    console.log(parseInt(color.substr(1,2),16))
-    console.log(parseInt(color.substr(3,2),16))
-    console.log(parseInt(color.substr(5,2),16))
 
     ctx.drawImage(imageObj, 0, 0);
     let id= ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -210,7 +197,6 @@ function alterImage(imageObj,color){
         id.data[i+1] = (id.data[i+1]*parseInt(color.substr(3,2),16))/255
         id.data[i+2] = (id.data[i+2]*parseInt(color.substr(5,2),16))/255
     }
-    console.log(id)
     // redraw your altered data on the canvas.
     ctx.putImageData(id, 0, 0);
     return canvas
@@ -232,3 +218,33 @@ function hash(s) {
     }
     return String(a);
 };
+
+function replaceMaterial(context, atlasImage, x, y, cellSize, material){
+    switch (material) {
+        case "#":
+            //s = source, d = destination
+            //.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+            context.drawImage(atlasImage, 10, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Wall
+            break
+        case "@":
+            context.drawImage(atlasImage, 0, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Apple
+            break
+        case "T":
+            context.drawImage(atlasImage, 20, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //AppleTree
+            break
+        case " ":
+            const hashValue = hash(x+""+y)
+            switch ((hashValue % 4) +1){
+                case 1: context.drawImage(atlasImage, 40, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground1
+                    break
+                case 2: context.drawImage(atlasImage, 50, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground2
+                    break
+                case 3: context.drawImage(atlasImage, 40, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground3
+                    break
+                case 4: context.drawImage(atlasImage, 50, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground4
+                    break
+                default: context.fillStyle = "#d3d3d3"
+                    context.fillRect(x, y, cellSize, cellSize)
+            }
+    }
+}
