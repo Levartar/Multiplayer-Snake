@@ -1,39 +1,24 @@
-2022-01-26 23:27:50,541 main INFO  networking.SnakeServer - Server started successfully
-2022-01-26 23:27:50,581 qtp155361948-35 INFO  requests.GetHighscores - Request(GET http://localhost:8080/highscores)@5bb3e224
-2022-01-26 23:27:50,701 qtp155361948-35 INFO  Database.SQLConnection - Connection to server successful!:org.mariadb.jdbc.MariaDbConnection@14e82808
+2022-01-27 10:54:53,647 main INFO  networking.SnakeServer - Server started successfully
+2022-01-27 10:54:56,055 qtp1397381784-28 INFO  requests.GetHighscores - Request(GET http://localhost:8080/highscores)@4e73b64b
+2022-01-27 10:54:56,214 qtp1397381784-28 INFO  Database.SQLConnection - Connection to server successful!:org.mariadb.jdbc.MariaDbConnection@91cac9a
 
 
-2022-01-26 23:27:50,702 qtp155361948-35 INFO  Database.SQLConnection - Successfully connected to Database: testdb
-2022-01-26 23:27:50,712 qtp155361948-35 INFO  Database.SQLConnection - Closing Database Connection
-2022-01-26 23:27:51,183 qtp155361948-26 INFO  requests.GetHighscores - Request(GET http://localhost:8080/highscores)@63893f45
-2022-01-26 23:27:51,204 qtp155361948-26 INFO  Database.SQLConnection - Connection to server successful!:org.mariadb.jdbc.MariaDbConnection@763ce579
+2022-01-27 10:54:56,214 qtp1397381784-28 INFO  Database.SQLConnection - Successfully connected to Database: testdb
+2022-01-27 10:54:56,230 qtp1397381784-28 INFO  Database.SQLConnection - Closing Database Connection
+2022-01-27 10:54:56,929 qtp1397381784-32 INFO  requests.CreateLobby - Request(GET http://localhost:8080/create)@4e73b64b
+2022-01-27 10:54:56,959 qtp1397381784-32 INFO  networking.LobbyManager - lobby created, join code = 258
+2022-01-27 10:54:56,973 qtp1397381784-28 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=258)@4e73b64b
+2022-01-27 10:54:56,981 qtp1397381784-28 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":[],"gamemode":"basic_snake"}
+2022-01-27 10:54:57,114 qtp1397381784-18 INFO  networking.Lobby - Player : Guest312118 Successfully joined the Lobby with joincode 258
+2022-01-27 10:54:57,667 qtp1397381784-32 INFO  requests.StartLobby - Request(POST http://localhost:8080/start?code=258)@4e73b64b
+2022-01-27 10:54:57,670 pool-2-thread-1 INFO  networking.Lobby - initializing game...
+2022-01-27 10:55:01,688 pool-2-thread-1 INFO  gamemodes.BasicSnake - snake Guest312118 died
+2022-01-27 10:55:01,690 pool-2-thread-1 INFO  gamemodes.BasicSnake - Game Ends winner: Guest312118
+2022-01-27 10:55:01,872 pool-2-thread-1 INFO  networking.Lobby - Game ended from lobby 258
+2022-01-27 10:55:01,902 pool-2-thread-1 INFO  Database.SQLConnection - Connection to server successful!:org.mariadb.jdbc.MariaDbConnection@2669c28d
 
 
-2022-01-26 23:27:51,204 qtp155361948-26 INFO  Database.SQLConnection - Successfully connected to Database: testdb
-2022-01-26 23:27:51,214 qtp155361948-26 INFO  Database.SQLConnection - Closing Database Connection
-2022-01-26 23:27:52,686 qtp155361948-27 INFO  requests.CreateLobby - Request(GET http://localhost:8080/create)@63893f45
-2022-01-26 23:27:52,694 qtp155361948-27 INFO  networking.LobbyManager - lobby created, join code = 327
-2022-01-26 23:27:52,699 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=327)@63893f45
-2022-01-26 23:27:52,702 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":[],"gamemode":"basic_snake"}
-2022-01-26 23:27:52,747 qtp155361948-20 INFO  networking.Lobby - Player : Guest807589 Successfully joined the Lobby with joincode 327
-2022-01-26 23:27:53,750 qtp155361948-27 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=327)@63893f45
-2022-01-26 23:27:53,751 qtp155361948-27 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest807589"],"gamemode":"basic_snake"}
-2022-01-26 23:27:54,745 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=327)@63893f45
-2022-01-26 23:27:54,745 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest807589"],"gamemode":"basic_snake"}
-2022-01-26 23:27:55,216 qtp155361948-27 INFO  requests.SelectMap - Request(POST http://localhost:8080/select-map?code=327)@63893f45
-2022-01-26 23:27:55,217 qtp155361948-27 INFO  requests.SelectMap - mapName: AppleHaven
-2022-01-26 23:27:55,218 qtp155361948-27 INFO  requests.SelectMap - New Map selected: AppleHaven
-2022-01-26 23:27:55,748 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=327)@63893f45
-2022-01-26 23:27:55,749 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"AppleHaven","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest807589"],"gamemode":"basic_snake"}
-2022-01-26 23:27:56,075 qtp155361948-27 INFO  requests.StartLobby - Request(POST http://localhost:8080/start?code=327)@63893f45
-2022-01-26 23:27:56,077 pool-2-thread-1 INFO  networking.Lobby - initializing game...
-2022-01-26 23:33:21,097 pool-2-thread-1 INFO  gamemodes.BasicSnake - snake Guest807589 died
-2022-01-26 23:33:21,097 pool-2-thread-1 INFO  gamemodes.BasicSnake - Game Ends winner: Guest807589
-2022-01-26 23:33:21,292 pool-2-thread-1 INFO  networking.Lobby - Game ended from lobby 327
-2022-01-26 23:33:21,314 pool-2-thread-1 INFO  Database.SQLConnection - Connection to server successful!:org.mariadb.jdbc.MariaDbConnection@3f0b76b5
-
-
-2022-01-26 23:33:21,314 pool-2-thread-1 INFO  Database.SQLConnection - Successfully connected to Database: testdb
-2022-01-26 23:33:21,329 pool-2-thread-1 INFO  Database.SQLConnection - InsertStatement executedsql : 'INSERT IGNORE INTO `Highscore` SET `score_id` = NULL,`player_name` =  ?, `score` = ?', parameters : ['Guest807589',443]
-2022-01-26 23:33:21,329 pool-2-thread-1 INFO  Database.SQLConnection - Closing Database Connection
-2022-01-26 23:33:21,332 pool-2-thread-1 INFO  networking.Lobby - Successfully disconnected from Database: 
+2022-01-27 10:55:01,904 pool-2-thread-1 INFO  Database.SQLConnection - Successfully connected to Database: testdb
+2022-01-27 10:55:01,935 pool-2-thread-1 INFO  Database.SQLConnection - InsertStatement executedsql : 'INSERT IGNORE INTO `Highscore` SET `score_id` = NULL,`player_name` =  ?, `score` = ?', parameters : ['Guest312118',5]
+2022-01-27 10:55:01,936 pool-2-thread-1 INFO  Database.SQLConnection - Closing Database Connection
+2022-01-27 10:55:01,943 pool-2-thread-1 INFO  networking.Lobby - Successfully disconnected from Database: 
