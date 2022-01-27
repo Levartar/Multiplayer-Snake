@@ -10,7 +10,51 @@ class Game extends React.Component {
         clearInterval(checkCurrentPlayers)
 
         //send the input of the Player to the backend
-        document.addEventListener("keydown", sendInput)
+        //document.addEventListener("keydown", sendInput)
+        //document.addEventListener("keyup", sendInput)
+
+            //keystate = {}
+
+        function onKeyPress(event) {
+                // keycode = event.code
+                let change = keystate[event.code] !== true
+                keystate[event.code] = true;
+
+                if (change) {
+                    console.clear()
+                    console.log("Press", event.code)
+                    handleInput(event.code);
+                }
+        }
+
+            function onKeyRelease(event) {
+                console.clear()
+                keystate[event.code] = false;
+                console.log("Release", event.code)
+                handleInput(null);
+            }
+
+            function handleInput(code) {
+                for (let c in keystate) {
+                    console.log(c, keystate[c])
+                }
+
+                if (code != null) {
+                    sendInput(code)
+                } else {
+                    for (let c in keystate) {
+                        if (true === keystate[c]) {
+                            console.error(c)
+                            sendInput(c)
+                            return
+                        }
+                    }
+                }
+        }
+
+        document.addEventListener('keydown', onKeyPress)
+        document.addEventListener('keyup', onKeyRelease)
+
         document.addEventListener('touchstart', handleTouchStart, false);
         document.addEventListener('touchmove', handleTouchMove, false);
 
