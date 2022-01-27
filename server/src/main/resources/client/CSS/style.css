@@ -66,6 +66,12 @@ label{
     justify-content: center;
 }
 
+.canvas{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 #newGameButtonDiv, #sessionIdButtonDiv, #sessionIdInputDiv, #sessionIdLabelDiv{
     text-align: center;
 }
