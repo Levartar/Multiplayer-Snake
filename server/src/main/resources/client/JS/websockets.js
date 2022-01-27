@@ -44,6 +44,7 @@ function websockets(name, sessionID){
             <Game  width={world.width * cellSize + 1} height={world.height * cellSize + 1} scores={json.scores}/>,
             document.getElementById('root')
         )
+
         drawWorld(world.worldstring, cellSize)
         drawSnakes(json.snakes, cellSize)
         drawGrid(world.width * cellSize + 1, world.height * cellSize + 1, cellSize)
@@ -73,7 +74,7 @@ function websockets(name, sessionID){
                     <Lobby players={playerNames} maps={maps}/>,
                     document.getElementById("root")
                 )
-            }, 1500)
+            }, 6000)
         }
     }
     //exit the lobby/game and render the main_Menu
