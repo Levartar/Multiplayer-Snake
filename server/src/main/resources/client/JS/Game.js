@@ -13,37 +13,37 @@ class Game extends React.Component {
         //document.addEventListener("keydown", sendInput)
         //document.addEventListener("keyup", sendInput)
 
-            //keystate = {}
+        let keyState = {}
 
         function onKeyPress(event) {
                 // keycode = event.code
-                let change = keystate[event.code] !== true
-                keystate[event.code] = true;
+                let change = keyState[event.key] !== true
+                keyState[event.key] = true;
 
                 if (change) {
                     console.clear()
-                    console.log("Press", event.code)
-                    handleInput(event.code);
+                    console.log("Press", event.key)
+                    handleInput(event.key);
                 }
         }
 
             function onKeyRelease(event) {
                 console.clear()
-                keystate[event.code] = false;
-                console.log("Release", event.code)
+                keyState[event.key] = false;
+                console.log("Release", event.key)
                 handleInput(null);
             }
 
             function handleInput(code) {
-                for (let c in keystate) {
-                    console.log(c, keystate[c])
+                for (let c in keyState) {
+                    console.log(c, keyState[c])
                 }
 
                 if (code != null) {
                     sendInput(code)
                 } else {
-                    for (let c in keystate) {
-                        if (true === keystate[c]) {
+                    for (let c in keyState) {
+                        if (true === keyState[c]) {
                             console.error(c)
                             sendInput(c)
                             return
@@ -133,13 +133,13 @@ class Game extends React.Component {
     }
 }
 
-function sendInput(event){
-    switch (event.key){
+function sendInput(key){
+    switch (key){
         case 'w':
         case 'a':
         case 's':
         case 'd':
-            ws.send(event.key)
+            ws.send(key)
             break
         case 'ArrowUp':
         case 'W':
