@@ -23,51 +23,58 @@ function websockets(name, sessionID){
         );
         document.getElementById("sessionIDtext").innerText = sessionID
     }
+
     ws.onmessage = function (evt) {
         let json = JSON.parse(evt.data)
         console.log(json)
 
-        if(json.world !== undefined){
-            // copy the newest coppy of the World if the backend sends it
+
+        if (json.world !== undefined) {
             world = json.world
+            ReactDOM.render(
+                <Game width={world.width * cellSize + 1} height={world.height * cellSize + 1} scores={json.scores}/>,
+                document.getElementById('root')
+            )
+            // copy the newest coppy of the World if the backend sends it
+            drawWorld(world.worldstring, cellSize)
+            drawGrid(world.width * cellSize + 1, world.height * cellSize + 1, cellSize)
+            //render Game World
+
         }
-        if(json.replace !== undefined){
+
+        if (json.replace !== undefined) {
             // copy the replace Data, then change world
             replace = json.replace
             for (let i = 0; i < replace.length; i++) {
-                world.worldstring = world.worldstring.replaceAt(replace[i].pos.y * (world.width + 1) + replace[i].pos.x, replace[i].mat)
+                drawReplace(json.replace, cellsize)
+                //world.worldstring = world.worldstring.replaceAt(replace[i].pos.y * (world.width + 1) + replace[i].pos.x, replace[i].mat)
             }
-        }
 
-        //render Game World
-        ReactDOM.render(
-            <Game  width={world.width * cellSize + 1} height={world.height * cellSize + 1} scores={json.scores}/>,
-            document.getElementById('root')
-        )
-        drawWorld(world.worldstring, cellSize)
-        drawSnakes(json.snakes, cellSize)
-        drawGrid(world.width * cellSize + 1, world.height * cellSize + 1, cellSize)
+            if (json.snakes !== undefined) {
+                drawSnakes(json.snakes, cellSize)
+            }
 
-        // draw a countdown before the game starts
-        if(json.countdown !== undefined){
-            const canvasMap = document.getElementById("mapCanvas")
-            const context = canvasMap.getContext("2d")
+            // draw a countdown before the game starts
+            if (json.countdown !== undefined) {
+                const canvasMap = document.getElementById("mapCanvas")
+                const context = canvasMap.getContext("2d")
 
-            context.font = "64px Arial"
-            context.fillStyle = "black"
-            context.fillText(json.countdown, (world.width/2) * cellSize, (world.height/2) * cellSize)
-        }
-        // check if the game is over and display the winner
-        if(json.gameover !== undefined){
-            alert("The Winner is: " + json.gameover.winner)
-            // disconect the players 6 sec after the game has ended
-            gameEnding = setTimeout(() => {
-                console.log("game ended")
-                ReactDOM.render(
-                    <Lobby players={playerNames} maps={maps}/>,
-                    document.getElementById("root")
-                )
-            }, 1500)
+                context.font = "64px Arial"
+                context.fillStyle = "black"
+                context.fillText(json.countdown, (world.width / 2) * cellSize, (world.height / 2) * cellSize)
+            }
+            // check if the game is over and display the winner
+            if (json.gameover !== undefined) {
+                alert("The Winner is: " + json.gameover.winner)
+                // disconect the players 6 sec after the game has ended
+                gameEnding = setTimeout(() => {
+                    console.log("game ended")
+                    ReactDOM.render(
+                        <Lobby players={playerNames} maps={maps}/>,
+                        document.getElementById("root")
+                    )
+                }, 1500)
+            }
         }
     }
     //exit the lobby/game and render the main_Menu

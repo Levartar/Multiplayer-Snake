@@ -20,6 +20,7 @@ function drawGrid(bw, bh, cellSize){
 
 //draw the gameWorld of the world synchronization massage
 function drawWorld(world, cellSize){
+    console.log("DrawWorld: "+world)
     const canvasMap = document.getElementById("mapCanvas")
     const context = canvasMap.getContext("2d")
     const atlasImage = new Image();   // Create new img element
@@ -35,6 +36,7 @@ function drawWorld(world, cellSize){
                 //s = source, d = destination
                 //.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
                 context.drawImage(atlasImage, 10, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Wall
+                console.log("Wall drawn")
                 x += cellSize
                 break
             case "@":
@@ -47,8 +49,6 @@ function drawWorld(world, cellSize){
                 break
             case " ":
                 const hashValue = hash(x+""+y)
-                console.log(hashValue)
-                console.log(hashValue % 4)
                 switch ((hashValue % 4) +1){
                     case 1: context.drawImage(atlasImage, 40, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground1
                         break
@@ -73,8 +73,50 @@ function drawWorld(world, cellSize){
     }
 }
 
+function drawReplace(replace, cellSize){
+    console.log("DrawReplace: "+replace)
+    const canvasMap = document.getElementById("mapCanvas")
+    const context = canvasMap.getContext("2d")
+    const atlasImage = new Image();   // Create new img element
+    atlasImage.src = "./assets/snakeAtlas.png"; // Set source path
+
+    for (let i = 0; i < replace.length; i++) {
+        let x = replace.pos.x
+        let y = replace.pos.y
+        switch (replace[i].mat) {
+            case "#":
+                //s = source, d = destination
+                //.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+                context.drawImage(atlasImage, 10, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Wall
+                break
+            case "@":
+                context.drawImage(atlasImage, 0, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Apple
+                break
+            case "T":
+                context.drawImage(atlasImage, 20, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //AppleTree
+                break
+            case " ":
+                const hashValue = hash(x+""+y)
+                switch ((hashValue % 4) +1){
+                    case 1: context.drawImage(atlasImage, 40, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground1
+                        break
+                    case 2: context.drawImage(atlasImage, 50, 20, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground2
+                        break
+                    case 3: context.drawImage(atlasImage, 40, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground3
+                        break
+                    case 4: context.drawImage(atlasImage, 50, 30, 10, 10, x+.5, y+.5, cellSize, cellSize); //Ground4
+                        break
+                    default: context.fillStyle = "#d3d3d3"
+                        context.fillRect(x, y, cellSize, cellSize)
+                }
+        }
+
+    }
+}
+
 // draw snakes from an array with all player snakes
 function drawSnakes(snakes, cellSize){
+    console.log("DrawSnakes: "+snakes)
     const canvasMap = document.getElementById("mapCanvas")
     const context = canvasMap.getContext("2d")
     const atlasImage = new Image();   // Create new img element
