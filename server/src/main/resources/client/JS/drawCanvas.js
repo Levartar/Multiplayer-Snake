@@ -1,6 +1,6 @@
 //draw a grid depending on the width ang height of the gameBoard
 function drawGrid(bw, bh, cellSize){
-    const canvasMap = document.getElementById("worldCanvas")
+    const canvasMap = document.getElementById("gridCanvas")
     const context = canvasMap.getContext("2d")
 
 
@@ -21,47 +21,55 @@ function drawGrid(bw, bh, cellSize){
 //draw the gameWorld of the world synchronization massage
 function drawWorld(world, cellSize){
     console.log("DrawWorld: "+world)
-    const canvasMap = document.getElementById("snakesCanvas")
+    const canvasMap = document.getElementById("worldCanvas")
     const context = canvasMap.getContext("2d")
     const atlasImage = new Image();   // Create new img element
     atlasImage.src = "./assets/snakeAtlas.png"; // Set source path
+    atlasImage.onload=start;
 
-    let x = 0
-    let y = 0
+    function start(){
+        //Test
+        context.drawImage(atlasImage,100,100)
 
-    // draw the World array
-    for (let i = 0; i < world.length; i++) {
-        if (world[i] !== '\n'){
-            replace(context,atlasImage,x,y,cellSize,world[i])
-            x+=cellSize
-        }else {
-            y+=cellSize
-            x=0
+        let x = 0
+        let y = 0
+
+        // draw the World array
+        for (let i = 0; i < world.length; i++) {
+
+            if (world[i] !== '\n'){
+                replaceMaterial(context,atlasImage,x,y,cellSize,world[i])
+                console.log("drewMap: "+x+" "+y+""+world[i])
+                x+=cellSize
+            }else {
+                y+=cellSize
+                x=0
+            }
         }
     }
 }
 
-function drawReplace(replace, cellSize){
-    console.log("DrawReplace: "+replace)
+function drawReplace(replaceObj, cellSize){
     const canvasMap = document.getElementById("worldCanvas")
     const context = canvasMap.getContext("2d")
     const atlasImage = new Image();   // Create new img element
     atlasImage.src = "./assets/snakeAtlas.png"; // Set source path
 
-    for (let i = 0; i < replace.length; i++) {
-        let x = replace.pos.x
-        let y = replace.pos.y
-        replace(context,atlasImage,x,y,cellSize,replace[i].mat)
+    for (let i = 0; i < replaceObj.length; i++) {
+        console.log("replace= "+replaceObj[i])
+        let x = replaceObj[i].pos.x*cellSize
+        let y = replaceObj[i].pos.y*cellSize
+        replaceMaterial(context,atlasImage,x,y,cellSize,replaceObj[i].mat)
     }
 }
 
 // draw snakes from an array with all player snakes
 function drawSnakes(snakes, cellSize){
-    console.log("DrawSnakes: "+snakes)
-    const canvasMap = document.getElementById("mapCanvas")
+    const canvasMap = document.getElementById("snakeCanvas")
     const context = canvasMap.getContext("2d")
     const atlasImage = new Image();   // Create new img element
     atlasImage.src = "./assets/snakeAtlas.png"; // Set source path
+    context.clearRect(0, 0, canvasMap.width, canvasMap.height);
 
     for (let i = 0; i < snakes.length; i++) {
         const coloredAtlasImage = alterImage(atlasImage,snakes[i].color)
@@ -177,10 +185,6 @@ function drawSnakes(snakes, cellSize){
 function alterImage(imageObj,color){
     let canvas = document.createElement("canvas",);
     let ctx= canvas.getContext("2d");
-    console.log(color)
-    console.log(parseInt(color.substr(1,2),16))
-    console.log(parseInt(color.substr(3,2),16))
-    console.log(parseInt(color.substr(5,2),16))
 
     ctx.drawImage(imageObj, 0, 0);
     let id= ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -193,7 +197,6 @@ function alterImage(imageObj,color){
         id.data[i+1] = (id.data[i+1]*parseInt(color.substr(3,2),16))/255
         id.data[i+2] = (id.data[i+2]*parseInt(color.substr(5,2),16))/255
     }
-    console.log(id)
     // redraw your altered data on the canvas.
     ctx.putImageData(id, 0, 0);
     return canvas
@@ -216,8 +219,7 @@ function hash(s) {
     return String(a);
 };
 
-function replace(context,atlasImage,x,y,cellSize,material){
-    console.log("Replace Material "+x+" "+y+"->"+material)
+function replaceMaterial(context, atlasImage, x, y, cellSize, material){
     switch (material) {
         case "#":
             //s = source, d = destination
