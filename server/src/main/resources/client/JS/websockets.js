@@ -81,7 +81,13 @@ function websockets(name, sessionID){
         }
             // check if the game is over and display the winner
         if (json.gameover !== undefined) {
-            alert("The Winner is: " + json.gameover.winner)
+            const canvasMap = document.getElementById("gridCanvas")
+            const context = canvasMap.getContext("2d")
+
+            context.font = "64px Arial"
+            context.fillStyle = "black"
+            context.fillText("The Winner is: "+json.gameover.winner,
+                (worldWidth / (8+json.gameover.winner.length/10)) * cellSize, (worldHeight / 2) * cellSize)
             // disconect the players 6 sec after the game has ended
             gameEnding = setTimeout(() => {
                 console.log("game ended")
