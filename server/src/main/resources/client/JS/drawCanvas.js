@@ -1,6 +1,6 @@
 //draw a grid depending on the width ang height of the gameBoard
 function drawGrid(bw, bh, cellSize){
-    const canvasMap = document.getElementById("mapCanvas")
+    const canvasMap = document.getElementById("worldCanvas")
     const context = canvasMap.getContext("2d")
 
 
@@ -21,7 +21,7 @@ function drawGrid(bw, bh, cellSize){
 //draw the gameWorld of the world synchronization massage
 function drawWorld(world, cellSize){
     console.log("DrawWorld: "+world)
-    const canvasMap = document.getElementById("mapCanvas")
+    const canvasMap = document.getElementById("snakesCanvas")
     const context = canvasMap.getContext("2d")
     const atlasImage = new Image();   // Create new img element
     atlasImage.src = "./assets/snakeAtlas.png"; // Set source path
@@ -75,7 +75,7 @@ function drawWorld(world, cellSize){
 
 function drawReplace(replace, cellSize){
     console.log("DrawReplace: "+replace)
-    const canvasMap = document.getElementById("mapCanvas")
+    const canvasMap = document.getElementById("worldCanvas")
     const context = canvasMap.getContext("2d")
     const atlasImage = new Image();   // Create new img element
     atlasImage.src = "./assets/snakeAtlas.png"; // Set source path
