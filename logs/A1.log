@@ -1,38 +1,126 @@
-2022-01-27 23:24:15,399 main INFO  networking.SnakeServer - Server started successfully
-2022-01-27 23:24:26,756 qtp155361948-34 INFO  requests.GetHighscores - Request(GET http://localhost:8080/highscores)@9a5d7e1
-2022-01-27 23:24:26,842 qtp155361948-34 INFO  Database.SQLConnection - Connection to server successful!:org.mariadb.jdbc.MariaDbConnection@1575ad76
-
-
-2022-01-27 23:24:26,842 qtp155361948-34 INFO  Database.SQLConnection - Successfully connected to Database: testdb
-2022-01-27 23:24:26,852 qtp155361948-34 INFO  Database.SQLConnection - Closing Database Connection
-2022-01-27 23:24:28,086 qtp155361948-32 INFO  requests.CreateLobby - Request(GET http://localhost:8080/create)@9a5d7e1
-2022-01-27 23:24:28,094 qtp155361948-32 INFO  networking.LobbyManager - lobby created, join code = 268
-2022-01-27 23:24:28,099 qtp155361948-34 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=268)@9a5d7e1
-2022-01-27 23:24:28,103 qtp155361948-34 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":[],"gamemode":"basic_snake"}
-2022-01-27 23:24:28,150 qtp155361948-22 INFO  networking.Lobby - Player : Guest98952 Successfully joined the Lobby with joincode 268
-2022-01-27 23:24:29,151 qtp155361948-32 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=268)@9a5d7e1
-2022-01-27 23:24:29,152 qtp155361948-32 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest98952"],"gamemode":"basic_snake"}
-2022-01-27 23:24:29,222 qtp155361948-34 INFO  requests.StartLobby - Request(POST http://localhost:8080/start?code=268)@9a5d7e1
-2022-01-27 23:24:29,224 pool-2-thread-1 INFO  networking.Lobby - initializing game...
-2022-01-27 23:24:33,238 pool-2-thread-1 INFO  gamemodes.BasicSnake - snake Guest98952 died
-2022-01-27 23:24:33,238 pool-2-thread-1 INFO  gamemodes.BasicSnake - Game Ends winner: Guest98952
-2022-01-27 23:24:33,429 pool-2-thread-1 INFO  networking.Lobby - Game ended from lobby 268
-2022-01-27 23:24:33,456 pool-2-thread-1 INFO  Database.SQLConnection - Connection to server successful!:org.mariadb.jdbc.MariaDbConnection@5a08b755
-
-
-2022-01-27 23:24:33,457 pool-2-thread-1 INFO  Database.SQLConnection - Successfully connected to Database: testdb
-2022-01-27 23:24:33,473 pool-2-thread-1 INFO  Database.SQLConnection - InsertStatement executedsql : 'INSERT IGNORE INTO `Highscore` SET `score_id` = NULL,`player_name` =  ?, `score` = ?', parameters : ['Guest98952',5]
-2022-01-27 23:24:33,473 pool-2-thread-1 INFO  Database.SQLConnection - Closing Database Connection
-2022-01-27 23:24:33,478 pool-2-thread-1 INFO  networking.Lobby - Successfully disconnected from Database: 
-2022-01-27 23:24:35,751 qtp155361948-34 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=268)@9a5d7e1
-2022-01-27 23:24:35,752 qtp155361948-34 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest98952"],"gamemode":"basic_snake"}
-2022-01-27 23:24:37,313 qtp155361948-20 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=268)@9a5d7e1
-2022-01-27 23:24:37,313 qtp155361948-20 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest98952"],"gamemode":"basic_snake"}
-2022-01-27 23:24:38,319 qtp155361948-34 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=268)@9a5d7e1
-2022-01-27 23:24:38,319 qtp155361948-34 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest98952"],"gamemode":"basic_snake"}
-2022-01-27 23:24:39,319 qtp155361948-20 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=268)@9a5d7e1
-2022-01-27 23:24:39,320 qtp155361948-20 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest98952"],"gamemode":"basic_snake"}
-2022-01-27 23:24:40,319 qtp155361948-34 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=268)@9a5d7e1
-2022-01-27 23:24:40,320 qtp155361948-34 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest98952"],"gamemode":"basic_snake"}
-2022-01-27 23:24:41,317 qtp155361948-20 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=268)@9a5d7e1
-2022-01-27 23:24:41,318 qtp155361948-20 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest98952"],"gamemode":"basic_snake"}
+2022-01-28 00:12:17,939 main INFO  networking.SnakeServer - Server started successfully
+2022-01-28 00:12:17,988 qtp155361948-36 INFO  requests.GetHighscores - Request(GET http://localhost:8080/highscores)@66957048
+2022-01-28 00:12:17,988 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=197)@2bec875f
+2022-01-28 00:12:17,994 qtp155361948-26 WARN  requests.GetGameInfo - No matching Lobby found for joinCode: 197
+2022-01-28 00:12:17,996 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"exists":false}
+2022-01-28 00:12:18,003 qtp155361948-21 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=197)@4a53ea64
+2022-01-28 00:12:18,003 qtp155361948-21 WARN  requests.GetGameInfo - No matching Lobby found for joinCode: 197
+2022-01-28 00:12:18,004 qtp155361948-21 INFO  requests.GetGameInfo - jsonMessage = {"exists":false}
+2022-01-28 00:12:18,015 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=197)@2bec875f
+2022-01-28 00:12:18,015 qtp155361948-26 WARN  requests.GetGameInfo - No matching Lobby found for joinCode: 197
+2022-01-28 00:12:18,016 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"exists":false}
+2022-01-28 00:12:18,017 qtp155361948-27 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=197)@4a53ea64
+2022-01-28 00:12:18,018 qtp155361948-27 WARN  requests.GetGameInfo - No matching Lobby found for joinCode: 197
+2022-01-28 00:12:18,018 qtp155361948-27 INFO  requests.GetGameInfo - jsonMessage = {"exists":false}
+2022-01-28 00:12:18,020 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=197)@2bec875f
+2022-01-28 00:12:18,020 qtp155361948-18 WARN  requests.GetGameInfo - No matching Lobby found for joinCode: 197
+2022-01-28 00:12:18,020 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"exists":false}
+2022-01-28 00:12:18,079 qtp155361948-36 INFO  Database.SQLConnection - Connection to server successful!:193.196.53.28
+2022-01-28 00:12:18,079 qtp155361948-36 INFO  Database.SQLConnection - Successfully connected to Database: testdb
+2022-01-28 00:12:18,090 qtp155361948-36 INFO  Database.SQLConnection - Closing Database Connection
+2022-01-28 00:12:19,228 qtp155361948-22 INFO  requests.CreateLobby - Request(GET http://localhost:8080/create)@66957048
+2022-01-28 00:12:19,236 qtp155361948-22 INFO  networking.LobbyManager - lobby created, join code = 229
+2022-01-28 00:12:19,243 qtp155361948-21 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=229)@66957048
+2022-01-28 00:12:19,245 qtp155361948-21 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":[],"gamemode":"basic_snake"}
+2022-01-28 00:12:19,295 qtp155361948-36 INFO  networking.Lobby - Player : Guest223043 Successfully joined the Lobby with joincode 229
+2022-01-28 00:12:20,294 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=229)@66957048
+2022-01-28 00:12:20,295 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest223043"],"gamemode":"basic_snake"}
+2022-01-28 00:12:20,675 qtp155361948-20 INFO  networking.Endpoint - Websocket connection with player Guest223043 closed
+2022-01-28 00:12:20,676 qtp155361948-20 INFO  networking.Lobby - Player : Guest223043 Successfully removed from the Lobby with joincode 229
+2022-01-28 00:12:21,394 qtp155361948-22 INFO  requests.GetHighscores - Request(GET http://localhost:8080/highscores)@66957048
+2022-01-28 00:12:21,410 qtp155361948-22 INFO  Database.SQLConnection - Connection to server successful!:193.196.53.28
+2022-01-28 00:12:21,411 qtp155361948-22 INFO  Database.SQLConnection - Successfully connected to Database: testdb
+2022-01-28 00:12:21,422 qtp155361948-22 INFO  Database.SQLConnection - Closing Database Connection
+2022-01-28 00:12:21,929 qtp155361948-26 INFO  requests.CreateLobby - Request(GET http://localhost:8080/create)@66957048
+2022-01-28 00:12:21,931 qtp155361948-26 INFO  networking.LobbyManager - lobby created, join code = 473
+2022-01-28 00:12:21,937 qtp155361948-22 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:21,937 qtp155361948-22 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":[],"gamemode":"basic_snake"}
+2022-01-28 00:12:21,941 qtp155361948-23 INFO  networking.Lobby - Player : Guest366557 Successfully joined the Lobby with joincode 473
+2022-01-28 00:12:22,574 qtp155361948-26 INFO  requests.StartLobby - Request(POST http://localhost:8080/start?code=473)@66957048
+2022-01-28 00:12:22,576 pool-2-thread-1 INFO  networking.Lobby - initializing game...
+2022-01-28 00:12:46,381 pool-2-thread-1 INFO  gamemodes.BasicSnake - snake Guest366557 died
+2022-01-28 00:12:46,381 pool-2-thread-1 INFO  gamemodes.BasicSnake - Game Ends winner: Guest366557
+2022-01-28 00:12:46,588 pool-2-thread-1 INFO  networking.Lobby - Game ended from lobby 473
+2022-01-28 00:12:46,609 pool-2-thread-1 INFO  Database.SQLConnection - Connection to server successful!:193.196.53.28
+2022-01-28 00:12:46,609 pool-2-thread-1 INFO  Database.SQLConnection - Successfully connected to Database: testdb
+2022-01-28 00:12:46,623 pool-2-thread-1 INFO  Database.SQLConnection - InsertStatement executedsql : 'INSERT IGNORE INTO `Highscore` SET `score_id` = NULL,`player_name` =  ?, `score` = ?', parameters : ['Guest366557',5]
+2022-01-28 00:12:46,623 pool-2-thread-1 INFO  Database.SQLConnection - Closing Database Connection
+2022-01-28 00:12:46,627 pool-2-thread-1 INFO  networking.Lobby - Successfully disconnected from Database: 
+2022-01-28 00:12:48,904 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:48,905 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:12:50,316 qtp155361948-28 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:50,317 qtp155361948-28 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:12:51,316 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:51,317 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:12:52,319 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:52,320 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:12:53,319 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:53,320 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:12:54,314 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:54,315 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:12:55,312 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:55,313 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:12:56,327 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:56,328 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:12:57,326 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:57,327 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:12:58,324 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:58,325 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:12:59,321 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:12:59,322 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:00,322 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:00,322 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:01,324 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:01,324 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:02,319 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:02,320 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:03,320 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:03,321 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:04,326 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:04,327 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:05,314 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:05,315 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:06,319 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:06,320 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:07,324 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:07,325 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:08,313 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:08,314 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:09,317 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:09,317 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:10,318 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:10,319 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:11,322 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:11,323 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:12,313 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:12,313 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:13,320 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:13,321 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:14,323 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:14,324 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:15,325 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:15,326 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:16,322 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:16,323 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:17,321 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:17,321 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:18,324 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:18,325 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:19,313 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:19,314 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:20,312 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:20,312 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:21,327 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:21,327 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:22,312 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:22,312 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:23,315 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:23,316 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:24,326 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:24,327 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:25,324 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:25,325 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:26,314 qtp155361948-18 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:26,315 qtp155361948-18 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
+2022-01-28 00:13:27,321 qtp155361948-26 INFO  requests.GetGameInfo - Request(GET http://localhost:8080/game-info?code=473)@66957048
+2022-01-28 00:13:27,322 qtp155361948-26 INFO  requests.GetGameInfo - jsonMessage = {"selectedMap":"default","hasStarted":false,"mapNames":["AppleHaven","BasicMap50x50","default","Garden","HideOuts","Tubes"],"exists":true,"playerNames":["Guest366557"],"gamemode":"basic_snake"}
