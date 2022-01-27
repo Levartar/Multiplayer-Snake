@@ -88,7 +88,7 @@ public class Lobby {
         map.shuffleSpawnPoints();
         gamemode.setMap(map);
 
-        setPlayerColors();
+        //setPlayerColors();
 
         running = false;
 

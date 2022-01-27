@@ -3,7 +3,10 @@ class CreateSession extends React.Component{
     componentDidMount() {
         document.getElementById("buttonnewGame").addEventListener("click", () => {
             //create a new lobby
-            if(!nameCheck()){
+            if(nameCheck()){
+                document.getElementById("inputName").value = "Guest"+Math.floor(Math.random()*999999)
+            }
+
                 const url = "/create"
                 const request = new Request(url, {
                         method: 'GET'
@@ -16,17 +19,13 @@ class CreateSession extends React.Component{
                             //connect the player to the lobby
                             sessionID = value
                             // values of the input fields
-                            const name = document.getElementById("inputName").value
+                            let name = document.getElementById("inputName").value
 
                             getGameInfo(sessionID)
                             websockets(name, sessionID)
                         })
                     })
                     .catch(err => console.log(err.message))
-            }else {
-                alert("Enter a name!!!")
-            }
-
         })
     }
 

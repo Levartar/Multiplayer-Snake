@@ -194,6 +194,8 @@ public class BasicSnake implements Gamemode {
                 snake.grow(1);
                 currentMap.changeMaterial(head, Material.FREESPACE);
                 jsonChangeMaterial(head, Material.FREESPACE);
+            }else if (currentMap.getMaterialAt(head) == Material.APPLETREE){
+                snake.grow(1);
             }
         });
 
