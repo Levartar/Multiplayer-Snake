@@ -33,7 +33,11 @@ public class SQLConnection {
         if(DBIP == null || DBIP.equals("")){
             DBIP = "localhost";
             DBUser = "root";
-            DBUserPW = "testpw!";
+            DBUserPW = System.getenv("rootPW");
+            if(DBUserPW == null || DBUserPW.equals("")){
+                DBUserPW = "testpw!";
+                log.info("rootPW not found! set as normal.");
+            }
             log.info("DB expected locally");
             localPort = 3306;
         }
