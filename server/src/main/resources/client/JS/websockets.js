@@ -95,7 +95,7 @@ function websockets(name, sessionID){
                     <Lobby players={playerNames} maps={maps}/>,
                     document.getElementById("root")
                 )
-            }, 1500)
+            }, 10000)
         }
     }
     //exit the lobby/game and render the main_Menu
