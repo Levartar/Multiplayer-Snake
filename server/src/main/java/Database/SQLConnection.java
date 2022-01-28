@@ -22,16 +22,20 @@ public class SQLConnection {
         InsertSnakeHighscore("NikoLocal",22);
     }
 
-
+    /**
+     *
+     * if no enviroment variables expect local db for test purposes
+     */
     public static void setLoginDetails() {
         DBUser = System.getenv("DBUserName");
         DBUserPW = System.getenv("DBUserPassword");
         DBIP = System.getenv("Server_IP");
-        /**
-         * if no enviroment variables expect local db for test purposes
-         */
+
         if(DBIP == null || DBIP.equals("")){
             DBIP = "localhost";
+            String hostname = System.getenv("DATABASE_HOSTNAME");
+            if(hostname == null || hostname.equals("")) hostname = "localhost";
+            DBIP = hostname;
             DBUser = "root";
             DBUserPW = System.getenv("rootPW");
             if(DBUserPW == null || DBUserPW.equals("")){
