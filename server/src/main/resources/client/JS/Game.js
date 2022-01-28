@@ -9,8 +9,50 @@ class Game extends React.Component {
         // clear the interval refreshing the player list
         clearInterval(checkCurrentPlayers)
 
-        //send the input of the Player to the backend
-        document.addEventListener("keydown", sendInput)
+        //----------PC-INPUTS------------------------------
+        let keyState = {}
+
+        function onKeyPress(event) {
+                // keycode = event.code
+                let change = keyState[event.key] !== true
+                keyState[event.key] = true;
+
+                if (change) {
+                    console.clear()
+                    console.log("Press", event.key)
+                    handleInput(event.key);
+                }
+        }
+
+            function onKeyRelease(event) {
+                console.clear()
+                keyState[event.key] = false;
+                console.log("Release", event.key)
+                handleInput(null);
+            }
+
+            function handleInput(code) {
+                for (let c in keyState) {
+                    console.log(c, keyState[c])
+                }
+
+                if (code != null) {
+                    sendInput(code)
+                } else {
+                    for (let c in keyState) {
+                        if (true === keyState[c]) {
+                            console.error(c)
+                            sendInput(c)
+                            return
+                        }
+                    }
+                }
+        }
+
+        document.addEventListener('keydown', onKeyPress)
+        document.addEventListener('keyup', onKeyRelease)
+
+        //----------MOBILE-INPUTS------------------------------
         document.addEventListener('touchstart', handleTouchStart, false);
         document.addEventListener('touchmove', handleTouchMove, false);
 
@@ -27,7 +69,7 @@ class Game extends React.Component {
             const firstTouch = getTouches(evt)[0];
             xDown = firstTouch.clientX;
             yDown = firstTouch.clientY;
-        };
+        }
 
         function handleTouchMove(evt) {
             if ( ! xDown || ! yDown ) {
@@ -51,16 +93,16 @@ class Game extends React.Component {
             } else {
                 if ( yDiff > 0 ) {
                     /* down swipe */
-                    ws.send('s')
+                    ws.send('w')
                 } else {
                     /* up swipe */
-                    ws.send('w')
+                    ws.send('s')
                 }
             }
             /* reset values */
             xDown = null;
             yDown = null;
-        };
+        }
     }
 
     render() {
@@ -69,7 +111,15 @@ class Game extends React.Component {
                 <div className="flexed" id="gameScreen">
                     <Button name={"exitGame"} text={"back"}/>
                     <div id="gameMap">
-                        <canvas id="mapCanvas" width={this.props.width} height={this.props.height}>
+                        <canvas id="pseudoCanvas" width={this.props.width} height={this.props.height}></canvas>
+                        <canvas id="worldCanvas" class="canvas" width={this.props.width} height={this.props.height}
+                                style={{'z-index': 0}}>
+                        </canvas>
+                        <canvas id="snakeCanvas" class="canvas" width={this.props.width} height={this.props.height}
+                                style={{'z-index': 1}}>
+                        </canvas>
+                        <canvas id="gridCanvas" class="canvas" width={this.props.width} height={this.props.height}
+                                style={{'z-index': 2}}>
                         </canvas>
                     </div>
                     <div id="gameScores">
@@ -81,13 +131,13 @@ class Game extends React.Component {
     }
 }
 
-function sendInput(event){
-    switch (event.key){
+function sendInput(key){
+    switch (key){
         case 'w':
         case 'a':
         case 's':
         case 'd':
-            ws.send(event.key)
+            ws.send(key)
             break
         case 'ArrowUp':
         case 'W':
@@ -106,8 +156,4 @@ function sendInput(event){
             ws.send('d')
             break
     }
-}
-
-function mobileInputs(event){
-
 }
