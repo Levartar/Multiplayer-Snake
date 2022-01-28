@@ -69,7 +69,7 @@ class Game extends React.Component {
             const firstTouch = getTouches(evt)[0];
             xDown = firstTouch.clientX;
             yDown = firstTouch.clientY;
-        };
+        }
 
         function handleTouchMove(evt) {
             if ( ! xDown || ! yDown ) {
@@ -102,7 +102,7 @@ class Game extends React.Component {
             /* reset values */
             xDown = null;
             yDown = null;
-        };
+        }
     }
 
     render() {
