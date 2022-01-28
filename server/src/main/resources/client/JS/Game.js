@@ -9,10 +9,7 @@ class Game extends React.Component {
         // clear the interval refreshing the player list
         clearInterval(checkCurrentPlayers)
 
-        //send the input of the Player to the backend
-        //document.addEventListener("keydown", sendInput)
-        //document.addEventListener("keyup", sendInput)
-
+        //----------PC-INPUTS------------------------------
         let keyState = {}
 
         function onKeyPress(event) {
@@ -55,6 +52,7 @@ class Game extends React.Component {
         document.addEventListener('keydown', onKeyPress)
         document.addEventListener('keyup', onKeyRelease)
 
+        //----------MOBILE-INPUTS------------------------------
         document.addEventListener('touchstart', handleTouchStart, false);
         document.addEventListener('touchmove', handleTouchMove, false);
 
@@ -158,8 +156,4 @@ function sendInput(key){
             ws.send('d')
             break
     }
-}
-
-function mobileInputs(event){
-
 }
