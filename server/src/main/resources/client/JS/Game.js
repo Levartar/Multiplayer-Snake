@@ -95,10 +95,10 @@ class Game extends React.Component {
             } else {
                 if ( yDiff > 0 ) {
                     /* down swipe */
-                    ws.send('s')
+                    ws.send('w')
                 } else {
                     /* up swipe */
-                    ws.send('w')
+                    ws.send('s')
                 }
             }
             /* reset values */
@@ -115,13 +115,13 @@ class Game extends React.Component {
                     <div id="gameMap">
                         <canvas id="pseudoCanvas" width={this.props.width} height={this.props.height}></canvas>
                         <canvas id="worldCanvas" class="canvas" width={this.props.width} height={this.props.height}
-                                style={{position: 'absolute','z-index': 0}}>
+                                style={{'z-index': 0}}>
                         </canvas>
                         <canvas id="snakeCanvas" class="canvas" width={this.props.width} height={this.props.height}
-                                style={{position: 'absolute','z-index': 1}}>
+                                style={{'z-index': 1}}>
                         </canvas>
                         <canvas id="gridCanvas" class="canvas" width={this.props.width} height={this.props.height}
-                                style={{position: 'absolute','z-index': 2}}>
+                                style={{'z-index': 2}}>
                         </canvas>
                     </div>
                     <div id="gameScores">
