@@ -20,7 +20,7 @@ The game was created as a project in the module [Software Develoment 3](https://
 
 ### Compose file modification
 
-Open `docker-compose.yaml` and set the password for the database. The password needs to be added in 2 playes, marked with a comment:
+Open `docker-compose.yaml` and set the password for the database. The password needs to be added in 2 places, marked with a comment:
 ```yaml
 # set database password
 ```
@@ -29,7 +29,7 @@ Open `docker-compose.yaml` and set the password for the database. The password n
 
 #### Linux
 
-run the command
+run
 
 ```bash
 docker-compose up -d
