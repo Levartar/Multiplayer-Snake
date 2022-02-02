@@ -15,6 +15,13 @@ import java.io.IOException;
 public class StartLobby extends HttpServlet {
     private static final Logger log = LogManager.getLogger(StartLobby.class);
 
+    /**
+     * starts the lobby with the corresponding joinCode
+     * @param req request that gets read from the URL, should be joinCode
+     * @param resp response that is send to the client
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info(req);

@@ -15,10 +15,17 @@ import java.io.IOException;
 public class SelectMap extends HttpServlet {
     private static final Logger log = LogManager.getLogger(SelectMap.class);
 
+    /**
+     * changes the Map of the lobby with the corresponding joinCode to the given map
+     * @param req request that gets read from the URL, should be joinCode and mapName
+     * @param resp response that is send to the client
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info(req);
-
+        //extracts the joinCode from the request
         String parameter = req.getParameter("code");
         if (parameter == null) {
             log.warn("no 'code' parameter in " + req);
@@ -27,6 +34,7 @@ public class SelectMap extends HttpServlet {
         }
         int joinCode = Integer.parseInt(parameter);
 
+        //extracts the mapName
         BufferedReader reader = req.getReader();
         String mapFileName = reader.readLine();
         log.info("mapName: " + mapFileName);
