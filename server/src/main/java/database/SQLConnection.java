@@ -51,7 +51,6 @@ public class SQLConnection {
     public static void connectToServer(String dataBaseName) {
         setLoginDetails();
         connectToDataBase(dataBaseName);
-        log.info("Successfully connected to Database: " + dataBaseName);
     }
 
 
