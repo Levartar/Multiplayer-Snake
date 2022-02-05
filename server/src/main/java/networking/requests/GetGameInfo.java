@@ -23,10 +23,18 @@ import java.util.stream.Collectors;
 public class GetGameInfo extends HttpServlet {
     private static final Logger log = LogManager.getLogger(GetGameInfo.class);
 
+    /**
+     * formulates a message containing important information about the lobby and sends it to the frontend
+     * @param req request that gets read from the URL, should contain the joinCode
+     * @param resp response that is send to the client
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info(req);
 
+        //extracts the joinCode from the request
         String parameter = req.getParameter("code");
         if (parameter == null) {
             log.warn("no 'code' parameter in " + req);
@@ -35,6 +43,7 @@ public class GetGameInfo extends HttpServlet {
         }
         int joinCode = Integer.parseInt(parameter);
         Lobby lobby;
+        //creates a JSONObject containing important information about a lobby
         JSONObject jsonMessage = new JSONObject();
         try {
             lobby = LobbyManager.getLobby(joinCode);

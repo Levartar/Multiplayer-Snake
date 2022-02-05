@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  snake-db:
+    image: mariadb:10.6
+    container_name: snake-database
+    hostname: snake-database
+    restart: always
+    networks:
+      - snake
+    environment:
+      # set database password
+      - MARIADB_ROOT_PASSWORD=
+    volumes:
+      # setup script
+      - ./database/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      # MariaDB data files location
+      # - /my/own/datadir:/var/lib/mysql
+
+  snake:
+    build:
+      ./server/
+    container_name: snake
+    restart: unless-stopped
+    networks:
+      - snake
+    ports:
+      - 80:8080
+    environment:
+      - DATABASE_HOSTNAME=snake-database
+      # set database password
+      - rootPW= 
+
+networks:
+  snake:

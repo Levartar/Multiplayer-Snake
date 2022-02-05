@@ -1,4 +1,4 @@
-package Database;
+package database;
 
 import java.sql.*;
 import org.apache.logging.log4j.LogManager;

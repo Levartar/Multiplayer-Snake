@@ -1,6 +1,5 @@
 package networking;
 
-import exceptions.GameOverException;
 import logic.Player;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +22,14 @@ public class Endpoint {
     private Lobby lobby;
     private Player player;
 
+    /**
+     * is executed after the client establishes the Websocket connection
+     * sees if given lobby is available, then joins with the given name
+     * @param joinCode of the chosen lobby
+     * @param name of the player
+     * @param session of the Websocket connection i.e. Client and Server
+     * @throws IOException if lobby exists or is full/started
+     */
     @OnOpen
     public void onOpen(@PathParam("code") int joinCode, @PathParam("name") String name, Session session) throws IOException {
         this.session = session;
@@ -46,12 +53,21 @@ public class Endpoint {
         }
     }
 
+    /**
+     * is executed upon frontend uses send() method. relays the input to the Player Object
+     * @param input from the keyboard of the websocket clientside
+     * @param session of the Websocket connection i.e. Client and Server
+     */
     @OnMessage
     public void onMessage(char input, Session session) {
         log.debug("input from player " + player.getName() + ": " + input);
         player.setInput(input);
     }
 
+    /**
+     * upon closing of the websocket connection, removes the endpoint from the open connections, removes the Player from the lobby and dismisses the lobby connection
+     * @param session of the Websocket connection i.e. Client and Server
+     */
     @OnClose
     public void onClose(Session session) {
         endpoints.remove(this);
@@ -60,16 +76,29 @@ public class Endpoint {
         lobby = null;
     }
 
+    /**
+     * upon receiving an error in the websocket connection, displays it into the console
+     * @param session of the Websocket connection i.e. Client and Server
+     * @param cause of the error
+     */
     @OnError
     public void onError(Session session, Throwable cause) {
         log.error("Error in the Websocket connection with player " + player.getName() + ": " + cause.getMessage());
     }
 
 
+    /**
+     * returns the player object corresponding to the endpoint
+     * @return Player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * sends data to the frontend
+     * @param data is the world information of the game
+     */
     public void send(String data) {
         try {
             session.getBasicRemote().sendText(data);
@@ -79,6 +108,9 @@ public class Endpoint {
         }
     }
 
+    /**
+     * closes all endpoint connections (all endpoints in List endpoints)
+     */
     public static void closeAllEndpoints() {
         endpoints.forEach(endpoint -> {
             try {

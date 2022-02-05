@@ -1,6 +1,6 @@
 package networking.requests;
 
-import Database.SQLConnection;
+import database.SQLConnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -18,9 +18,17 @@ public class GetHighscores extends HttpServlet {
 
     private final JSONArray jsonArray = new JSONArray();
 
+    /**
+     * sends the top 20 scores as a JSONArray to the frontend
+     * @param req request that gets read from the URL, should be empty
+     * @param resp response that is send to the client
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.info(req);
+        //gets the highscores table from the database and formulates a readable JSONArray of the top 20 scores
         ResultSet resultSet = SQLConnection.getScores();
         try{
             for (int i = 0; i < 20 &&resultSet.next(); i++) {

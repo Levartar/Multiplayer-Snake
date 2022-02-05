@@ -18,6 +18,10 @@ public class SnakeServer {
 
     private final Server server;
 
+    /**
+     * Establishes a connection to a jetty Server
+     * @param port where the server should be run
+     */
     public SnakeServer(int port) {
         server = new Server(port);
         Connector connector = new ServerConnector(server);
@@ -25,8 +29,8 @@ public class SnakeServer {
 
         ServletContextHandler contextHandler = new ServletContextHandler(server, "/");
 
+        //configures the websockets
         log.debug("configuring websockets...");
-        // websocket configuration
         JavaxWebSocketServletContainerInitializer.configure(contextHandler, ((servletContext, serverContainer) -> {
             serverContainer.setDefaultMaxTextMessageBufferSize(69);
             // timeout for websockets (in milliseconds I think)
@@ -34,8 +38,8 @@ public class SnakeServer {
             serverContainer.addEndpoint(Endpoint.class);
         }));
 
+        //static webpage configuration where the html file is referenced that the server shall display by default
         log.debug("configuring static file serving...");
-        // static webpage configuration
         ServletHolder defaultHolder = new ServletHolder("default", new DefaultServlet());
         String resourceBase = Objects.requireNonNull(this.getClass()
                         .getClassLoader()
@@ -46,29 +50,29 @@ public class SnakeServer {
         defaultHolder.setInitParameter("resourceBase", resourceBase);
         contextHandler.addServlet(defaultHolder, "/*");
 
-        log.debug("configuring HTTP Requests...");
 
+        //http requests that are to be handled by the server
+        log.debug("configuring HTTP Requests...");
         // get request on /create
         ServletHolder createServlet = new ServletHolder(new CreateLobby());
         contextHandler.addServlet(createServlet, "/create");
-
         // get request on /create
         ServletHolder getGameInfoServlet = new ServletHolder(new GetGameInfo());
         contextHandler.addServlet(getGameInfoServlet, "/game-info");
-
         //post request on /start
         ServletHolder postGameStartServlet = new ServletHolder(new StartLobby());
         contextHandler.addServlet(postGameStartServlet, "/start");
-
         //post request on /select-map
         ServletHolder postSelectedMap = new ServletHolder(new SelectMap());
         contextHandler.addServlet(postSelectedMap, "/select-map");
-
         //get request on /highscores
         ServletHolder getHighscores = new ServletHolder(new GetHighscores());
         contextHandler.addServlet(getHighscores, "/highscores");
     }
 
+    /**
+     * starts the server
+     */
     public void run() {
         try {
             server.start();
