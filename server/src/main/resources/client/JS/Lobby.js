@@ -1,8 +1,6 @@
 //define the lobby with eventListener, buttons and mapOptions
 class Lobby extends React.Component {
     componentDidMount() {
-        document.removeEventListener("keydown", sendInput)
-
         document.getElementById("buttonexitLobby").addEventListener("click", () => {
             ws.close()
             renderMain()
