@@ -33,9 +33,10 @@
                 .then(response => response.json().then(obj => {
                     /*
                         to use the same code as fore the score table during the game
-                        i change the name score to points, because otherwise i would have tho change to
+                        i change the name score to points, because otherwise i would have to change to
                         much
                     */
+                    console.log("get scores")
                     let scores = []
                     for (let i = 0; i < obj.length; i++) {
                         scores[i] = {
@@ -43,13 +44,34 @@
                             points: obj[i].score
                         }
                     }
-                    ReactDOM.render(
-                        <MainMenu scores={scores}/>,
-                        document.getElementById('root')
-                    );
-                }))
+                    console.log("render screen")
+                    console.log("scores", scores)
+                    if(scores.length === 0){
+                        ReactDOM.render(
+                            <MainMenu scores={[{name: "failed to load", points: ''}]}/>,
+                            document.getElementById('root')
+                        )
+                    }else{
+                        ReactDOM.render(
+                            <MainMenu scores={scores}/>,
+                            document.getElementById('root')
+                        );
+                    }
+                    console.log("finished rendering")
+                }).catch(exception => {
+                        console.log("database is closed", exception)
+                        ReactDOM.render(
+                            <MainMenu scores={[{name: "failed to load", points: ''}]}/>,
+                            document.getElementById('root')
+                        )
+                    })
+                )
         }
 
+        ReactDOM.render(
+            <MainMenu scores={[{name: "loading...", points: ''}]}/>,
+            document.getElementById('root')
+        )
         renderMain()
     </script>
 </body>
