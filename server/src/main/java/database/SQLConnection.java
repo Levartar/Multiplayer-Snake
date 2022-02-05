@@ -18,10 +18,6 @@ public class SQLConnection {
     static String databasename = "testdb";
     private static int localPort = 3360;
 
-    public static void main(String[] args) {
-        InsertSnakeHighscore("NikoLocal",22);
-    }
-
     /**
      *
      * if no enviroment variables expect local db for test purposes
