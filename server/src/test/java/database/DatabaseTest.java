@@ -3,11 +3,12 @@ package database;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import Database.SQLConnection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DatabaseTest {
-    private static final Logger log = LogManager.getLogger(SQLConnection.class);
+    private static final Logger log = LogManager.getLogger(Database.SQLConnection.class);
     String name = "Jens_TEST";
     int highscore = 2048;
 
@@ -19,10 +20,17 @@ public class DatabaseTest {
 
     @Test
     void receiveDatatest() {
-        SQLConnection.InsertSnakeHighscore(name, highscore);
-        assertEquals(highscore, Integer.valueOf(SQLConnection.getScore(name)));
+        Database.SQLConnection.InsertSnakeHighscore(name, highscore);
+        int i;
+        try{
+            i = Integer.parseInt(Database.SQLConnection.getName(name));
+        }catch ( NumberFormatException Ne){
+            log.error(Ne);
+            i = -1;
+        }
+        assertEquals(highscore, i);
         log.info("received Data");
-        SQLConnection.deleteHighscore("Jens_TEST");
+        Database.SQLConnection.deleteHighscore("Jens_TEST");
     }
 
     @Test

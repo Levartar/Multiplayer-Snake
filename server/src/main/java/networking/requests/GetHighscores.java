@@ -1,6 +1,6 @@
 package networking.requests;
 
-import database.SQLConnection;
+import Database.SQLConnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
@@ -30,14 +30,18 @@ public class GetHighscores extends HttpServlet {
         log.info(req);
         //gets the highscores table from the database and formulates a readable JSONArray of the top 20 scores
         ResultSet resultSet = SQLConnection.getScores();
-        try{
-            for (int i = 0; i < 20 &&resultSet.next(); i++) {
-                try{
+        try {
+            for (int i = 0; i < 20 && resultSet.next(); i++) {
+                try {
                     addToJSON(resultSet.getString("player_name"), Integer.parseInt(resultSet.getString("score")));
-                }catch(Exception e){
+                } catch (Exception e) {
                     log.error("For loop Error: " + e.getMessage());
                 }
             }
+
+
+        }catch (NullPointerException nullE){
+            log.error("No resultset found!" + nullE);
         }catch(Exception e){
             log.error("External for loop Error:  " + e.getMessage());
         }

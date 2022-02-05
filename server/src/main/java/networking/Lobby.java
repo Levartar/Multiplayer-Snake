@@ -9,7 +9,7 @@ import logic.Player;
 import logic.gamemodes.BasicSnake;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import database.SQLConnection;
+import Database.SQLConnection;
 
 import java.io.IOException;
 import java.util.ArrayList;
