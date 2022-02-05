@@ -24,7 +24,7 @@ public class StartLobby extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.info(req);
+        log.debug(req);
 
         String parameter = req.getParameter("code");
         if (parameter == null) {

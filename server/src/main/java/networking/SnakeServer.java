@@ -19,7 +19,7 @@ public class SnakeServer {
     private final Server server;
 
     /**
-     * Establishes a connection to a jetty Server
+     * Establishes a jetty Server
      * @param port where the server should be run
      */
     public SnakeServer(int port) {
@@ -76,7 +76,7 @@ public class SnakeServer {
     public void run() {
         try {
             server.start();
-            log.info("Server started successfully");
+            log.info("Server started on port " + server.getServer().getURI().getPort());
             server.join();
         } catch (Exception e) {
             log.error(e.getMessage());

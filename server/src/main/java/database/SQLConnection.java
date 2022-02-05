@@ -36,9 +36,9 @@ public class SQLConnection {
             DBUserPW = System.getenv("rootPW");
             if(DBUserPW == null || DBUserPW.equals("")){
                 DBUserPW = "testpw!";
-                log.info("rootPW not found! set as normal.");
+                log.debug("rootPW not found! set as normal.");
             }
-            log.info("DB expected locally");
+            log.debug("DB expected locally");
             localPort = 3306;
         }
 
@@ -60,7 +60,7 @@ public class SQLConnection {
                 throw new SQLException("Cannot connect to Database !");
             }
             stmt = connection.createStatement();
-            log.info("Connection to server successful!:" + DBIP);
+            log.debug("Connection to server successful!:" + DBIP);
         } catch (SQLException e) {
 
             log.error("connectToDataBase Error: " + e.getMessage());
@@ -70,7 +70,7 @@ public class SQLConnection {
     public static void closeDataBaseConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
-                log.info("Closing Database Connection");
+                log.debug("Closing Database Connection");
                 connection.close();
             }
         } catch (SQLException e) {
@@ -106,7 +106,7 @@ public class SQLConnection {
             int rowAffected = ps.executeUpdate();
             log.debug(rowAffected + "rows affected");
             stmt.close();
-            log.info("InsertStatement executed" + ps);
+            log.debug("InsertStatement executed" + ps);
             closeDataBaseConnection();
             return true;
         } catch (SQLException e) {

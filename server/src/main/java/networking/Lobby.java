@@ -149,12 +149,6 @@ public class Lobby {
                 }catch(Exception ex){
                     log.error(ex.getMessage());
                 }
-                try{
-
-                    log.info("Successfully disconnected from Database: ");
-                }catch(Exception exp){
-                    log.error(exp.getMessage());
-                }
                 running = false;
                 executor.shutdown();
             }

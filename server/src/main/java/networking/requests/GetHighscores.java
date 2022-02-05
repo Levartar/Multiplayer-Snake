@@ -27,7 +27,7 @@ public class GetHighscores extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.info(req);
+        log.debug(req);
         //gets the highscores table from the database and formulates a readable JSONArray of the top 20 scores
         ResultSet resultSet = SQLConnection.getScores();
         try {
