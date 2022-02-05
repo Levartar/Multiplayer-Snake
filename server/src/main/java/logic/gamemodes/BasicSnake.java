@@ -2,6 +2,7 @@ package logic.gamemodes;
 
 import exceptions.GameNotInitializedException;
 import exceptions.GameOverException;
+import exceptions.GameRunningException;
 import logic.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +42,11 @@ public class BasicSnake implements Gamemode {
 
     public BasicSnake(List<Player> players, Map map, int countDown) {
         this.players = players;
-        setMap(map);
+        try {
+            setMap(map);
+        } catch (GameRunningException e) {
+            log.error(e.getMessage());
+        }
         this.initialCountDown = countDown * 1000;
         log.debug("BasicSnake created\n" + this);
     }
@@ -345,7 +350,9 @@ public class BasicSnake implements Gamemode {
     }
 
     @Override
-    public void setMap(Map map) {
+    public void setMap(Map map) throws GameRunningException {
+        if (initialized) throw new GameRunningException();
+
         this.originalMap = map;
         this.currentMap = new Map(map);
     }

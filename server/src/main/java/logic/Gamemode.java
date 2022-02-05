@@ -2,6 +2,7 @@ package logic;
 
 import exceptions.GameNotInitializedException;
 import exceptions.GameOverException;
+import exceptions.GameRunningException;
 
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public interface Gamemode {
 
     String init();
 
-    void setMap(logic.Map map);
+    void setMap(logic.Map map) throws GameRunningException;
 
     Map<String, Integer> getScores();
 
