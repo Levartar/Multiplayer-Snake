@@ -42,6 +42,7 @@ public class GetHighscores extends HttpServlet {
 
         }catch (NullPointerException nullE){
             log.error("No resultset found!" + nullE);
+            resp.sendError(500,"Database not found!");
         }catch(Exception e){
             log.error("External for loop Error:  " + e.getMessage());
         }

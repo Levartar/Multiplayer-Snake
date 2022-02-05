@@ -134,31 +134,6 @@ public class SQLConnection {
         }
     }
 
-
-    // works ONLY FOR  single query (one SELECT or one DELETE etc)
-    public static String getScore(String name) {
-        ResultSet resultSet;
-        String result = "";
-        try {
-            connectToServer(databasename);
-            if(connection == null || stmt == null){
-                throw new SQLException("Cannot connect to Database !");
-            }
-            Statement stmt = connection.createStatement();
-            resultSet = stmt.executeQuery("Select score from testdb.Highscore where player_name = '" + name + "';");
-            log.info("Database connection success");
-            closeDataBaseConnection();
-            if (resultSet.next()) {
-                result = resultSet.getString(1);
-            }
-            log.debug("returning score:" + result);
-            return result;
-        } catch (SQLException e) {
-            log.error("getScore Error: " + e.getMessage());
-        }
-        return "Error!";
-    }
-
     public static ResultSet getScores(){
         String statement = "Select * from testdb.Highscore order by score DESC";
         ResultSet resultSet;
