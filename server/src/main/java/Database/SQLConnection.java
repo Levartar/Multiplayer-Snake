@@ -51,7 +51,6 @@ public class SQLConnection {
     public static void connectToServer(String dataBaseName) {
         setLoginDetails();
         connectToDataBase(dataBaseName);
-        log.info("Successfully connected to Database: " + dataBaseName);
     }
 
 
@@ -61,9 +60,13 @@ public class SQLConnection {
 
         try {
             connection = DriverManager.getConnection(url, DBUser, DBUserPW);
+            if(connection == null){
+                throw new SQLException("Cannot connect to Database !");
+            }
             stmt = connection.createStatement();
             log.info("Connection to server successful!:" + DBIP);
         } catch (SQLException e) {
+
             log.error("connectToDataBase Error: " + e.getMessage());
         }
     }
@@ -98,6 +101,9 @@ public class SQLConnection {
         try {
 
             connectToServer(databasename);
+            if(connection == null || stmt == null){
+                throw new SQLException("Cannot connect to Database !");
+            }
             PreparedStatement ps = connection.prepareStatement(insert);
             ps.setString(1, name);
             ps.setInt(2, highscore);
@@ -118,6 +124,9 @@ public class SQLConnection {
         int result = 0;
         try {
             connectToServer(databasename);
+            if(connection == null || stmt == null){
+                throw new SQLException("Cannot connect to Database !");
+            }
             Statement stmt = connection.createStatement();
             result = stmt.executeUpdate(delete);
             log.info("Database connection success");
@@ -136,6 +145,9 @@ public class SQLConnection {
         String result = "";
         try {
             connectToServer(databasename);
+            if(connection == null || stmt == null){
+                throw new SQLException("Cannot connect to Database !");
+            }
             Statement stmt = connection.createStatement();
             resultSet = stmt.executeQuery("Select score from testdb.Highscore where player_name = '" + name + "';");
             log.info("Database connection success");
@@ -157,6 +169,9 @@ public class SQLConnection {
 
         try{
             connectToServer(databasename);
+            if(connection == null || stmt == null){
+                throw new SQLException("Cannot connect to Database !");
+            }
             resultSet = stmt.executeQuery(statement);
             closeDataBaseConnection();
             return resultSet;
@@ -172,6 +187,9 @@ public class SQLConnection {
         String result = "";
         try {
             connectToServer(databasename);
+            if(connection == null || stmt == null){
+                throw new SQLException("Cannot connect to Database !");
+            }
             Statement stmt = connection.createStatement();
             resultSet = stmt.executeQuery("SELECT player_name FROM testdb.Highscore where player_name ='" + name + "';");
             closeDataBaseConnection();
