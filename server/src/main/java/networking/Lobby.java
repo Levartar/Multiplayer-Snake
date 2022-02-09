@@ -144,8 +144,12 @@ public class Lobby {
             } catch (GameOverException e) {
                 log.info("Game ended from lobby " + joinCode);
                 java.util.Map<String, Integer> highscores = gamemode.getScores();
-                try{
-                    highscores.forEach(SQLConnection::InsertSnakeHighscore);
+                try(var sqlConnection = new SQLConnection()){
+
+                    for (var score:highscores.entrySet()) {
+                        sqlConnection.insertSnakeHighscore(score.getKey(),score.getValue());
+                    }
+
                 }catch(Exception ex){
                     log.error(ex.getMessage());
                 }

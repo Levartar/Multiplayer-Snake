@@ -1,56 +1,92 @@
 package database;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DatabaseTest {
-    private static final Logger log = LogManager.getLogger(database.SQLConnection.class);
-    String name = "Jens_TEST";
-    int highscore = 2048;
+
+    String name = "test";
+    int x = 420;
 
     @Test
-    void postDatatest() {
-        assertTrue(sendData());
-        log.info("send Data to Database!");
-    }
-
-    @Test
-    void receiveDatatest() {
-        database.SQLConnection.InsertSnakeHighscore(name, highscore);
-        int i;
-        try{
-            i = Integer.parseInt(database.SQLConnection.getName(name));
-        }catch ( NumberFormatException Ne){
-            log.error(Ne);
-            i = -1;
+    @Order(1)
+    public void connection(){
+        try(SQLConnection sqlConnection = new SQLConnection()){
+            int i = 0;
+        }catch (Exception e){
+            System.out.println("Error!" + e);
         }
-        assertEquals(highscore, i);
-        log.info("received Data");
-        database.SQLConnection.deleteHighscore("Jens_TEST");
     }
 
     @Test
-    void deleteDatatest() {
-        name = "Felix_TEST";
-        SQLConnection.InsertSnakeHighscore("Tim_TEST", 20);
-        SQLConnection.InsertSnakeHighscore("Timo_TEST", 21);
-        SQLConnection.InsertSnakeHighscore("Felix_TEST", 23);
-        SQLConnection.InsertSnakeHighscore("Anjo_TEST", 24);
-        assertEquals(1,SQLConnection.deleteHighscore("Felix_TEST"));
-        assertEquals("Could not find name: " + name, SQLConnection.getName("Felix_TEST"));
-        SQLConnection.deleteHighscore("Tim_TEST");
-        SQLConnection.deleteHighscore("Timo_TEST");
-        SQLConnection.deleteHighscore("Felix_TEST");
-        SQLConnection.deleteHighscore("Anjo_TEST");
+    @Order(2)
+    public void negativScore() {
+        assertThrowsExactly(IllegalArgumentException.class, () -> {
+            SQLConnection sqlCon = new SQLConnection();
+            sqlCon.insertSnakeHighscore(name, -10);
+        });
     }
 
-    public boolean sendData() {
 
-        return (SQLConnection.InsertSnakeHighscore(name, highscore));
+
+
+    @Test
+    @Order(3)
+    public void postData(){
+        try(SQLConnection sqlCon = new SQLConnection()){
+            sqlCon.insertSnakeHighscore(name,x);
+        }catch (IOException IOe){
+            IOe.printStackTrace();
+        }
     }
 
+    @Test
+    @Order(4)
+    public void getHighscores() throws Exception {
+        SQLConnection sqlCon = new SQLConnection();
+        sqlCon.insertSnakeHighscore("test",420);
+        try (SQLConnection sqlConnection = new SQLConnection()) {
+            var test = sqlConnection.getScores(1);
+            Map<String, Integer> referenzmap = new HashMap<>();
+            referenzmap.put("test",420);
+            assertEquals(referenzmap,test);
+        }
+    }
+    @Test
+    @Order(5)
+    public void delete() {
+        SQLConnection sqlCon = new SQLConnection();
+        sqlCon.insertSnakeHighscore("test", 10);
+        SQLConnection sqlConnection = new SQLConnection();
+        assertTrue(0 < sqlConnection.deleteHighscore("test"));
+    }
+
+    @Test
+    @Order(6)
+    void deleteMultiple() {
+        var TestMap= new HashMap<String,Integer>();
+        TestMap.put("Tim_Test",20);
+        TestMap.put("Timo_Test",Integer.MAX_VALUE);
+        TestMap.put("Felix_TEST",21);
+        TestMap.put("Anjo_TEST",30);
+
+        try(SQLConnection sqlCon = new SQLConnection()){
+            for (var score: TestMap.entrySet()) {
+                sqlCon.insertSnakeHighscore(score.getKey(),score.getValue());
+            }
+
+            assertEquals(4,sqlCon.deleteHighscore("Test"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
+
