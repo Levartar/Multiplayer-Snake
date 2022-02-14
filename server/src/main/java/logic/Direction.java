@@ -1,11 +1,19 @@
 package logic;
 
+/**
+ * This class interprets the input of a Player and converts into a {@link Direction}.
+ */
 public enum Direction {
     up,
     down,
     left,
     right;
 
+    /**
+     * Returns the matching {@link Direction} to the given player input.
+     * @param input character input from the player.
+     * @return enum that represents the direction.
+     */
     public static Direction getDirection(char input) {
         return switch (input) {
             case 'w' -> Direction.up;
