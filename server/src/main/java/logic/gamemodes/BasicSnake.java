@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class BasicSnake implements Gamemode {
     private static final Logger log = LogManager.getLogger(BasicSnake.class);
@@ -119,8 +118,8 @@ public class BasicSnake implements Gamemode {
     /**
      * Represents one step for all snakes and all that could happen during this one step.
      * @return The synchronisation message after all changes that happens during one step
-     * @throws GameOverException
-     * @throws GameNotInitializedException
+     * @throws GameOverException ...
+     * @throws GameNotInitializedException ...
      */
     @Override
     public String gameLoop() throws GameOverException, GameNotInitializedException {
@@ -428,7 +427,7 @@ public class BasicSnake implements Gamemode {
     /**
      * Allowing to change the map in the lobby screen
      * @param map The {@link Map} to be used
-     * @throws GameRunningException
+     * @throws GameRunningException if you try to set a map while a game is running
      */
     @Override
     public void setMap(Map map) throws GameRunningException {
