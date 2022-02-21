@@ -1,132 +1,156 @@
 package database;
 
+import java.io.IOException;
 import java.sql.*;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class SQLConnection {
+public final class SQLConnection implements AutoCloseable {
     private static final Logger log = LogManager.getLogger(SQLConnection.class);
 
-
-    private static Connection connection;
-    private static String DBUser;
-    private static String DBUserPW;
-    private static String DBIP;
-    static Statement stmt;
+    private Connection connection;
+    private String DBUser;
+    private String DBUserPW;
+    private String DBIP;
+    private Statement stmt;
     static String databasename = "testdb";
     private static int localPort = 3360;
 
+
+
     /**
-     *
-     * if no enviroment variables expect local db for test purposes
+     * Constructor for the SQL Connection
      */
-    public static void setLoginDetails() {
+    public SQLConnection() {
+        setLoginDetails();
+        connectToDataBase();
+    }
+
+
+    /**
+     * Sets the Connection Variables via System environment variables for Docker CICD pipelines.
+     * if no enviroment variables are found, a local Database is expected for test purposes and can be connected via e.g. DockerDesktop.
+     */
+    private void setLoginDetails() {
         DBUser = System.getenv("DBUserName");
         DBUserPW = System.getenv("DBUserPassword");
         DBIP = System.getenv("Server_IP");
 
-        if(DBIP == null || DBIP.equals("")){
+        if (DBIP == null || DBIP.equals("")) {
             DBIP = "localhost";
             String hostname = System.getenv("DATABASE_HOSTNAME");
-            if(hostname == null || hostname.equals("")) hostname = "localhost";
+            if (hostname == null || hostname.equals("")) hostname = "localhost";
             DBIP = hostname;
             DBUser = "root";
             DBUserPW = System.getenv("rootPW");
-            if(DBUserPW == null || DBUserPW.equals("")){
+            if (DBUserPW == null || DBUserPW.equals("")) {
                 DBUserPW = "testpw!";
-                log.debug("rootPW not found! set as normal.");
+                log.info("rootPW not found! set as normal.");
             }
-            log.debug("DB expected locally");
+            log.info("DB expected locally");
             localPort = 3306;
         }
 
     }
 
-    public static void connectToServer(String dataBaseName) {
-        setLoginDetails();
-        connectToDataBase(dataBaseName);
-    }
+    /**
+     * Connection Methode
+     * when the connection has a timeout an Exception will be thrown
+     * and caught so the game can also run, but the Highscore won´t get saved.
+     * This is also shown in the Frontend See: {@link networking.requests.GetHighscores#doGet(HttpServletRequest, HttpServletResponse)networking}
+     * JDBC Driver: Mariadb
+     */
+    private void connectToDataBase() {
 
-
-    private static void connectToDataBase(String dataBaseName) {
-
-        String url = "jdbc:mariadb://" + DBIP + ":" + localPort + "/" + dataBaseName;
+        String url = "jdbc:mariadb://" + DBIP + ":" + localPort + "/" + databasename;
 
         try {
             connection = DriverManager.getConnection(url, DBUser, DBUserPW);
-            if(connection == null){
+            if (connection == null) {
                 throw new SQLException("Cannot connect to Database !");
+
             }
             stmt = connection.createStatement();
-            log.debug("Connection to server successful!:" + DBIP);
+            log.info("Connection to Database server successful!:" + DBIP);
         } catch (SQLException e) {
 
             log.error("connectToDataBase Error: " + e.getMessage());
         }
     }
 
-    public static void closeDataBaseConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                log.debug("Closing Database Connection");
-                connection.close();
-            }
-        } catch (SQLException e) {
-            log.error("closeDataBaseConnection Error: " + e.getMessage());
-        }
 
-    }
-
-
-    public static boolean InsertSnakeHighscore(String name, int highscore) {
-        String test = name.toUpperCase();
-        if(test.length() >= 100 || test.contains("FROM")||
-                test.contains("DELETE") || test.contains("INSERT") || test.contains("DROP") ||
-                test.contains(";") || test.contains("1=1") || test.contains("REPLACE") || test.contains("SELECT")){
-            return false;
-        }
+    /**
+     *created the SQL Statement based on the Input
+     * the ? are for the prepared statment.
+     * @param name the name of the Player
+     * @param highscore the player´s highscore
+     */
+    public void insertSnakeHighscore(String name, int highscore) {
         String statement = "INSERT IGNORE INTO `Highscore`" +
                 " SET `score_id` = NULL," +
-                "`player_name` =  ?, " +"`score` = ?";
-        return InsertStatement(statement, name, highscore);
+                "`player_name` =  ?, " + "`score` = ?";
+        insertStatement(statement, name, highscore);
     }
 
-    public static boolean InsertStatement(String insert, String name, int highscore) {
-        try {
 
-            connectToServer(databasename);
-            if(connection == null || stmt == null){
+    /**
+     * Checks name and highscore and if an connection and statement is available
+     * Creates a new PreparedStatement, inserts the values(name,highscore) and executes it.
+     * When successful the statement and the amount of affected rows will be logged
+     * @param statement the statement which should be executed
+     * @param name the player´s name
+     * @param highscore his highscore
+     */
+    private void insertStatement(String statement, String name, int highscore) {
+        try {
+            if (highscore < 0 ) {
+                throw new IllegalArgumentException("Highscore must be positiv or 0!");
+            }
+            if (name == null || name.isBlank()) {
+                throw new IllegalArgumentException("Name can´t be null or blank!");
+            }
+
+            if (connection == null || stmt == null) {
                 throw new SQLException("Cannot connect to Database !");
             }
-            PreparedStatement ps = connection.prepareStatement(insert);
+            PreparedStatement ps = connection.prepareStatement(statement);
             ps.setString(1, name);
             ps.setInt(2, highscore);
             int rowAffected = ps.executeUpdate();
             log.debug(rowAffected + "rows affected");
-            stmt.close();
-            log.debug("InsertStatement executed" + ps);
-            closeDataBaseConnection();
-            return true;
+            log.info("InsertStatement executed " + ps + "| Rows affected:" + rowAffected);
         } catch (SQLException e) {
             log.error("InsertStatement Error: " + e);
-            return false;
         }
     }
 
-    public static int deleteHighscore(String name) {
-        String delete = "delete from testdb.`Highscore` where `player_name` ='" + name + "';";
+
+    /**
+     * Not yet implemented in the Backend / Frontend
+     * deletes all entries from a player based on his name
+     * @param name the players name of which entries should be deleted
+     * @return the amount of rows which has been changed
+     */
+    public int deleteHighscore(String name) {
+        String delete = "delete from " + databasename + ".`Highscore` where `player_name` LIKE ?;";
         int result = 0;
         try {
-            connectToServer(databasename);
-            if(connection == null || stmt == null){
+            if (connection == null || stmt == null) {
                 throw new SQLException("Cannot connect to Database !");
             }
-            Statement stmt = connection.createStatement();
-            result = stmt.executeUpdate(delete);
+            PreparedStatement ps = connection.prepareStatement(delete);
+            ps.setString(1, "%" +name+"%");
+            result = ps.executeUpdate();
             log.info("Database connection success");
-            log.info("Deleted" + result + "rows");
+            log.info("Deleted rows: " + result);
             return result;
         } catch (SQLException e) {
             log.error("deleteHighscore Error: " + e.getMessage());
@@ -134,50 +158,57 @@ public class SQLConnection {
         }
     }
 
-    public static ResultSet getScores(){
+
+    /**
+     * Return the first (best) playernames and scores in a Map
+     * @param maxCount How many entries should be given back
+     * @return a Map which contains the player name (Key) and the score(value)
+     */
+    public Map<String, Integer> getScores(int maxCount) {
+        if (maxCount <= 0) {
+            return new HashMap<>();
+        }
+
+
         String statement = "Select * from testdb.Highscore order by score DESC";
         ResultSet resultSet;
 
-        try{
-            connectToServer(databasename);
-            if(connection == null || stmt == null){
-                throw new SQLException("Cannot connect to Database !");
-            }
-            resultSet = stmt.executeQuery(statement);
-            closeDataBaseConnection();
-            return resultSet;
-        }catch(SQLException e){
-            log.error("getScores Error : " + e.getMessage());
-        }
-
-        return null;
-    }
-
-    public static String getName(String name) {
-        ResultSet resultSet;
-        String result = "";
         try {
-            connectToServer(databasename);
-            if(connection == null || stmt == null){
+            if (connection == null || stmt == null) {
                 throw new SQLException("Cannot connect to Database !");
             }
-            Statement stmt = connection.createStatement();
-            resultSet = stmt.executeQuery("SELECT player_name FROM testdb.Highscore where player_name ='" + name + "';");
-            closeDataBaseConnection();
-            if (resultSet.next()) {
-                result = resultSet.getString(1);
+
+            resultSet = stmt.executeQuery(statement);
+            Map<String, Integer> scores = new HashMap<>();
+            int i = 0;
+            while (resultSet.next() && i < maxCount) {
+                scores.put(resultSet.getString("player_name"), Integer.parseInt(resultSet.getString("score")));
+                i++;
             }
-            log.debug("Database querry for name:" + name +" : "+ result);
-            if(result.equals("")){
-                log.debug("Database: no Matches for:" +name );
-                return "Could not find name: " + name;
-            }
-            return result;
+            return scores;
         } catch (SQLException e) {
-            log.error("getName Error: " + e.getMessage());
+            log.error("getScores Error : " + e.getMessage());
+            return new HashMap<>();
         }
-        return "Could not find name: " + name;
+
     }
 
+    /**
+     * Autocloseable for SQL Connection
+     * Closes the connection after try-catch block
+     *
+     * @throws IOException if this resource cannot be closed
+     */
+    @Override
+    public void close() throws IOException {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                log.info("Closing Database Connection");
+                connection.close();
+            }
+        } catch (SQLException e) {
+            log.error("closeDataBaseConnection Error: " + e.getMessage());
+        }
+    }
 
 }
