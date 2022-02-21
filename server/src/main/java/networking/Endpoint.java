@@ -15,7 +15,7 @@ import java.util.List;
 public class Endpoint {
     private static final Logger log = LogManager.getLogger(Endpoint.class);
 
-    private static List<Endpoint> endpoints = new ArrayList<>();
+    private static final List<Endpoint> endpoints = new ArrayList<>();
 
     private Session session;
 
@@ -71,7 +71,7 @@ public class Endpoint {
     @OnClose
     public void onClose(Session session) {
         endpoints.remove(this);
-        log.info("Websocket connection with player " + player.getName() + " closed");
+        log.debug("Websocket connection with player " + player.getName() + " closed");
         lobby.removePlayer(this);
         lobby = null;
     }

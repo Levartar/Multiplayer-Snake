@@ -27,11 +27,18 @@ public class GetHighscores extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.info(req);
+        log.debug(req);
+        //gets the highscores table from the database and formulates a readable JSONArray of the top 20 scores
+        ResultSet resultSet = SQLConnection.getScores();
+        try {
+            for (int i = 0; i < 20 && resultSet.next(); i++) {
+                try {
+                    addToJSON(resultSet.getString("player_name"), Integer.parseInt(resultSet.getString("score")));
+                } catch (Exception e) {
+                    log.error("For loop Error: " + e.getMessage());
+                }
+            }
 
-        try (var sqlConnection = new SQLConnection()){
-            var scores = sqlConnection.getScores(20);
-            scores.forEach(this::addToJSON);
 
         }catch (NullPointerException nullE){
             log.error("No resultset found!" + nullE);

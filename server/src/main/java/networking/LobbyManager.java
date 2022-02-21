@@ -26,19 +26,6 @@ public class LobbyManager {
     }
 
     /**
-     *
-     * @param joinCode
-     * @param endpoint
-     * @return
-     * @throws Exception
-     */
-    public static Lobby joinLobby(int joinCode, Endpoint endpoint) throws Exception {
-        Lobby lobby = getLobby(joinCode);
-        lobby.join(endpoint);
-        return lobby;
-    }
-
-    /**
      * generates a new and unused joinCode
      * @return int joinCode
      */
@@ -53,23 +40,9 @@ public class LobbyManager {
     }
 
     /**
-     *
-     * @param endpoint
-     */
-    public static void leaveLobby(Endpoint endpoint) {
-        for (Lobby lobby : lobbies) {
-            if (lobby.hasPlayer(endpoint)) {
-                lobby.removePlayer(endpoint);
-                return;
-            }
-        }
-        log.error("Endpoint " + endpoint + " tried to leave a lobby, but is in no lobby");
-    }
-
-    /**
      * returns the Lobby object with a given joinCode
      * @return Lobby Object
-     * @throws Exception if no lobby with the provided joinCode exists
+     * @throws NoSuchLobbyException if no lobby with the provided joinCode exists
      */
     public static Lobby getLobby(int joinCode) throws NoSuchLobbyException {
         for (Lobby lobby : lobbies) {
@@ -84,6 +57,7 @@ public class LobbyManager {
      * closes all lobbies, even if games are running
      */
     public static void closeAllLobbies() {
+        log.warn("Closing all lobbies. This is not threadsafe and should not be used in production");
         Endpoint.closeAllEndpoints();
         lobbies.clear();
         log.warn("All open lobbies have been closed!");

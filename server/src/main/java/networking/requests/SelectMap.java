@@ -24,7 +24,7 @@ public class SelectMap extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.info(req);
+        log.debug(req);
         //extracts the joinCode from the request
         String parameter = req.getParameter("code");
         if (parameter == null) {
@@ -37,7 +37,7 @@ public class SelectMap extends HttpServlet {
         //extracts the mapName
         BufferedReader reader = req.getReader();
         String mapFileName = reader.readLine();
-        log.info("mapName: " + mapFileName);
+        log.debug("mapName: " + mapFileName);
         reader.close();
 
         try {

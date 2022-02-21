@@ -32,7 +32,7 @@ public class GetGameInfo extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log.info(req);
+        log.debug(req);
 
         //extracts the joinCode from the request
         String parameter = req.getParameter("code");
@@ -77,7 +77,7 @@ public class GetGameInfo extends HttpServlet {
             log.warn(e.getMessage());
             jsonMessage.put("exists", false);
         } finally {
-            log.info("jsonMessage = " + jsonMessage);
+            log.debug("jsonMessage = " + jsonMessage);
         }
 
         try {

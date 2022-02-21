@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class BasicSnake implements Gamemode {
     private static final Logger log = LogManager.getLogger(BasicSnake.class);
@@ -40,6 +39,12 @@ public class BasicSnake implements Gamemode {
     private int countDown;
     private final int initialCountDown;
 
+    /**
+     * Constructor
+     * @param players List of all players who are playing in this round
+     * @param map the actual chosen map for this round
+     * @param countDown Countdown until start of round
+     */
     public BasicSnake(List<Player> players, Map map, int countDown) {
         this.players = players;
         try {
@@ -51,10 +56,19 @@ public class BasicSnake implements Gamemode {
         log.debug("BasicSnake created\n" + this);
     }
 
+    /**
+     * Constructor for testing
+     * @param players List of testplayers
+     * @param map Test map
+     */
     public BasicSnake(List<Player> players, Map map) {
         this(players, map, 0);
     }
 
+    /**
+     * Returns in form of a String the initial synchronisation message
+     * @return String that contains the initial information of the round
+     */
     @Override
     public String init() {
 
@@ -101,6 +115,12 @@ public class BasicSnake implements Gamemode {
         return getSynchronizationMessage();
     }
 
+    /**
+     * Represents one step for all snakes and all that could happen during this one step.
+     * @return The synchronisation message after all changes that happens during one step
+     * @throws GameOverException ...
+     * @throws GameNotInitializedException ...
+     */
     @Override
     public String gameLoop() throws GameOverException, GameNotInitializedException {
         if (gameOver) throw new GameOverException();
@@ -125,6 +145,9 @@ public class BasicSnake implements Gamemode {
         return message;
     }
 
+    /**
+     * moves all snakes, checks for collision, updates the scores and spawns apples
+     */
     private void update() {
         loopCount++;
         if (loopCount % (15 / snakes.size()) == 0) {
@@ -139,6 +162,9 @@ public class BasicSnake implements Gamemode {
         updateScore();
     }
 
+    /**
+     * spawning the apples
+     */
     private void spawnFood() {
         int width = currentMap.getWidth();
         int height = currentMap.getHeight();
@@ -159,6 +185,9 @@ public class BasicSnake implements Gamemode {
         log.trace("food spawned at " + spawnPosition);
     }
 
+    /**
+     * Checking if a snake hit a wall, itself or another snake.
+     */
     private void checkCollisions() {
         // Collision rules are made here!
         // # = Wall = Death
@@ -211,6 +240,10 @@ public class BasicSnake implements Gamemode {
         scheduledForRemoval.clear();
     }
 
+    /**
+     * If a snake dies it body will converts into apples
+     * @param snake The snake that died
+     */
     private void snakeToApples(Snake snake) {
         List<Position> newApples = snake.getPositions();
         newApples.forEach(position -> {
@@ -222,6 +255,9 @@ public class BasicSnake implements Gamemode {
 
     }
 
+    /**
+     * Checking if the game ends because time is over or all snakes are dead
+     */
     private void gameEnds() {
         if (timeLeft < 0) { //endif gameMaxTime is surpassed
             log.debug("time is up");
@@ -232,6 +268,9 @@ public class BasicSnake implements Gamemode {
         }
     }
 
+    /**
+     * Ending the round
+     */
     private void endGame() {
         gameOver = true;
         initialized = false;
@@ -239,6 +278,10 @@ public class BasicSnake implements Gamemode {
         log.info("Game Ends winner: " + getWinner());
     }
 
+    /**
+     *
+     * @return The player that has won this round
+     */
     private String getWinner() {
         String winner = "";
         int maxPoints = Collections.max(scores.values());
@@ -255,15 +298,26 @@ public class BasicSnake implements Gamemode {
         return winner; //should never be reached
     }
 
+    /**
+     * Updates the score for all snakes
+     */
     private void updateScore() {
-        snakes.forEach(snake -> setScore(snake, snake.length()));
+        snakes.forEach(snake -> setScore(snake, snake.getLength()));
     }
 
+    /**
+     * Updates the score of a snake if e.g. it ate a apple
+     * @param snake The {@link Snake} instance that gets the points
+     * @param points amount of points to be added
+     */
     private void setScore(Snake snake, int points) {
         scores.put(snake.getPlayer(), points);
         log.trace("set points for " + snake + " :" + points + " points");
     }
 
+    /**
+     * decreases the countdown and the time left.
+     */
     private void updateTime() {
         long now = System.currentTimeMillis();
         int delta = (int) (now - lastFrameSystemTime);
@@ -275,6 +329,10 @@ public class BasicSnake implements Gamemode {
         log.trace("time left (millis): " + timeLeft);
     }
 
+    /**
+     * The Synchronization Message
+     * @return JSON object containing all needed information for the frontend
+     */
     private String getSynchronizationMessage() {
         if (countDown > 0) {
             JSONSynchronizationMessage.put("countdown", Math.ceil(countDown / 1000f));
@@ -299,6 +357,10 @@ public class BasicSnake implements Gamemode {
         return message;
     }
 
+    /**
+     *
+     * @return JSON object with all information about a map (String, height, width)
+     */
     private JSONObject jsonGetWorld() {
         JSONObjectWorld.put("worldstring", currentMap.toString());
         JSONObjectWorld.put("height", currentMap.getHeight());
@@ -306,6 +368,10 @@ public class BasicSnake implements Gamemode {
         return JSONObjectWorld;
     }
 
+    /**
+     *
+     * @return JSON object containing all information about all snakes.
+     */
     private JSONArray jsonGetSnakes() {
         // bad performance, because many objects are created
         JSONArray snakeArray = new JSONArray();
@@ -327,6 +393,10 @@ public class BasicSnake implements Gamemode {
         return snakeArray;
     }
 
+    /**
+     *
+     * @return Returns the scores of all players in a JSON object.
+     */
     private JSONArray jsonGetScores() {
         JSONArrayScores.clear();
         scores.forEach((player, points) -> {
@@ -338,6 +408,11 @@ public class BasicSnake implements Gamemode {
         return JSONArrayScores;
     }
 
+    /**
+     * Putting all to be changed positions into a JSON object
+     * @param position The {@link Position} where to change the {@link Material}
+     * @param material The new {@link Material}
+     */
     private void jsonChangeMaterial(Position position, Material material) {
         // bad performance, because many objects are created
         JSONObject materialChange = new JSONObject();
@@ -349,6 +424,11 @@ public class BasicSnake implements Gamemode {
         JSONReplace.put(materialChange);
     }
 
+    /**
+     * Allowing to change the map in the lobby screen
+     * @param map The {@link Map} to be used
+     * @throws GameRunningException if you try to set a map while a game is running
+     */
     @Override
     public void setMap(Map map) throws GameRunningException {
         if (initialized) throw new GameRunningException();
@@ -357,11 +437,19 @@ public class BasicSnake implements Gamemode {
         this.currentMap = new Map(map);
     }
 
+    /**
+     *
+     * @return Time left for this round in seconds.
+     */
     @Override
     public int getTimeLeft() {
         return (int) Math.ceil(timeLeft / 1000f);
     }
 
+    /**
+     *
+     * @return Hashmap that contains the actual score of all players
+     */
     @Override
     public java.util.Map<String, Integer> getScores() {
         java.util.Map<String, Integer> scoreMap = new HashMap<>();
@@ -369,6 +457,10 @@ public class BasicSnake implements Gamemode {
         return scoreMap;
     }
 
+    /**
+     * Used for testing and the Swing application
+     * @return String with map and snakes
+     */
     @Override
     public String toString() {
         Material[][] tmp = currentMap.getMap();

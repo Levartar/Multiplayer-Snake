@@ -22,7 +22,7 @@ public class CreateLobby extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException , IOException {
-        log.info(req);
+        log.debug(req);
 
         int lobbyJoinCode = LobbyManager.createLobby();
         try {

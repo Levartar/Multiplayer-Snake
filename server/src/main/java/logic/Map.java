@@ -3,12 +3,14 @@ package logic;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+/**
+ * The {@link Map} class contains all information about the field except the positions of the snakes.
+ * It contains information like size and set materials or spawnpoints of the specific map.
+ */
 public class Map {
 
     private static final Logger log = LogManager.getLogger(Map.class);
@@ -16,14 +18,21 @@ public class Map {
     private Material[][] map;
     private List<Position> spawnPoints = new ArrayList<>();
     private String mapString;
-    //private final int spawnDistanceX = 0;
-    //private final int spawnDistanceY = 0;
 
+    /**
+     * Copy Constructor. Creates a new instance of a given map object.
+     * @param map The original map to create a copy.
+     */
     public Map(Map map) {
         this(map.toString());
         this.spawnPoints = List.copyOf(map.spawnPoints);
     }
 
+    /**
+     * Constructor reads map string and creates a {@link Material} array. The usable characters should be listed in
+     * the {@link Material} class.
+     * @param mapString The String that represents a map.
+     */
     public Map(String mapString) {
         this.mapString = mapString;
         parseMapString(mapString);
@@ -32,18 +41,33 @@ public class Map {
         log.debug("Map created: \n" +mapString);
     }
 
+    /**
+     * Changes the {@link Material} in the {@link Map#map} array.
+     * @param pos The {@link Position} where to change the {@link Material}
+     * @param material The new {@link Material} to set.
+     */
     public void changeMaterial(Position pos, Material material) {
         map[pos.getX()][pos.getY()] = material;
         updateMapString();
         log.debug("Material changed:"+ pos+" -> "+ material );
     }
 
+    /**
+     * Changes the {@link Material} in the {@link Map#map} array.
+     * @param x The x coordinate where to change the {@link Material}
+     * @param y The y coordinate where to change the {@link Material}
+     * @param material The new {@link Material} to set.
+     */
     public void changeMaterial(int x, int y, Material material) {
         map[x][y] = material;
         updateMapString();
         log.debug("Material changed:"+ "x:" + x + "," + "y:" + y+" -> "+ material );
     }
 
+    /**
+     *
+     * @return The reference of a new copy instance of this {@link Map} instance.
+     */
     public Material[][] getMap() { //maybe useless
         Material[][] output = new Material[getWidth()][getHeight()];
         for (int i = 0; i < map.length; i++) {
@@ -54,18 +78,37 @@ public class Map {
         return output;
     }
 
+    /**
+     * Returns a {@link Material} at a given {@link Position}
+     * @param pos {@link Position} where you want to get the {@link Material}
+     * @return {@link Material} at a specific position in the {@link Material} array
+     */
     public Material getMaterialAt(Position pos) {
         return map[pos.getX()][pos.getY()];
     }
 
+    /**
+     * Returns a {@link Material} at a given x and y coordinate
+     * @param x The x coordinate
+     * @param y The y coordinate
+     * @return {@link Material} at a specific position in the {@link Material} array
+     */
     public Material getMaterialAt(int x, int y) {
         return map[x][y];
     }
 
+    /**
+     * Shuffles the spawnpoints. Used before every new round to spawn at different positions.
+     */
     public void shuffleSpawnPoints() {
         Collections.shuffle(spawnPoints);
     }
 
+    /**
+     * With the given String, representing the map, this method creates the {@link Map#map} array and fills it with
+     * the materials corresponding to the String. Also fills the list {@link Map#spawnPoints} with the {@link Position}s
+     * @param mapString The String that represents a map.
+     */
     private void parseMapString(String mapString) {
         try {
             mapString = parseString(mapString);
@@ -94,7 +137,11 @@ public class Map {
         }
     }
 
-    //this removes all \r if they exist
+    /**
+     * This removes all \r if they exist
+     * @param str The original String
+     * @return The String without \r
+     */
     private String parseString(String str) {
         return str.replace("\r","");
     }
@@ -104,6 +151,10 @@ public class Map {
         return mapString;
     }
 
+    /**
+     * If something changes in the {@link Map#map} this method creates a new String based on {@link Map#map}.
+     * So every change will update the {@link Map#mapString}.
+     */
     private void updateMapString() {
         StringBuilder sb = new StringBuilder();
 
@@ -117,14 +168,26 @@ public class Map {
         this.mapString = sb.toString();
     }
 
+    /**
+     *
+     * @return The width of the {@link Map#map}.
+     */
     public int getWidth() {
         return map.length;
     }
 
+    /**
+     *
+     * @return The height of the {@link Map#map}.
+     */
     public int getHeight() {
         return map[0].length;
     }
 
+    /**
+     *
+     * @return The list of all spawnpoints
+     */
     public List<Position> getSpawnPoints() {
         return spawnPoints;
     }
